@@ -4,6 +4,7 @@
  */
 package server.server.Model.Services;
 
+import java.util.ArrayList;
 import server.server.Model.Domain.Faculty;
 
 /**
@@ -27,5 +28,11 @@ public interface IFacultyService {
      * @return String - contains information about saving process (status, an errors if those exist) 
      */
     public String save(Faculty faculty); 
+
+    /**
+     * All faculties in system 
+     * @return ArrayList
+     */
+    public ArrayList<Faculty> getAll();
     
 }

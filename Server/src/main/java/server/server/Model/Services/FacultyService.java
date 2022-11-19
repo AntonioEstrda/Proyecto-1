@@ -4,6 +4,7 @@
  */
 package server.server.Model.Services;
 
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -35,5 +36,11 @@ public class FacultyService implements IFacultyService {
         Faculty entitySaved = facultyRepo.save(faculty);  
         response = (entitySaved != null)? "success" : "failed";    
         return response;  
+    }
+
+    @Override
+    @Transactional(value="DataTransactionManager", readOnly=true)
+    public ArrayList<Faculty> getAll() {
+        return (ArrayList<Faculty>) facultyRepo.findAll();  
     }
 }
