@@ -7,32 +7,41 @@ package server.server.Model.Domain;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.Data;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import lombok.Data;
 
 /**
- * Class Faculty mapped to Faculty Entity 
+ *
  * @author anmon
  */
-
 @Entity
-@Table(name = "faculty")
+@Table(name="EnviromentType")
 @Data
-public class Faculty implements Serializable {
-    
+public class EnviromentType implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="FACULTYID")
-    private long facultyId; 
+    @Column(name="ENVIROMENTTYPEID")
+    private long ResourceTypeId;
     
     @NotEmpty
     @Column(length=100, name="NAME")
     private String name;
-     
+    
+    @NotNull
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean isDisable;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="ENV_ENVIROMENTTYPEID")
+    private EnviromentType parent;
 }
