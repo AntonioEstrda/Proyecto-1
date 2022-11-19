@@ -33,6 +33,6 @@ public class Faculty implements Serializable {
     
     @NotEmpty
     @Column(length=100, name="NAME")
-    private String name;
+    private String facultyName;
      
 }
