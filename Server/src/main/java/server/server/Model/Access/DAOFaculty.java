@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import server.server.Model.Domain.Faculty;
 
 /**
- * 
+ * Faculty repository
  * @author anmon
  */
 @Repository

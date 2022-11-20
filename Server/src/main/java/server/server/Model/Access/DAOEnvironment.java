@@ -5,14 +5,12 @@
 package server.server.Model.Access;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import server.server.Model.Domain.Resource;
+import server.server.Model.Domain.Environment;
 
 /**
- * Resource repository
+ * Environment repository 
  * @author anmon
  */
-@Repository
-public interface DAOResource extends JpaRepository<Resource, Long>{
-    
+public interface DAOEnvironment extends JpaRepository<Environment, Long>{
+   
 }
