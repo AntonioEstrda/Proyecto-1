@@ -22,36 +22,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import server.server.Model.Domain.Environment;
-import server.server.Model.Services.IEnvironmentService;
+import server.server.Model.Domain.Resource;
+import server.server.Model.Services.IResourceService;
 
 /**
+ * Resource Controller
  *
  * @author anmon
  */
 @RestController
-@RequestMapping("/Environment")
-public class EnvironmentController {
+@RequestMapping("/Resource")
+public class ResourceController {
 
     @Autowired
-    public IEnvironmentService envService;
+    public IResourceService envService;
 
     @GetMapping(value = "/all")
-    public ArrayList<Environment> all() {
+    public ArrayList<Resource> all() {
         return envService.getAll();
     }
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public Environment get(@PathVariable Long id) {
-        Environment env = new Environment();
-        env.setEnvironmentId(id);
-        return envService.find(env);
+    public Resource get(@PathVariable Long id) {
+        Resource envType = new Resource();
+        envType.setResourceId(id);
+        return envService.find(envType);
     }
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Environment> add(@RequestBody @Valid Environment env, Errors errors) {
+    public ResponseEntity<Resource> add(@RequestBody @Valid Resource env, Errors errors) {
         if (errors.hasErrors()) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Errors", Utility.setErrors(errors).toString());
@@ -70,14 +71,14 @@ public class EnvironmentController {
 
     @PutMapping
     @RequestMapping("/update")
-    public ResponseEntity<Environment> update(@RequestBody @Valid Environment env, Errors errors) {
-        
+    public ResponseEntity<Resource> update(@RequestBody @Valid Resource env, Errors errors) {
+
         if (errors.hasErrors()) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Errors", Utility.setErrors(errors).toString());
             return new ResponseEntity<>(env, headers, HttpStatus.NOT_MODIFIED);
         }
-        
+
         env = envService.update(env);
         if (env != null) {
             return new ResponseEntity<>(env, null, HttpStatus.ACCEPTED);
@@ -86,14 +87,14 @@ public class EnvironmentController {
             headers.add("Error", "Not found");
             return new ResponseEntity<>(env, headers, HttpStatus.NOT_MODIFIED);
         }
-        
+
     }
 
     @DeleteMapping
     @RequestMapping("/delete/{id}")
-    public ResponseEntity<Environment> delete(@PathVariable Long id) {
+    public ResponseEntity<Resource> delete(@PathVariable Long id) {
 
-        Environment env = envService.delete(id);
+        Resource env = envService.delete(id);
         if (env != null) {
             return new ResponseEntity<>(env, null, HttpStatus.ACCEPTED);
         } else {

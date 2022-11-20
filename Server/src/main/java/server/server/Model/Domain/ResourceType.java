@@ -7,13 +7,11 @@ package server.server.Model.Domain;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
@@ -42,8 +40,12 @@ public class ResourceType implements Serializable {
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isDisable;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Min(value = 0, message = "ParentId must be higher or equal than 0")
+    @Column(name="RES_RESSOURCETYPEID")
+    private Long parent;  
+    
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="RES_RESSOURCETYPEID")
     private ResourceType parent;
-
+    */
 }

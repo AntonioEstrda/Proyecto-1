@@ -41,7 +41,7 @@ public class Resource implements Serializable {
     private String description;  
     
     @NotNull
-    @Column(nullable = false, columnDefinition = "TINYINT(1)", name="ISDISABLE")
+    @Column(columnDefinition = "TINYINT(1)", name="ISDISABLE")
     private boolean isDisable;
     
     @NotNull
