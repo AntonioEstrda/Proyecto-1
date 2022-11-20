@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
@@ -30,18 +32,16 @@ public class Environment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ENVIROMENTID")
-    private long ResourceId; 
-    
-    @NotEmpty
-    @Column(length=100, name="NAME")
-    private String name;
+    private long EnvironmentId; 
     
     @NotEmpty 
     @Column(length=100, name="UBICATION")
     private String ubication;
     
     @NotNull 
-    @Column(columnDefinition="int(3)", nullable=false, name="NUMBER")
+    @Column(columnDefinition="int(3)", name="NUMBER")
+    @Min(value = 100, message = "Number must be higher or equal than 100")
+    @Max(value = 999, message = "Number must be less than 999")
     private int number;  
     
     @NotNull
@@ -50,6 +50,7 @@ public class Environment implements Serializable {
     
     @NotNull 
     @Column(columnDefinition="int(4)", name="CAPACITY")
+    @Min(value = 0, message = "Capacity should not be less than 0")
     private int capacity;  
     
     @NotNull

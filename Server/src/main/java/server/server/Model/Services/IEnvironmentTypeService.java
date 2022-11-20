@@ -14,39 +14,39 @@ import server.server.Model.Domain.EnvironmentType;
 public interface IEnvironmentTypeService {
     
     /**
-     *
-     * @param o
+     * find all EnvironmentTypes 
+     * @param o Object Args 
      * @return
      */
     public ArrayList<EnvironmentType> findAll(Object o);  
     
     /**
-     *
-     * @param o
+     * find an EnvironmentType
+     * @param o Object Args 
      * @return
      */
     public EnvironmentType find(Object o);  
     
     /**
-     *
-     * @param o
+     * Saves a new one EnvironmentType
+     * @param o Object Args 
      * @return
      */
     public EnvironmentType save(Object o);  
     
     /**
-     *
+     * Update a EnvironmentType
      * @param o
      * @return
      */
     public EnvironmentType update(Object o);  
     
     /**
-     *
-     * @param o
+     * Disables a EnviromentType
+     * @param o Object Args 
      * @return
      */
-    public EnvironmentType delete(Object o);  
+    public EnvironmentType delete(Long o);  
     
     
 }

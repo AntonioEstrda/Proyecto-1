@@ -7,73 +7,70 @@ package server.server.Model.Services;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import server.server.Model.Access.DAOResourceType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-import server.server.Model.Access.DAOEnvironmentType;
-import server.server.Model.Domain.EnvironmentType;
+import server.server.Model.Domain.ResourceType;
 
 /**
- * Environment Service Class
+ * Resource Type Service Class 
  * @author anmon
  */
 @Service 
 @EnableTransactionManagement
-public class EnvironmentTypeService implements IEnvironmentTypeService{
-    
+public class ResourceTypeService implements IResourceTypeService {
     @Autowired 
-    private DAOEnvironmentType envTypeRepo;  
+    private DAOResourceType resTypeRepo;  
 
     @Override
     @Transactional(value="DataTransactionManager", readOnly=true)
-    public ArrayList<EnvironmentType> findAll(Object o) {
-        return (ArrayList<EnvironmentType>) envTypeRepo.findAll(); 
+    public ArrayList<ResourceType> findAll(Object o) {
+        return (ArrayList<ResourceType>) resTypeRepo.findAll(); 
     }
 
     @Override
     @Transactional(value="DataTransactionManager", readOnly=true)
-    public EnvironmentType find(Object o) {
-        EnvironmentType f = (EnvironmentType) o;  
-        return envTypeRepo.findById(f.getResourceTypeId()).orElse(null);  
+    public ResourceType find(Object o) {
+        ResourceType f = (ResourceType) o;  
+        return resTypeRepo.findById(f.getResourceTypeId()).orElse(null);  
     }
 
     @Override
     @Transactional(value="DataTransactionManager")
-    public EnvironmentType save(Object o) {
-        EnvironmentType et = (EnvironmentType) o; 
+    public ResourceType save(Object o) {
+        ResourceType et = (ResourceType) o; 
         if (et.getName() == null 
                 || et.getResourceTypeId() < 0 
                 || this.find(et) != null){
             return null;  
         }
         Long etP = et.getParent();  
-        if(etP != null && envTypeRepo.findById(etP) == null){
+        if(etP != null && resTypeRepo.findById(etP) == null){
             return null; 
         }
         
-        return envTypeRepo.save(et);  
+        return resTypeRepo.save(et);  
     }
 
     @Override
     @Transactional(value="DataTransactionManager")
-    public EnvironmentType update(Object o) {
-        EnvironmentType et = (EnvironmentType) o; 
+    public ResourceType update(Object o) {
+        ResourceType et = (ResourceType) o; 
         if (et.getName() == null || et.getResourceTypeId() < 0 || this.find(et) == null){
             return null;  
         }
-        return envTypeRepo.save(et); 
+        return resTypeRepo.save(et); 
     }
 
     @Override
     @Transactional(value="DataTransactionManager")
-    public EnvironmentType delete(Long id) {
-        EnvironmentType et2 = envTypeRepo.findById(id).orElse(null); 
+    public ResourceType delete(Long id) {
+        ResourceType et2 = resTypeRepo.findById(id).orElse(null); 
         if (et2 == null){
             return null;
         }else{
             et2.setDisable(true);
-            return envTypeRepo.save(et2);
+            return resTypeRepo.save(et2);
         }
     }
-    
-    
 }

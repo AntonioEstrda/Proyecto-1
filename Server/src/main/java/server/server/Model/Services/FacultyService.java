@@ -16,55 +16,56 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author anmon
  */
-@Service 
+@Service
 @EnableTransactionManagement
 public class FacultyService implements IFacultyService {
-    
-    @Autowired 
-    private DAOFaculty facultyRepo; 
+
+    @Autowired
+    private DAOFaculty facultyRepo;
 
     @Override
-    @Transactional(value="DataTransactionManager", readOnly=true)
-    public Faculty find(Faculty faculty) {        
-        return facultyRepo.findById(faculty.getFacultyId()).orElse(null); 
-    }
-
-    @Override 
-    @Transactional(value="DataTransactionManager")
-    public Faculty save(Faculty faculty){
-        Faculty entitySaved = facultyRepo.save(faculty);  
-        return entitySaved;  
+    @Transactional(value = "DataTransactionManager", readOnly = true)
+    public Faculty find(Faculty faculty) {
+        return facultyRepo.findById(faculty.getFacultyId()).orElse(null);
     }
 
     @Override
-    @Transactional(value="DataTransactionManager", readOnly=true)
+    @Transactional(value = "DataTransactionManager")
+    public Faculty save(Faculty faculty) {
+        if (this.find(faculty) == null) {
+            Faculty entitySaved = facultyRepo.save(faculty);
+            return entitySaved;
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional(value = "DataTransactionManager", readOnly = true)
     public ArrayList<Faculty> getAll() {
-        return (ArrayList<Faculty>) facultyRepo.findAll();  
+        return (ArrayList<Faculty>) facultyRepo.findAll();
     }
 
     @Override
-    @Transactional(value="DataTransactionManager")
+    @Transactional(value = "DataTransactionManager")
     public Faculty update(Faculty faculty) {
-        Faculty old = this.find(faculty);  
-        if (old == null){
-            return null;  
-        }    
-        else{   
-            return facultyRepo.save(faculty);  
+        Faculty old = this.find(faculty);
+        if (old == null) {
+            return null;
+        } else {
+            return facultyRepo.save(faculty);
         }
     }
 
     @Override
-    @Transactional(value="DataTransactionManager")
+    @Transactional(value = "DataTransactionManager")
     public Faculty delete(Long FacultyId) {
-        
-        Faculty old = facultyRepo.findById(FacultyId).orElse(null);  
-        if (old == null){
-            return null;  
-        }    
-        else{   
+
+        Faculty old = facultyRepo.findById(FacultyId).orElse(null);
+        if (old == null) {
+            return null;
+        } else {
             facultyRepo.delete(old);
-            return old; 
+            return old;
         }
     }
 }

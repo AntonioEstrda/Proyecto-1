@@ -5,16 +5,11 @@
 package server.server.Model.Domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -43,10 +38,16 @@ public class EnvironmentType implements Serializable {
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isDisable;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name="ENV_ENVIROMENTTYPEID")
+    private Long parent;
+    
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="ENV_ENVIROMENTTYPEID")
     private EnvironmentType parent;
+    */
     
+    /*
     @OneToMany(mappedBy="environmentType", fetch = FetchType.LAZY)
-    private ArrayList<Environment> enviromentsAssociated;
+    private List<Environment> enviromentsAssociated;
+    */
 }
