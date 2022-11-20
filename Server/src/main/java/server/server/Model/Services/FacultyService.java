@@ -31,16 +31,40 @@ public class FacultyService implements IFacultyService {
 
     @Override 
     @Transactional(value="DataTransactionManager")
-    public String save(Faculty faculty){
-        String response;   
+    public Faculty save(Faculty faculty){
         Faculty entitySaved = facultyRepo.save(faculty);  
-        response = (entitySaved != null)? "success" : "failed";    
-        return response;  
+        return entitySaved;  
     }
 
     @Override
     @Transactional(value="DataTransactionManager", readOnly=true)
     public ArrayList<Faculty> getAll() {
         return (ArrayList<Faculty>) facultyRepo.findAll();  
+    }
+
+    @Override
+    @Transactional(value="DataTransactionManager")
+    public Faculty update(Faculty faculty) {
+        Faculty old = this.find(faculty);  
+        if (old == null){
+            return null;  
+        }    
+        else{   
+            return facultyRepo.save(faculty);  
+        }
+    }
+
+    @Override
+    @Transactional(value="DataTransactionManager")
+    public Faculty delete(Long FacultyId) {
+        
+        Faculty old = facultyRepo.findById(FacultyId).orElse(null);  
+        if (old == null){
+            return null;  
+        }    
+        else{   
+            facultyRepo.delete(old);
+            return old; 
+        }
     }
 }

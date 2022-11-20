@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-11-2022 a las 01:39:16
+-- Tiempo de generación: 19-11-2022 a las 23:33:02
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -423,6 +423,118 @@ ALTER TABLE `teacher_schedule`
   ADD KEY `TEACHER_SCHEDULE_FK` (`TEACHERID`);
 
 --
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `academicperiod`
+--
+ALTER TABLE `academicperiod`
+  MODIFY `ACADEMICPERIDODID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `department`
+--
+ALTER TABLE `department`
+  MODIFY `DEPARTMENTID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `enviroment`
+--
+ALTER TABLE `enviroment`
+  MODIFY `ENVIROMENTID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `enviromenttype`
+--
+ALTER TABLE `enviromenttype`
+  MODIFY `ENVIROMENTTYPEID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `faculty`
+--
+ALTER TABLE `faculty`
+  MODIFY `FACULTYID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `faculty_enviroment`
+--
+ALTER TABLE `faculty_enviroment`
+  MODIFY `FAC_AND_ENV_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `faculty_resource`
+--
+ALTER TABLE `faculty_resource`
+  MODIFY `FAC_AND_RES_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `groupt`
+--
+ALTER TABLE `groupt`
+  MODIFY `IDGROUP` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `hourlyassignment`
+--
+ALTER TABLE `hourlyassignment`
+  MODIFY `HOURLYASSIGMENTID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `program`
+--
+ALTER TABLE `program`
+  MODIFY `IDPROGRAM` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `resourceenviroment`
+--
+ALTER TABLE `resourceenviroment`
+  MODIFY `ENV_AND_RES_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `resourcet`
+--
+ALTER TABLE `resourcet`
+  MODIFY `RESOURCEID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `resourcetype`
+--
+ALTER TABLE `resourcetype`
+  MODIFY `RESSOURCETYPEID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `schedule`
+--
+ALTER TABLE `schedule`
+  MODIFY `IDSCHEDEULE` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `subject`
+--
+ALTER TABLE `subject`
+  MODIFY `IDSUBJECT` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `teacher`
+--
+ALTER TABLE `teacher`
+  MODIFY `TEACHERID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `teacher_group`
+--
+ALTER TABLE `teacher_group`
+  MODIFY `TEAC_GRP_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `teacher_schedule`
+--
+ALTER TABLE `teacher_schedule`
+  MODIFY `TEAC_SCHED_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Restricciones para tablas volcadas
 --
 
@@ -478,53 +590,6 @@ ALTER TABLE `hourlyassignment`
 --
 ALTER TABLE `program`
   ADD CONSTRAINT `FK_PROGRAM_DEPARTMEN_DEPARTME` FOREIGN KEY (`DEPARTMENTID`) REFERENCES `department` (`DEPARTMENTID`);
-
---
--- Filtros para la tabla `resourceenviroment`
---
-ALTER TABLE `resourceenviroment`
-  ADD CONSTRAINT `FK_RESOURCE_RESOURCEE_ENVIROME` FOREIGN KEY (`ENVIROMENTID`) REFERENCES `enviroment` (`ENVIROMENTID`),
-  ADD CONSTRAINT `FK_RESOURCE_RESOURCEE_RESOURCE` FOREIGN KEY (`RESOURCEID`) REFERENCES `resourcet` (`RESOURCEID`);
-
---
--- Filtros para la tabla `resourcet`
---
-ALTER TABLE `resourcet`
-  ADD CONSTRAINT `FK_RESOURCE_RESOURCE__RESOURCE` FOREIGN KEY (`RESSOURCETYPEID`) REFERENCES `resourcetype` (`RESSOURCETYPEID`);
-
---
--- Filtros para la tabla `resourcetype`
---
-ALTER TABLE `resourcetype`
-  ADD CONSTRAINT `FK_RESOURCE_IS_PARENT_RESOURCE` FOREIGN KEY (`RES_RESSOURCETYPEID`) REFERENCES `resourcetype` (`RESSOURCETYPEID`);
-
---
--- Filtros para la tabla `schedule`
---
-ALTER TABLE `schedule`
-  ADD CONSTRAINT `FK_SCHEDULE_ACADEMICP_ACADEMIC` FOREIGN KEY (`ACADEMICPERIDODID`) REFERENCES `academicperiod` (`ACADEMICPERIDODID`),
-  ADD CONSTRAINT `FK_SCHEDULE_ENVIROMEN_ENVIROME` FOREIGN KEY (`ENVIROMENTID`) REFERENCES `enviroment` (`ENVIROMENTID`),
-  ADD CONSTRAINT `FK_SCHEDULE_GROUP_SCH_GROUP` FOREIGN KEY (`IDGROUP`) REFERENCES `groupt` (`IDGROUP`);
-
---
--- Filtros para la tabla `subject`
---
-ALTER TABLE `subject`
-  ADD CONSTRAINT `FK_SUBJECT_PROGRAM_S_PROGRAM` FOREIGN KEY (`IDPROGRAM`) REFERENCES `program` (`IDPROGRAM`);
-
---
--- Filtros para la tabla `teacher_group`
---
-ALTER TABLE `teacher_group`
-  ADD CONSTRAINT `FK_TEACHER__TEACHER_G_GROUP` FOREIGN KEY (`IDGROUP`) REFERENCES `groupt` (`IDGROUP`),
-  ADD CONSTRAINT `FK_TEACHER__TEACHER_G_TEACHER` FOREIGN KEY (`TEACHERID`) REFERENCES `teacher` (`TEACHERID`);
-
---
--- Filtros para la tabla `teacher_schedule`
---
-ALTER TABLE `teacher_schedule`
-  ADD CONSTRAINT `FK_TEACHER__TEACHER_S_SCHEDULE` FOREIGN KEY (`SCHEDEULEID`) REFERENCES `schedule` (`IDSCHEDEULE`),
-  ADD CONSTRAINT `FK_TEACHER__TEACHER_S_TEACHER` FOREIGN KEY (`TEACHERID`) REFERENCES `teacher` (`TEACHERID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

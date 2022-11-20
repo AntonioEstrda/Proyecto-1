@@ -27,12 +27,26 @@ public interface IFacultyService {
      * @param faculty Faculty instance 
      * @return String - contains information about saving process (status, an errors if those exist) 
      */
-    public String save(Faculty faculty); 
+    public Faculty save(Faculty faculty); 
 
     /**
      * All faculties in system 
      * @return ArrayList
      */
     public ArrayList<Faculty> getAll();
+    
+    /**
+     * update a faculty 
+     * @param faculty
+     * @return 
+     */
+    public Faculty update(Faculty faculty);
+    
+    /**
+     * Delete a Faculty 
+     * @param FacultyId
+     * @return 
+     */
+    public Faculty delete(Long FacultyId);
     
 }
