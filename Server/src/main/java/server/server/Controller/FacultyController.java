@@ -52,7 +52,7 @@ public class FacultyController {
     public ResponseEntity<Faculty> add(@RequestBody Faculty faculty) {     
        
        faculty = facultyService.save(faculty); 
-       if (faculty != null){ 
+       if (faculty == null){ 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Error", "found an instance");
             return new ResponseEntity<>(faculty,headers,HttpStatus.NOT_MODIFIED);

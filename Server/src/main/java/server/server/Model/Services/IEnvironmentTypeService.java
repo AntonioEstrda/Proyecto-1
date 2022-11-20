@@ -46,7 +46,7 @@ public interface IEnvironmentTypeService {
      * @param o
      * @return
      */
-    public EnvironmentType delete(Object o);  
+    public EnvironmentType delete(Long o);  
     
     
 }
