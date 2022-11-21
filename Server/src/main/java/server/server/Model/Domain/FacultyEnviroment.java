@@ -5,6 +5,7 @@
 package server.server.Model.Domain;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,40 +14,44 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.Data;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import lombok.Data;
 
 /**
- *
+ * Faculty - Environment Intermediate Entity
  * @author anmon
  */
 @Entity
-@Table(name="ResourceT")
+@Table(name="faculty_enviroment")
 @Data
-public class Resource implements Serializable {
+public class FacultyEnviroment implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="RESOURCEID")
-    private long ResourceId; 
-    
-    @NotEmpty
-    @Column(length=100, name="NAME")
-    private String name;
-    
-    @NotEmpty 
-    @Column(length=100, name="DESCRIPTION")
-    private String description;  
+    @Column(name="FAC_AND_ENV_ID")
+    private long FacEnvId;
     
     @NotNull
-    @Column(columnDefinition = "TINYINT(1)", name="ISDISABLE")
-    private boolean isDisable;
+    @Temporal(TemporalType.DATE)
+    @Column(name="REGISTERDATE", updatable=false)
+    private Date registrerDateFE;  
+    
+    
+    @Temporal(TemporalType.DATE)
+    @Column(name="FINALDATE")
+    private Date finalDateFE;  
+    
+  
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name="ENVIROMENTID")
+    private Environment environmentFR; 
     
     @NotNull
     @ManyToOne
-    @JoinColumn(name="RESOURCETYPEID")
-    private ResourceType resourceType;
-    
+    @JoinColumn(name="FACULTYID")
+    private Faculty facultyFE; 
 }

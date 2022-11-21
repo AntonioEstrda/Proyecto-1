@@ -8,42 +8,42 @@ import java.util.ArrayList;
 import server.server.Model.Domain.Resource;
 
 /**
- *
+ * Resource Service Interface 
  * @author anmon
  */
 public interface IResourceService {
 
     /**
-     *
-     * @param id
-     * @return
+     * Disables a Resource 
+     * @param id ResourceId
+     * @return Resource
      */
     public Resource delete(Long id);
 
     /**
-     *
-     * @param env
-     * @return
+     * Updates a Resource 
+     * @param res  Resource to map
+     * @return Resource 
      */
-    public Resource update(Resource env);
+    public Resource update(Resource res);
 
     /**
-     *
-     * @param env
-     * @return
+     * Add a new one Resource 
+     * @param res Resource to map
+     * @return Resource
      */
-    public Resource save(Resource env);
+    public Resource save(Resource res);
 
     /**
-     *
-     * @param envType
-     * @return
+     * Find a resource 
+     * @param res  Resource to map
+     * @return Resource 
      */
-    public Resource find(Resource envType);
+    public Resource find(Resource res);
 
     /**
-     *
-     * @return
+     * list all Resources 
+     * @return ArrayList Resources 
      */
     public ArrayList<Resource> getAll();
     

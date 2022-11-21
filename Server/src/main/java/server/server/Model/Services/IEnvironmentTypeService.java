@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import server.server.Model.Domain.EnvironmentType;
 
 /**
- *
+ * Interface for EnvironmentTypeService 
  * @author anmon
  */
 public interface IEnvironmentTypeService {
