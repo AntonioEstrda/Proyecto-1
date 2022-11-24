@@ -53,8 +53,4 @@ public class Environment implements Serializable {
     @Min(value = 0, message = "Capacity should not be less than 0")
     private int capacity;  
     
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name="ENVIROMENTTYPEID")
-    private EnvironmentType environmentType;
 }

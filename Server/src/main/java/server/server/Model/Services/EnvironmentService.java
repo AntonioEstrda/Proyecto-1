@@ -22,9 +22,6 @@ public class EnvironmentService implements IEnvironmentService{
     
     @Autowired 
     private DAOEnvironment envRepo; 
-
-    @Autowired
-    private IEnvironmentTypeService envTypeServ;  
     
     @Override
     @Transactional(value="DataTransactionManager", readOnly=true)
@@ -36,8 +33,7 @@ public class EnvironmentService implements IEnvironmentService{
     @Transactional(value="DataTransactionManager")
     public Environment save(Environment env){
         Environment old = this.find(env);  
-        if ( old != null
-                || envTypeServ.find(env.getEnvironmentType()) == null ){
+        if (old != null){
             return null;  
         }    
         else{   
@@ -55,8 +51,7 @@ public class EnvironmentService implements IEnvironmentService{
     @Transactional(value="DataTransactionManager")
     public Environment update(Environment env) {
         Environment old = this.find(env);  
-        if ( envTypeServ.find(env.getEnvironmentType()) == null 
-                || old == null){
+        if (old == null){
             return null;  
         }    
         else{   
