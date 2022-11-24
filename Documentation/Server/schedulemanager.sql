@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-11-2022 a las 23:33:02
+-- Tiempo de generación: 24-11-2022 a las 01:02:43
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -43,7 +43,9 @@ CREATE TABLE `academicperiod` (
 CREATE TABLE `department` (
   `DEPARTMENTID` int(11) NOT NULL,
   `FACULTYID` int(11) NOT NULL,
-  `NAME` varchar(100) NOT NULL
+  `NAME` varchar(100) NOT NULL,
+  `code` varchar(25) NOT NULL,
+  `location` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -54,25 +56,22 @@ CREATE TABLE `department` (
 
 CREATE TABLE `enviroment` (
   `ENVIROMENTID` int(11) NOT NULL,
-  `ENVIROMENTTYPEID` int(11) NOT NULL,
   `CAPACITY` int(4) NOT NULL,
   `UBICATION` varchar(100) NOT NULL,
   `NUMBER` int(3) NOT NULL,
-  `ISDISABLE` tinyint(1) NOT NULL DEFAULT 0
+  `ISDISABLE` tinyint(1) NOT NULL DEFAULT 0,
+  `code` varchar(5) NOT NULL,
+  `type` enum('Salon','Sala','Auditorio') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `enviromenttype`
+-- Volcado de datos para la tabla `enviroment`
 --
 
-CREATE TABLE `enviromenttype` (
-  `ENVIROMENTTYPEID` int(11) NOT NULL,
-  `ENV_ENVIROMENTTYPEID` int(11) DEFAULT NULL,
-  `NAME` varchar(100) NOT NULL,
-  `ISDISABLE` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO `enviroment` (`ENVIROMENTID`, `CAPACITY`, `UBICATION`, `NUMBER`, `ISDISABLE`, `code`, `type`) VALUES
+(1, 25, 'Segundo piso', 201, 0, '', 'Salon'),
+(2, 25, 'Segundo piso', 202, 1, '', 'Salon'),
+(4, 25, 'Tercer piso', 303, 0, '', 'Salon');
 
 -- --------------------------------------------------------
 
@@ -82,8 +81,18 @@ CREATE TABLE `enviromenttype` (
 
 CREATE TABLE `faculty` (
   `FACULTYID` int(11) NOT NULL,
-  `NAME` varchar(100) NOT NULL
+  `NAME` varchar(100) NOT NULL,
+  `location` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `faculty`
+--
+
+INSERT INTO `faculty` (`FACULTYID`, `NAME`, `location`) VALUES
+(5, 'Artes', ''),
+(7, 'Agrarias', ''),
+(10, 'Contables', '');
 
 -- --------------------------------------------------------
 
@@ -113,6 +122,13 @@ CREATE TABLE `faculty_resource` (
   `FINALDATE` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `faculty_resource`
+--
+
+INSERT INTO `faculty_resource` (`FAC_AND_RES_ID`, `FACULTYID`, `RESOURCEID`, `REGISTERDATE`, `FINALDATE`) VALUES
+(1, 7, 1, '2022-11-01', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -134,12 +150,13 @@ CREATE TABLE `groupt` (
 --
 
 CREATE TABLE `hourlyassignment` (
-  `HOURLYASSIGMENTID` int(11) NOT NULL,
+  `vinculationId` int(11) NOT NULL,
   `DEPARTMENTID` int(11) NOT NULL,
   `TEACHERID` int(11) NOT NULL,
-  `ACADEMICPERIDODID` int(11) NOT NULL,
   `HOURS` int(2) NOT NULL,
-  `VINCULATIONTYPE` enum('Nombrado tiempo completo','Nombrado medio tiempo','Ocasional tiempo completo','Ocasional medio tiempo','Hora cátedra','Becario') NOT NULL
+  `VINCULATIONTYPE` enum('Nombrado tiempo completo','Nombrado medio tiempo','Ocasional tiempo completo','Ocasional medio tiempo','Hora cátedra','Becario') NOT NULL,
+  `initialdate` date NOT NULL,
+  `finaldate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -151,7 +168,9 @@ CREATE TABLE `hourlyassignment` (
 CREATE TABLE `program` (
   `IDPROGRAM` int(11) NOT NULL,
   `DEPARTMENTID` int(11) NOT NULL,
-  `NAME` varchar(100) NOT NULL
+  `NAME` varchar(100) NOT NULL,
+  `code` varchar(25) NOT NULL,
+  `location` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -176,11 +195,19 @@ CREATE TABLE `resourceenviroment` (
 
 CREATE TABLE `resourcet` (
   `RESOURCEID` int(11) NOT NULL,
-  `RESSOURCETYPEID` int(11) NOT NULL,
+  `RESOURCETYPEID` int(11) NOT NULL,
   `NAME` varchar(100) NOT NULL,
   `DESCRIPTION` varchar(100) NOT NULL,
-  `ISDISABLE` tinyint(1) NOT NULL
+  `ISDISABLE` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `resourcet`
+--
+
+INSERT INTO `resourcet` (`RESOURCEID`, `RESOURCETYPEID`, `NAME`, `DESCRIPTION`, `ISDISABLE`) VALUES
+(1, 1, 'Computador', 'Computadorxd', 0),
+(2, 3, 'Tablero', 'Tablero', 0);
 
 -- --------------------------------------------------------
 
@@ -194,6 +221,15 @@ CREATE TABLE `resourcetype` (
   `NAME` varchar(100) NOT NULL,
   `ISDISABLE` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `resourcetype`
+--
+
+INSERT INTO `resourcetype` (`RESSOURCETYPEID`, `RES_RESSOURCETYPEID`, `NAME`, `ISDISABLE`) VALUES
+(1, NULL, 'Computacional', 0),
+(2, 1, 'SubTipoComputacional1', 0),
+(3, NULL, 'Utileria', 0);
 
 -- --------------------------------------------------------
 
@@ -225,8 +261,9 @@ CREATE TABLE `subject` (
   `REQUISITS` varchar(200) NOT NULL,
   `SEMESTER` int(2) NOT NULL,
   `INTENSITY` int(2) NOT NULL,
-  `ModalityTime` enum('Diurn','Nocturn') NOT NULL,
-  `ISDISABLE` tinyint(1) NOT NULL
+  `Modality` enum('Semestral','Anual') NOT NULL,
+  `ISDISABLE` tinyint(1) NOT NULL,
+  `type` enum('Teórica','Práctica','Híbrida') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -291,16 +328,7 @@ ALTER TABLE `department`
 --
 ALTER TABLE `enviroment`
   ADD PRIMARY KEY (`ENVIROMENTID`),
-  ADD UNIQUE KEY `ENVIROMENT_PK` (`ENVIROMENTID`),
-  ADD KEY `ENVIROMENT_ENVIROMENTTYPE_FK` (`ENVIROMENTTYPEID`);
-
---
--- Indices de la tabla `enviromenttype`
---
-ALTER TABLE `enviromenttype`
-  ADD PRIMARY KEY (`ENVIROMENTTYPEID`),
-  ADD UNIQUE KEY `ENVIROMENTTYPE_PK` (`ENVIROMENTTYPEID`),
-  ADD KEY `ISPARENT_FK` (`ENV_ENVIROMENTTYPEID`);
+  ADD UNIQUE KEY `ENVIROMENT_PK` (`ENVIROMENTID`);
 
 --
 -- Indices de la tabla `faculty`
@@ -340,11 +368,10 @@ ALTER TABLE `groupt`
 -- Indices de la tabla `hourlyassignment`
 --
 ALTER TABLE `hourlyassignment`
-  ADD PRIMARY KEY (`HOURLYASSIGMENTID`),
-  ADD UNIQUE KEY `HOURLYASSIGNMENT_PK` (`HOURLYASSIGMENTID`),
+  ADD PRIMARY KEY (`vinculationId`),
+  ADD UNIQUE KEY `HOURLYASSIGNMENT_PK` (`vinculationId`),
   ADD KEY `DEPARTAMENT_HOURLYASSIGNMENT_FK` (`DEPARTMENTID`),
-  ADD KEY `TEACHER_HOURLYASSIGNMENT_FK` (`TEACHERID`),
-  ADD KEY `ACADEMICPERIOD_HOURLYASSIGNMENT_FK` (`ACADEMICPERIDODID`);
+  ADD KEY `TEACHER_HOURLYASSIGNMENT_FK` (`TEACHERID`);
 
 --
 -- Indices de la tabla `program`
@@ -369,7 +396,7 @@ ALTER TABLE `resourceenviroment`
 ALTER TABLE `resourcet`
   ADD PRIMARY KEY (`RESOURCEID`),
   ADD UNIQUE KEY `RESOURCE_PK` (`RESOURCEID`),
-  ADD KEY `RESOURCE_RESOURCETYPE_FK` (`RESSOURCETYPEID`);
+  ADD KEY `fk_resourcet_resourcetype` (`RESOURCETYPEID`);
 
 --
 -- Indices de la tabla `resourcetype`
@@ -442,19 +469,13 @@ ALTER TABLE `department`
 -- AUTO_INCREMENT de la tabla `enviroment`
 --
 ALTER TABLE `enviroment`
-  MODIFY `ENVIROMENTID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `enviromenttype`
---
-ALTER TABLE `enviromenttype`
-  MODIFY `ENVIROMENTTYPEID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ENVIROMENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `FACULTYID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `FACULTYID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `faculty_enviroment`
@@ -466,7 +487,7 @@ ALTER TABLE `faculty_enviroment`
 -- AUTO_INCREMENT de la tabla `faculty_resource`
 --
 ALTER TABLE `faculty_resource`
-  MODIFY `FAC_AND_RES_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `FAC_AND_RES_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `groupt`
@@ -478,7 +499,7 @@ ALTER TABLE `groupt`
 -- AUTO_INCREMENT de la tabla `hourlyassignment`
 --
 ALTER TABLE `hourlyassignment`
-  MODIFY `HOURLYASSIGMENTID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `vinculationId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `program`
@@ -496,13 +517,13 @@ ALTER TABLE `resourceenviroment`
 -- AUTO_INCREMENT de la tabla `resourcet`
 --
 ALTER TABLE `resourcet`
-  MODIFY `RESOURCEID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `RESOURCEID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `resourcetype`
 --
 ALTER TABLE `resourcetype`
-  MODIFY `RESSOURCETYPEID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `RESSOURCETYPEID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `schedule`
@@ -545,18 +566,6 @@ ALTER TABLE `department`
   ADD CONSTRAINT `FK_DEPARTME_FACULTY_D_FACULTY` FOREIGN KEY (`FACULTYID`) REFERENCES `faculty` (`FACULTYID`);
 
 --
--- Filtros para la tabla `enviroment`
---
-ALTER TABLE `enviroment`
-  ADD CONSTRAINT `FK_ENVIROME_ENVIROMEN_ENVIROME` FOREIGN KEY (`ENVIROMENTTYPEID`) REFERENCES `enviromenttype` (`ENVIROMENTTYPEID`);
-
---
--- Filtros para la tabla `enviromenttype`
---
-ALTER TABLE `enviromenttype`
-  ADD CONSTRAINT `FK_ENVIROME_ISPARENT_ENVIROME` FOREIGN KEY (`ENV_ENVIROMENTTYPEID`) REFERENCES `enviromenttype` (`ENVIROMENTTYPEID`);
-
---
 -- Filtros para la tabla `faculty_enviroment`
 --
 ALTER TABLE `faculty_enviroment`
@@ -581,7 +590,6 @@ ALTER TABLE `groupt`
 -- Filtros para la tabla `hourlyassignment`
 --
 ALTER TABLE `hourlyassignment`
-  ADD CONSTRAINT `FK_HOURLYAS_ACADEMICP_ACADEMIC` FOREIGN KEY (`ACADEMICPERIDODID`) REFERENCES `academicperiod` (`ACADEMICPERIDODID`),
   ADD CONSTRAINT `FK_HOURLYAS_DEPARTAME_DEPARTME` FOREIGN KEY (`DEPARTMENTID`) REFERENCES `department` (`DEPARTMENTID`),
   ADD CONSTRAINT `FK_HOURLYAS_TEACHER_H_TEACHER` FOREIGN KEY (`TEACHERID`) REFERENCES `teacher` (`TEACHERID`);
 
@@ -590,6 +598,19 @@ ALTER TABLE `hourlyassignment`
 --
 ALTER TABLE `program`
   ADD CONSTRAINT `FK_PROGRAM_DEPARTMEN_DEPARTME` FOREIGN KEY (`DEPARTMENTID`) REFERENCES `department` (`DEPARTMENTID`);
+
+--
+-- Filtros para la tabla `resourcet`
+--
+ALTER TABLE `resourcet`
+  ADD CONSTRAINT `fk_resourcet_resourcetype` FOREIGN KEY (`RESOURCETYPEID`) REFERENCES `resourcetype` (`RESSOURCETYPEID`);
+
+--
+-- Filtros para la tabla `teacher_group`
+--
+ALTER TABLE `teacher_group`
+  ADD CONSTRAINT `fk_teacher_group_group` FOREIGN KEY (`IDGROUP`) REFERENCES `groupt` (`IDGROUP`),
+  ADD CONSTRAINT `fk_teacher_group_teacher` FOREIGN KEY (`TEACHERID`) REFERENCES `teacher` (`TEACHERID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
