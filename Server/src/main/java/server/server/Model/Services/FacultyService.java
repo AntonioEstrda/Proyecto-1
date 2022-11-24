@@ -5,6 +5,8 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -31,12 +33,14 @@ public class FacultyService implements IFacultyService {
 
     @Override
     @Transactional(value = "DataTransactionManager")
-    public Faculty save(Faculty faculty) {
+    public Map<String, Object> save(Faculty faculty) {
+        Map<String, Object> args = new HashMap();  
+        
         if (this.find(faculty) == null) {
             Faculty entitySaved = facultyRepo.save(faculty);
-            return entitySaved;
+            args.put("objectReturn", entitySaved); 
         }
-        return null;
+        return args;
     }
 
     @Override

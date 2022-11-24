@@ -13,9 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-
 /**
  *
  * @author Fernando
@@ -35,6 +35,14 @@ public class Department implements Serializable{
     @Column(length=100, name="NAME")
     private String name;
         
+    @NotEmpty 
+    @Column(length=25, name="code")
+    private String code; 
+    
+    @NotEmpty 
+    @Column(length=100, name="location")
+    private String location; 
+    
     @NotNull
     @ManyToOne
     @JoinColumn(name="FACULTYID")

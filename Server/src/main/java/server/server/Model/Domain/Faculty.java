@@ -34,5 +34,9 @@ public class Faculty implements Serializable {
     @NotEmpty
     @Column(length=100, name="NAME")
     private String facultyName;
+    
+    @NotEmpty 
+    @Column(length=100, name="location")
+    private String location;  
      
 }
