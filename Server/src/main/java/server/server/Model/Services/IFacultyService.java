@@ -7,6 +7,7 @@ package server.server.Model.Services;
 import java.util.ArrayList;
 import java.util.Map;
 import server.server.Model.Domain.Faculty;
+import server.server.utilities.Labels;
 
 /**
  * Faculty Service interface 
@@ -28,7 +29,7 @@ public interface IFacultyService {
      * @param faculty Faculty instance 
      * @return String - contains information about saving process (status, an errors if those exist) 
      */
-    public Map<String, Object> save(Faculty faculty); 
+    public Map<Labels, Object> save(Faculty faculty); 
 
     /**
      * All faculties in system 

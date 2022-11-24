@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import server.server.Model.Access.DAOFaculty;
 import server.server.Model.Domain.Faculty;
 import org.springframework.transaction.annotation.Transactional;
+import server.server.utilities.Labels;
 
 /**
  *
@@ -33,14 +34,17 @@ public class FacultyService implements IFacultyService {
 
     @Override
     @Transactional(value = "DataTransactionManager")
-    public Map<String, Object> save(Faculty faculty) {
-        Map<String, Object> args = new HashMap();  
-        
+    public Map<Labels, Object> save(Faculty faculty) {
+        Map<Labels, Object> returns = new HashMap();  
+        ArrayList errors = new ArrayList();  
         if (this.find(faculty) == null) {
             Faculty entitySaved = facultyRepo.save(faculty);
-            args.put("objectReturn", entitySaved); 
+            returns.put(Labels.objectReturn, entitySaved); 
+        }else{
+            returns.put(Labels.objectReturn, null); 
         }
-        return args;
+        returns.put(Labels.errors, errors); 
+        return returns;
     }
 
     @Override
