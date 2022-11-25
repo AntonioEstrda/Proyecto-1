@@ -22,85 +22,83 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import server.server.Controller.Utilities.Utility;
-import server.server.Model.Domain.Department;
-import server.server.Model.Services.IDepartmentService;
+import server.server.Model.Domain.HourlyAssignment;
+import server.server.Model.Services.IHourlyAssignmentService;
 
 /**
  *
  * @author Fernando
  */
 @RestController
-@RequestMapping("/department")
-public class DepartmentController {
-    
+@RequestMapping("/hourlyAssignment")
+public class HourlyAssignmentController {
     @Autowired
-    public IDepartmentService deptService;
+    public IHourlyAssignmentService deptService;
 
     @GetMapping(value = "/all")
-    public ArrayList<Department> all() {
+    public ArrayList<HourlyAssignment> all() {
         return deptService.getAll();
     }
 
-    @GetMapping(value = "/{departmentId}")
+    @GetMapping(value = "/{vinculationId}")
     @ResponseBody
-    public Department get(@PathVariable Long departmentId) {
-        Department department = new Department();
-        department.setDepartmentId(departmentId);
-        return deptService.find(department);
+    public HourlyAssignment get(@PathVariable Long vinculationId) {
+        HourlyAssignment hourlyAssignment = new HourlyAssignment();
+        hourlyAssignment.setHourlyAssignmentId(vinculationId);
+        return deptService.find(hourlyAssignment);
     }
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Department> add(@RequestBody @Valid Department department, Errors errors) {
+    public ResponseEntity<HourlyAssignment> add(@RequestBody @Valid HourlyAssignment hourlyAssignment, Errors errors) {
         if (errors.hasErrors()) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Errors", Utility.setErrors(errors).toString());
-            return new ResponseEntity<>(department, headers, HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED);
         }
 
-        department = deptService.save(department);
-        if (department != null) {
-            return new ResponseEntity<>(department, null, HttpStatus.ACCEPTED);
+        hourlyAssignment = deptService.save(hourlyAssignment);
+        if (hourlyAssignment != null) {
+            return new ResponseEntity<>(hourlyAssignment, null, HttpStatus.ACCEPTED);
         } else {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Error", "found an instance");
-            return new ResponseEntity<>(department, headers, HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED);
         }
     }
 
     @PutMapping
     @RequestMapping("/update")
-    public ResponseEntity<Department> update(@RequestBody @Valid Department department, Errors errors) {
+    public ResponseEntity<HourlyAssignment> update(@RequestBody @Valid HourlyAssignment hourlyAssignment, Errors errors) {
         
         if (errors.hasErrors()) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Errors", Utility.setErrors(errors).toString());
-            return new ResponseEntity<>(department, headers, HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED);
         }
         
-        department = deptService.update(department);
-        if (department != null) {
-            return new ResponseEntity<>(department, null, HttpStatus.ACCEPTED);
+        hourlyAssignment = deptService.update(hourlyAssignment);
+        if (hourlyAssignment != null) {
+            return new ResponseEntity<>(hourlyAssignment, null, HttpStatus.ACCEPTED);
         } else {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Error", "Not found");
-            return new ResponseEntity<>(department, headers, HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED);
         }
         
     }
 
     @DeleteMapping
-    @RequestMapping("/delete/{departmentId}")
-    public ResponseEntity<Department> delete(@PathVariable Long departmentId) {
+    @RequestMapping("/delete/{vinculationId}")
+    public ResponseEntity<HourlyAssignment> delete(@PathVariable Long vinculationId) {
 
-        Department department = deptService.delete(departmentId);
-        if (department != null) {
-            return new ResponseEntity<>(department, null, HttpStatus.ACCEPTED);
+        HourlyAssignment hourlyAssignment = deptService.delete(vinculationId);
+        if (hourlyAssignment != null) {
+            return new ResponseEntity<>(hourlyAssignment, null, HttpStatus.ACCEPTED);
         } else {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Error", "Not found");
-            return (new ResponseEntity<>(department, headers, HttpStatus.NOT_MODIFIED));
+            return (new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED));
         }
     }
-    
 }

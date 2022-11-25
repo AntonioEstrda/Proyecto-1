@@ -30,9 +30,8 @@ import server.server.Model.Services.IDepartmentService;
  * @author Fernando
  */
 @RestController
-@RequestMapping("/department")
-public class DepartmentController {
-    
+@RequestMapping("/groupt")
+public class GroupController {
     @Autowired
     public IDepartmentService deptService;
 
@@ -102,5 +101,4 @@ public class DepartmentController {
             return (new ResponseEntity<>(department, headers, HttpStatus.NOT_MODIFIED));
         }
     }
-    
 }
