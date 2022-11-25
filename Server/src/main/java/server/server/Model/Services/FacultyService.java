@@ -38,11 +38,12 @@ public class FacultyService implements IFacultyService {
     public Map<Labels, Object> save(Faculty faculty) {
         Map<Labels, Object> returns = new HashMap();
         ArrayList errors = new ArrayList();
-        if (this.find(faculty) == null) {
+        if (this.find(faculty) != null) {
+            errors.add(FacErrors.FAC102.name());
+            returns.put(Labels.objectReturn, null);
+        } else {
             Faculty entitySaved = facultyRepo.save(faculty);
             returns.put(Labels.objectReturn, entitySaved);
-        } else {
-            returns.put(Labels.objectReturn, null);
         }
         returns.put(Labels.errors, errors);
         return returns;

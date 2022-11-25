@@ -56,18 +56,16 @@ public class FacultyController {
     public ResponseEntity<Faculty> add(@RequestBody @Valid Faculty faculty, Errors errors) {
 
         Map<Labels, Object> returns = facultyService.save(faculty);
-        
-        ArrayList<String> errors2 =  (ArrayList<String>) returns.get(Labels.errors);  
-        Faculty fac = (Faculty) returns.get(Labels.objectReturn);  
-        
-        if (!errors2.isEmpty() || fac == null || errors.hasErrors()) {
+        ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
+        Faculty fac = (Faculty) returns.get(Labels.objectReturn);
+        if (errors2.isEmpty() && !errors.hasErrors() && fac != null) {
+            return new ResponseEntity<>(faculty, null, HttpStatus.ACCEPTED);
+        } else {
             HttpHeaders headers = new HttpHeaders();
             ArrayList<String> setErrors = Utility.setErrors(errors);
-            setErrors.addAll(errors2);  
-            headers.add(Labels.errors.name(),setErrors.toString());
+            errors2.addAll(setErrors);
+            headers.add(Labels.errors.name(), errors2.toString());
             return new ResponseEntity<>(faculty, headers, HttpStatus.NOT_MODIFIED);
-        } else {
-            return new ResponseEntity<>(faculty, null, HttpStatus.ACCEPTED);
         }
     }
 
@@ -75,26 +73,26 @@ public class FacultyController {
     @RequestMapping("/update")
     public ResponseEntity<Faculty> update(@RequestBody @Valid Faculty faculty, Errors errors) {
         Map<Labels, Object> update = facultyService.update(faculty);
-        ArrayList<String> errors2 = (ArrayList<String>) update.get(Labels.errors);  
-        Faculty fac = (Faculty) update.get(Labels.objectReturn); 
-        
-        if (errors.hasErrors() == true || errors2.isEmpty() == false || fac == null){
+        ArrayList<String> errors2 = (ArrayList<String>) update.get(Labels.errors);
+        Faculty fac = (Faculty) update.get(Labels.objectReturn);
+
+        if (errors.hasErrors() == true || errors2.isEmpty() == false || fac == null) {
             HttpHeaders headers = new HttpHeaders();
             ArrayList<String> setErrors = Utility.setErrors(errors);
-            setErrors.addAll(errors2);  
+            setErrors.addAll(errors2);
             headers.add(Labels.errors.name(), setErrors.toString());
             return new ResponseEntity<>(faculty, headers, HttpStatus.NOT_MODIFIED);
-        }else {
+        } else {
             return new ResponseEntity<>(faculty, null, HttpStatus.ACCEPTED);
-        } 
+        }
     }
 
     @DeleteMapping
     @RequestMapping("/delete/{FacultyId}")
     public ResponseEntity<Faculty> delete(@PathVariable Long FacultyId) {
         Map<Labels, Object> delete = facultyService.delete(FacultyId);
-        ArrayList<String> errors = (ArrayList<String>) delete.get(Labels.errors);  
-        Faculty fac = (Faculty) delete.get(Labels.objectReturn); 
+        ArrayList<String> errors = (ArrayList<String>) delete.get(Labels.errors);
+        Faculty fac = (Faculty) delete.get(Labels.objectReturn);
         if (fac != null) {
             return new ResponseEntity<>(fac, null, HttpStatus.ACCEPTED);
         } else {
