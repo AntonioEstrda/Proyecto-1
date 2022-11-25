@@ -13,9 +13,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  *
@@ -48,5 +51,25 @@ public class Resource implements Serializable {
     @ManyToOne
     @JoinColumn(name="RESOURCETYPEID")
     private ResourceType resourceType;
+    
+    @NotEmpty(message="ENV102")
+    @Column(length=100, name="location")
+    private String location;
+    
+    @NotEmpty(message="ENV110")
+    @Column(length=5, name="code")
+    @Pattern(regexp = "^[a-zA-Z]{2,5}", message="ENV111")
+    private String code;
+    
+    @NotNull(message="ENV109")
+    @Column(columnDefinition="int(3)", name="NUMBER")
+    @Min(value = 100, message = "ENV103")
+    @Max(value = 999, message = "ENV104")
+    private int number;  
+    
+    @NotNull(message = "106")
+    @Column(columnDefinition="int(4)", name="CAPACITY")
+    @Min(value = 1, message = "107")
+    private int capacity;  
     
 }
