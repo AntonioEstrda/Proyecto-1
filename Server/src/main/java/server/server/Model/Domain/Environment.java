@@ -17,6 +17,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import lombok.Data;
 
 /**
@@ -39,29 +40,33 @@ public class Environment implements Serializable {
     @Column(name="ENVIROMENTID")
     private long EnvironmentId; 
     
-    @NotEmpty 
-    @Column(length=100, name="UBICATION")
-    private String ubication;
+    @NotEmpty(message="ENV102")
+    @Column(length=100, name="location")
+    private String location;
     
-    @NotNull 
+    @NotEmpty(message="ENV110")
+    @Column(length=5, name="code")
+    @Pattern(regexp = "^[a-zA-Z]{2,5}", message="ENV111")
+    private String code;
+    
+    @NotNull(message="ENV109")
     @Column(columnDefinition="int(3)", name="NUMBER")
-    @Min(value = 100, message = "Number must be higher or equal than 100")
-    @Max(value = 999, message = "Number must be less than 999")
+    @Min(value = 100, message = "ENV103")
+    @Max(value = 999, message = "ENV104")
     private int number;  
     
-    @NotNull
+    @NotNull(message = "ENV105")
     @Column(nullable = false, columnDefinition = "TINYINT(1)", name="ISDISABLE")
     private boolean isDisable;
     
-    @NotNull 
+    @NotNull(message = "106")
     @Column(columnDefinition="int(4)", name="CAPACITY")
-    @Min(value = 0, message = "Capacity should not be less than 0")
+    @Min(value = 1, message = "107")
     private int capacity;  
     
-    @NotNull 
+    @NotNull(message = "108")
     @Enumerated(EnumType.STRING)
     @Column(name="type")
     private EnvironmentType type; 
-    
     
 }

@@ -5,8 +5,6 @@
 package server.server.Controller.errors;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
 import javax.validation.ConstraintViolation;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
