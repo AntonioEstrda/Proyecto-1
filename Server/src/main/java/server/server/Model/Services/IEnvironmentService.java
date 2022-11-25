@@ -5,6 +5,7 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.Map;
 import server.server.Model.Domain.Environment;
 
 /**
@@ -22,13 +23,6 @@ public interface IEnvironmentService {
     public Environment find(Environment environment); 
     
     /**
-     * save a environment 
-     * @param environment
-     * @return Environment
-     */
-    public Environment save(Environment environment); 
-
-    /**
      * list all environments 
      * @return ArrayList
      */
@@ -40,7 +34,7 @@ public interface IEnvironmentService {
      * @param environment
      * @return Environment
      */
-    public Environment update(Environment environment);  
+    public Map<String, Object> update(Environment environment);  
     
     
     /**
@@ -48,5 +42,12 @@ public interface IEnvironmentService {
      * @param environmentId
      * @return Environment
      */
-    public Environment delete(Long environmentId);
+    public Map<String, Object> delete(Long environmentId);
+    
+     /**
+     * save a environment 
+     * @param environment
+     * @return Environment
+     */
+    public Map<String, Object> save(Environment environment); 
 }

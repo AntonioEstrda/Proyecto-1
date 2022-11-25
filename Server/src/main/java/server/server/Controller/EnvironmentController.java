@@ -6,6 +6,7 @@ package server.server.Controller;
 
 import server.server.Controller.Utilities.Utility;
 import java.util.ArrayList;
+import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -58,7 +59,7 @@ public class EnvironmentController {
             return new ResponseEntity<>(env, headers, HttpStatus.NOT_MODIFIED);
         }
 
-        env = envService.save(env);
+        Map<String, Object> save = envService.save(env);
         if (env != null) {
             return new ResponseEntity<>(env, null, HttpStatus.ACCEPTED);
         } else {
@@ -78,7 +79,7 @@ public class EnvironmentController {
             return new ResponseEntity<>(env, headers, HttpStatus.NOT_MODIFIED);
         }
         
-        env = envService.update(env);
+        Map<String, Object> update = envService.update(env);
         if (env != null) {
             return new ResponseEntity<>(env, null, HttpStatus.ACCEPTED);
         } else {
@@ -93,13 +94,13 @@ public class EnvironmentController {
     @RequestMapping("/delete/{id}")
     public ResponseEntity<Environment> delete(@PathVariable Long id) {
 
-        Environment env = envService.delete(id);
-        if (env != null) {
-            return new ResponseEntity<>(env, null, HttpStatus.ACCEPTED);
+        Map<String, Object> delete = envService.delete(id);
+        if (delete != null) {
+            return new ResponseEntity<>(null, null, HttpStatus.ACCEPTED);
         } else {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Error", "Not found");
-            return (new ResponseEntity<>(env, headers, HttpStatus.NOT_MODIFIED));
+            return (new ResponseEntity<>(null, headers, HttpStatus.NOT_MODIFIED));
         }
     }
 }

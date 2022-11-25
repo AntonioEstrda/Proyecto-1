@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-11-2022 a las 01:02:43
+-- Tiempo de generación: 25-11-2022 a las 16:13:23
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -61,7 +61,7 @@ CREATE TABLE `enviroment` (
   `NUMBER` int(3) NOT NULL,
   `ISDISABLE` tinyint(1) NOT NULL DEFAULT 0,
   `code` varchar(5) NOT NULL,
-  `type` enum('Salon','Sala','Auditorio') NOT NULL
+  `type` enum('SALON','SALA','AUDITORIO') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -69,9 +69,9 @@ CREATE TABLE `enviroment` (
 --
 
 INSERT INTO `enviroment` (`ENVIROMENTID`, `CAPACITY`, `UBICATION`, `NUMBER`, `ISDISABLE`, `code`, `type`) VALUES
-(1, 25, 'Segundo piso', 201, 0, '', 'Salon'),
-(2, 25, 'Segundo piso', 202, 1, '', 'Salon'),
-(4, 25, 'Tercer piso', 303, 0, '', 'Salon');
+(1, 25, 'Segundo piso', 201, 0, 'SIS', 'SALON'),
+(2, 25, 'Segundo piso', 202, 1, 'SIS', 'SALA'),
+(4, 25, 'Tercer piso', 303, 0, 'SIS', 'SALON');
 
 -- --------------------------------------------------------
 
@@ -90,9 +90,11 @@ CREATE TABLE `faculty` (
 --
 
 INSERT INTO `faculty` (`FACULTYID`, `NAME`, `location`) VALUES
-(5, 'Artes', ''),
 (7, 'Agrarias', ''),
-(10, 'Contables', '');
+(10, 'Contables', ''),
+(13, 'Agrarias', 'Cr 10 B'),
+(14, 'Agrarias', ''),
+(15, 'Artes', 'Centro histórico');
 
 -- --------------------------------------------------------
 
@@ -475,7 +477,7 @@ ALTER TABLE `enviroment`
 -- AUTO_INCREMENT de la tabla `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `FACULTYID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `FACULTYID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `faculty_enviroment`
