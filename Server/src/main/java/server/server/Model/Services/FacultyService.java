@@ -14,6 +14,7 @@ import server.server.Model.Access.DAOFaculty;
 import server.server.Model.Domain.Faculty;
 import org.springframework.transaction.annotation.Transactional;
 import server.server.utilities.Labels;
+import server.server.utilities.errors.FacErrors;
 
 /**
  *
@@ -35,15 +36,15 @@ public class FacultyService implements IFacultyService {
     @Override
     @Transactional(value = "DataTransactionManager")
     public Map<Labels, Object> save(Faculty faculty) {
-        Map<Labels, Object> returns = new HashMap();  
-        ArrayList errors = new ArrayList();  
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList errors = new ArrayList();
         if (this.find(faculty) == null) {
             Faculty entitySaved = facultyRepo.save(faculty);
-            returns.put(Labels.objectReturn, entitySaved); 
-        }else{
-            returns.put(Labels.objectReturn, null); 
+            returns.put(Labels.objectReturn, entitySaved);
+        } else {
+            returns.put(Labels.objectReturn, null);
         }
-        returns.put(Labels.errors, errors); 
+        returns.put(Labels.errors, errors);
         return returns;
     }
 
@@ -55,25 +56,33 @@ public class FacultyService implements IFacultyService {
 
     @Override
     @Transactional(value = "DataTransactionManager")
-    public Faculty update(Faculty faculty) {
+    public Map<Labels, Object> update(Faculty faculty) {
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errors = new ArrayList(); 
         Faculty old = this.find(faculty);
         if (old == null) {
-            return null;
+            errors.add(FacErrors.FAC101.name());  
         } else {
-            return facultyRepo.save(faculty);
+            old = facultyRepo.save(faculty);
         }
+        returns.put(Labels.errors, errors);  
+        returns.put(Labels.objectReturn, old);   
+        return returns;
     }
 
     @Override
     @Transactional(value = "DataTransactionManager")
-    public Faculty delete(Long FacultyId) {
-
+    public Map<Labels, Object> delete(Long FacultyId) {
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errors = new ArrayList(); 
         Faculty old = facultyRepo.findById(FacultyId).orElse(null);
-        if (old == null) {
-            return null;
-        } else {
+        if(old != null){
             facultyRepo.delete(old);
-            return old;
+        }else{
+            errors.add(FacErrors.FAC101.name());  
         }
+        returns.put(Labels.errors, errors); 
+        returns.put(Labels.objectReturn, old); 
+        return returns; 
     }
 }

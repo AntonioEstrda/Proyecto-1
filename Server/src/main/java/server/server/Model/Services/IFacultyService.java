@@ -42,13 +42,13 @@ public interface IFacultyService {
      * @param faculty
      * @return 
      */
-    public Faculty update(Faculty faculty);
+    public Map<Labels, Object> update(Faculty faculty);
     
     /**
      * Delete a Faculty 
      * @param FacultyId
      * @return 
      */
-    public Faculty delete(Long FacultyId);
+    public Map<Labels, Object> delete(Long FacultyId);
     
 }

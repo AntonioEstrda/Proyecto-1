@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Data;
 import javax.validation.constraints.NotEmpty;
+import server.server.utilities.errors.FacErrors;
 
 /**
  * Class Faculty mapped to Faculty Entity 
@@ -24,18 +25,18 @@ import javax.validation.constraints.NotEmpty;
 @Data
 public class Faculty implements Serializable {
     
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L; 
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="FACULTYID")
     private long facultyId; 
     
-    @NotEmpty
+    @NotEmpty(message = "FAC103") 
     @Column(length=100, name="NAME")
     private String facultyName;
-    
-    @NotEmpty 
+   
+    @NotEmpty(message = "FAC104")
     @Column(length=100, name="location")
     private String location;  
      

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.Faculty;
 import server.server.Model.Services.IFacultyService;
 import server.server.utilities.Labels;
@@ -59,9 +60,11 @@ public class FacultyController {
         ArrayList<String> errors2 =  (ArrayList<String>) returns.get(Labels.errors);  
         Faculty fac = (Faculty) returns.get(Labels.objectReturn);  
         
-        if ( errors2.isEmpty() || fac == null) {
+        if (!errors2.isEmpty() || fac == null || errors.hasErrors()) {
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Errors", "found an instance");
+            ArrayList<String> setErrors = Utility.setErrors(errors);
+            setErrors.addAll(errors2);  
+            headers.add(Labels.errors.name(),setErrors.toString());
             return new ResponseEntity<>(faculty, headers, HttpStatus.NOT_MODIFIED);
         } else {
             return new ResponseEntity<>(faculty, null, HttpStatus.ACCEPTED);
@@ -70,29 +73,34 @@ public class FacultyController {
 
     @PutMapping
     @RequestMapping("/update")
-    public ResponseEntity<Faculty> update(@RequestBody Faculty faculty) {
-
-        faculty = facultyService.update(faculty);
-        if (faculty != null) {
-            return new ResponseEntity<>(faculty, null, HttpStatus.ACCEPTED);
-        } else {
+    public ResponseEntity<Faculty> update(@RequestBody @Valid Faculty faculty, Errors errors) {
+        Map<Labels, Object> update = facultyService.update(faculty);
+        ArrayList<String> errors2 = (ArrayList<String>) update.get(Labels.errors);  
+        Faculty fac = (Faculty) update.get(Labels.objectReturn); 
+        
+        if (errors.hasErrors() == true || errors2.isEmpty() == false || fac == null){
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Error", "Not found");
+            ArrayList<String> setErrors = Utility.setErrors(errors);
+            setErrors.addAll(errors2);  
+            headers.add(Labels.errors.name(), setErrors.toString());
             return new ResponseEntity<>(faculty, headers, HttpStatus.NOT_MODIFIED);
-        }
+        }else {
+            return new ResponseEntity<>(faculty, null, HttpStatus.ACCEPTED);
+        } 
     }
 
     @DeleteMapping
     @RequestMapping("/delete/{FacultyId}")
     public ResponseEntity<Faculty> delete(@PathVariable Long FacultyId) {
-
-        Faculty faculty = facultyService.delete(FacultyId);
-        if (faculty != null) {
-            return new ResponseEntity<>(faculty, null, HttpStatus.ACCEPTED);
+        Map<Labels, Object> delete = facultyService.delete(FacultyId);
+        ArrayList<String> errors = (ArrayList<String>) delete.get(Labels.errors);  
+        Faculty fac = (Faculty) delete.get(Labels.objectReturn); 
+        if (fac != null) {
+            return new ResponseEntity<>(fac, null, HttpStatus.ACCEPTED);
         } else {
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Error", "Not found");
-            return (new ResponseEntity<>(faculty, headers, HttpStatus.NOT_MODIFIED));
+            headers.add(Labels.errors.name(), errors.toString());
+            return (new ResponseEntity<>(fac, headers, HttpStatus.NOT_MODIFIED));
         }
     }
 
