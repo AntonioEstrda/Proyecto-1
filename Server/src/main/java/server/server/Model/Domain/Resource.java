@@ -32,19 +32,19 @@ public class Resource implements Serializable {
     @Column(name="RESOURCEID")
     private long ResourceId; 
     
-    @NotEmpty
+    @NotEmpty(message = "RES105")
     @Column(length=100, name="NAME")
     private String name;
     
-    @NotEmpty 
+    @NotEmpty(message = "RES102")
     @Column(length=100, name="DESCRIPTION")
     private String description;  
     
-    @NotNull
+    @NotNull(message = "RES103")
     @Column(columnDefinition = "TINYINT(1)", name="ISDISABLE")
     private boolean isDisable;
     
-    @NotNull
+    @NotNull(message = "RES104")
     @ManyToOne
     @JoinColumn(name="RESOURCETYPEID")
     private ResourceType resourceType;
