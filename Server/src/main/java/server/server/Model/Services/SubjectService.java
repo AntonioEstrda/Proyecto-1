@@ -6,6 +6,8 @@ package server.server.Model.Services;
 
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import server.server.Model.Access.DAOSubject;
 import server.server.Model.Domain.Subject;
@@ -14,6 +16,8 @@ import server.server.Model.Domain.Subject;
  *
  * @author Fernando
  */
+@Service 
+@EnableTransactionManagement
 public class SubjectService implements ISubjectService{
     
     @Autowired 

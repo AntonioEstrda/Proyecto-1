@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Data;
 import javax.validation.constraints.NotEmpty;
-import server.server.utilities.errors.FacErrors;
+import javax.validation.constraints.Size;
 
 /**
  * Class Faculty mapped to Faculty Entity 
@@ -32,12 +32,14 @@ public class Faculty implements Serializable {
     @Column(name="FACULTYID")
     private long facultyId; 
     
-    @NotEmpty(message = "FAC103") 
-    @Column(length=100, name="NAME")
+    @NotEmpty(message = "FAC103")
+    @Size(min = 5, max = 100, message = "FAC105")
+    @Column(length=100, name="NAME", nullable = false)
     private String facultyName;
    
     @NotEmpty(message = "FAC104")
-    @Column(length=100, name="location")
+    @Size(min = 10, max = 100, message = "FAC106" )
+    @Column(length=100, name="location", nullable = false)
     private String location;  
      
 }
