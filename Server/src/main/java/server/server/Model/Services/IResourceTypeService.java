@@ -5,7 +5,9 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.Map;
 import server.server.Model.Domain.ResourceType;
+import server.server.utilities.Labels;
 
 /**
  * Interface for ResourceType Service 
@@ -15,36 +17,36 @@ public interface IResourceTypeService {
     
     /**
      * finAll ResourceTypes 
-     * @param o args
+     * @param args
      * @return ArrayList of ResourceType
      */
-    public ArrayList<ResourceType> findAll(Object o); 
+    public ArrayList<ResourceType> findAll(Object args); 
     
     /**
      *
-     * @param o args
+     * @param args
      * @return ResourceType
      */
-    public ResourceType find(Object o);
+    public ResourceType find(Object args);
 
     /**
      * find one resource type
-     * @param o args
-     * @return ResourceType
+     * @param args
+     * @return errors, ResourceType
      */
-    public ResourceType save(Object o);  
+    public Map<Labels, Object> save(Object args);  
     
     /**
      * updates a resource type
      * @param o
-     * @return
+     * @return errors, ResourceType
      */
-    public ResourceType update(Object o);  
+    public Map<Labels, Object> update(Object o);  
     
     /**
      * disables a resource type 
      * @param id
-     * @return
+     * @return errors, ResourceType
      */
-    public ResourceType delete(Long id);  
+    public Map<Labels, Object> delete(Long id);  
 }

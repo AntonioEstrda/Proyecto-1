@@ -32,15 +32,14 @@ public class ResourceType implements Serializable {
     @Column(name="RESSOURCETYPEID")
     private long ResourceTypeId;
     
-    @NotEmpty
+    @NotEmpty(message = "RESTYP103") 
     @Column(length=100, name="NAME")
     private String name;
     
-    @NotNull
+    @NotNull(message = "RESTYP102")
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isDisable;
     
-    @Min(value = 0, message = "ParentId must be higher or equal than 0")
     @Column(name="RES_RESSOURCETYPEID")
     private Long parent;  
     
