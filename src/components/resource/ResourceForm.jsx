@@ -21,9 +21,7 @@ function ResourceForm() {
   return (
     <div className="max-w-md mx-auto">
       <form onSubmit={handleSubmit} className="bg-slate-800 p-10 mb-4 ">
-        <h1 className="text-2xl font-bold text-white mb-3">
-          Crear una Recurso
-        </h1>
+        <h1 className="text-2xl font-bold text-white mb-3">Crear un Recurso</h1>
         <input
           placeholder="Nombre del recurso"
           onChange={(e) => setName(e.target.value)}

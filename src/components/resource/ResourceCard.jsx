@@ -3,7 +3,6 @@ import { ResourceContext } from "../../context/ResourceContext";
 
 function ResourceCard({ resource }) {
   const { deleteResource } = useContext(ResourceContext);
-  console.log(resource);
 
   return (
     <div className="bg-gray-800 text-white p-4 rounded-md">

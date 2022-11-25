@@ -13,7 +13,6 @@ export function ResourceContextProvider(props) {
   }
 
   function createResource(resource) {
-    console.log(resource);
     setResources([
       ...resources,
       {
