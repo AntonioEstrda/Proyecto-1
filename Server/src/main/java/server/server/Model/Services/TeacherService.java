@@ -6,6 +6,7 @@ package server.server.Model.Services;
 
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.server.Model.Access.DAOTeacher;
 import server.server.Model.Domain.Teacher;
@@ -14,6 +15,7 @@ import server.server.Model.Domain.Teacher;
  *
  * @author Fernando
  */
+@Service
 public class TeacherService implements ITeacherService{
     
     
