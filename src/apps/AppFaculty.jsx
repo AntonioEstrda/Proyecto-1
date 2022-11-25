@@ -3,7 +3,7 @@ import FacultyForm from "../components/faculty/FacultyForm";
 
 function FacultyApp() {
   return (
-    <main className="bg-zinc-900 h-screen">
+    <main className="bg-slate-500 h-full">
       <div className="container mx-auto p-10">
         <FacultyForm />
         <FacultyList />

@@ -8,12 +8,15 @@ import { ResourceContextProvider } from "./context/ResourceContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <FacultyContextProvider>
-      <FacultyApp />
-    </FacultyContextProvider>
-
-    <ResourceContextProvider>
-      <ResourceApp />
-    </ResourceContextProvider>
+    <div>
+      <div className="grid grid-cols-2">
+        <FacultyContextProvider>
+          <FacultyApp />
+        </FacultyContextProvider>
+        <ResourceContextProvider>
+          <ResourceApp />
+        </ResourceContextProvider>
+      </div>
+    </div>
   </React.StrictMode>
 );

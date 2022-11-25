@@ -26,6 +26,7 @@ export function ResourceContextProvider(props) {
           resourceTypeId: null,
           disable: false,
         },
+        disable: resource.disable,
       },
     ]);
   }
