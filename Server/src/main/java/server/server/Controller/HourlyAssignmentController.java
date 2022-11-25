@@ -44,7 +44,7 @@ public class HourlyAssignmentController {
     @ResponseBody
     public HourlyAssignment get(@PathVariable Long vinculationId) {
         HourlyAssignment hourlyAssignment = new HourlyAssignment();
-        hourlyAssignment.setHourlyAssignmentId(vinculationId);
+        hourlyAssignment.setVinculationId(vinculationId);
         return deptService.find(hourlyAssignment);
     }
 
