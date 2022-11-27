@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-11-2022 a las 22:18:00
+-- Tiempo de generación: 27-11-2022 a las 03:19:45
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -20,6 +20,24 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `schedulemanager`
 --
+
+DELIMITER $$
+--
+-- Funciones
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `globalType` (`idType` INT) RETURNS INT(11)  BEGIN
+    	DECLARE var_2 int;  
+        SET var_2 = -1; 
+        WITH RECURSIVE globalType(id, parentId) AS  
+                (  
+                SELECT RT.RESSOURCETYPEID, RT.RES_RESSOURCETYPEID FROM resourcetype RT WHERE RESSOURCETYPEID = idType
+                union all  
+                SELECT RT2.RESSOURCETYPEID , RT2.RES_RESSOURCETYPEID from globalType GT, resourcetype RT2 WHERE GT.parentId = RT2.RESSOURCETYPEID
+                )SELECT DISTINCT id into var_2 FROM globalType WHERE ParentId is null; 
+        RETURN var_2; 
+    END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -96,13 +114,6 @@ CREATE TABLE `faculty_resource` (
   `FINALDATE` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `faculty_resource`
---
-
-INSERT INTO `faculty_resource` (`FAC_AND_RES_ID`, `FACULTYID`, `RESOURCEID`, `REGISTERDATE`, `FINALDATE`) VALUES
-(1, 7, 1, '2022-11-01', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -170,7 +181,7 @@ CREATE TABLE `resourcet` (
 --
 
 INSERT INTO `resourcet` (`RESOURCEID`, `RESOURCETYPEID`, `NAME`, `DESCRIPTION`, `ISDISABLE`, `code`, `location`, `capacity`, `number`) VALUES
-(1, 1, 'Computador', 'Computadorxd', 0, 'SiSCOM12', NULL, NULL, NULL);
+(3, 8, 'Computador', 'Computador', 0, 'SISCOM', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -190,9 +201,13 @@ CREATE TABLE `resourcetype` (
 --
 
 INSERT INTO `resourcetype` (`RESSOURCETYPEID`, `RES_RESSOURCETYPEID`, `NAME`, `ISDISABLE`) VALUES
-(1, NULL, 'Computacional', 0),
-(2, 1, 'SubTipoComputacional1', 0),
-(3, NULL, 'Utileria', 0);
+(4, NULL, 'ENVIRONMENT', 0),
+(5, 4, 'SALA', 0),
+(6, 4, 'AUDITORIO', 0),
+(7, 4, 'SALON', 0),
+(8, NULL, 'COMPUTACIONAL', 0),
+(9, 7, 'SubTipo1', 0),
+(10, 8, 'SubTipoComputacional', 0);
 
 -- --------------------------------------------------------
 
@@ -451,13 +466,13 @@ ALTER TABLE `program`
 -- AUTO_INCREMENT de la tabla `resourcet`
 --
 ALTER TABLE `resourcet`
-  MODIFY `RESOURCEID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `RESOURCEID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `resourcetype`
 --
 ALTER TABLE `resourcetype`
-  MODIFY `RESSOURCETYPEID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `RESSOURCETYPEID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `schedule`

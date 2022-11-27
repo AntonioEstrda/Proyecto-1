@@ -104,4 +104,9 @@ public class ResourceTypeService implements IResourceTypeService {
         returns.put(Labels.objectReturn, et2);
         return returns;
     }
+
+    @Override
+    public long globalType(long idType) {
+        return resTypeRepo.findGlobalType(idType); 
+    }
 }

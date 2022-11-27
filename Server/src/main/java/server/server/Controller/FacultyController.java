@@ -54,35 +54,40 @@ public class FacultyController {
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Faculty> add(@RequestBody @Valid Faculty faculty, Errors errors) {
-
-        Map<Labels, Object> returns = facultyService.save(faculty);
-        ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
-        Faculty fac = (Faculty) returns.get(Labels.objectReturn);
-        if (errors2.isEmpty() && !errors.hasErrors() && fac != null) {
-            return new ResponseEntity<>(faculty, null, HttpStatus.ACCEPTED);
-        } else {
-            HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
+        if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
-            errors2.addAll(setErrors);
-            headers.add(Labels.errors.name(), errors2.toString());
+            headers.add(Labels.errors.name(), setErrors.toString());
             return new ResponseEntity<>(faculty, headers, HttpStatus.NOT_MODIFIED);
+        } else {
+            Map<Labels, Object> returns = facultyService.save(faculty);
+            ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
+            Faculty fac = (Faculty) returns.get(Labels.objectReturn);
+            if (!errors2.isEmpty() || fac != null) {
+                headers.add(Labels.errors.name(), errors2.toString());
+                return new ResponseEntity<>(faculty, headers, HttpStatus.NOT_MODIFIED);
+            }else{
+                return new ResponseEntity<>(faculty, null, HttpStatus.ACCEPTED);
+            }
         }
     }
 
     @PutMapping
     @RequestMapping("/update")
     public ResponseEntity<Faculty> update(@RequestBody @Valid Faculty faculty, Errors errors) {
-        Map<Labels, Object> update = facultyService.update(faculty);
-        ArrayList<String> errors2 = (ArrayList<String>) update.get(Labels.errors);
-        Faculty fac = (Faculty) update.get(Labels.objectReturn);
-
-        if (errors.hasErrors() == true || errors2.isEmpty() == false || fac == null) {
-            HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
+        if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
-            setErrors.addAll(errors2);
             headers.add(Labels.errors.name(), setErrors.toString());
             return new ResponseEntity<>(faculty, headers, HttpStatus.NOT_MODIFIED);
         } else {
+            Map<Labels, Object> update = facultyService.update(faculty);
+            ArrayList<String> errors2 = (ArrayList<String>) update.get(Labels.errors);
+            Faculty fac = (Faculty) update.get(Labels.objectReturn);
+            if (!errors2.isEmpty() || fac == null) {
+                headers.add(Labels.errors.name(), errors2.toString());
+                return new ResponseEntity<>(faculty, headers, HttpStatus.NOT_MODIFIED);
+            }
             return new ResponseEntity<>(faculty, null, HttpStatus.ACCEPTED);
         }
     }

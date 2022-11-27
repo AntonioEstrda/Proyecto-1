@@ -5,7 +5,9 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.Map;
 import server.server.Model.Domain.Resource;
+import server.server.utilities.Labels;
 
 /**
  * Resource Service Interface 
@@ -18,21 +20,21 @@ public interface IResourceService {
      * @param id ResourceId
      * @return Resource
      */
-    public Resource delete(Long id);
+    public Map<Labels, Object> delete(Long id);
 
     /**
      * Updates a Resource 
      * @param res  Resource to map
      * @return Resource 
      */
-    public Resource update(Resource res);
+    public Map<Labels, Object> update(Resource res);
 
     /**
      * Add a new one Resource 
      * @param res Resource to map
      * @return Resource
      */
-    public Resource save(Resource res);
+    public Map<Labels, Object> save(Resource res);
 
     /**
      * Find a resource 

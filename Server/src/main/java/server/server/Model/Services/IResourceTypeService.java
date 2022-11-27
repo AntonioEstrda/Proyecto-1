@@ -16,6 +16,11 @@ import server.server.utilities.Labels;
 public interface IResourceTypeService {
     
     /**
+     * Temporal solution 
+     */
+    public static int ENVIRONMENTTYPE = 4;  
+    
+    /**
      * finAll ResourceTypes 
      * @param args
      * @return ArrayList of ResourceType
@@ -49,4 +54,13 @@ public interface IResourceTypeService {
      * @return errors, ResourceType
      */
     public Map<Labels, Object> delete(Long id);  
+    
+    
+    /**
+     * Returns a Resource global type 
+     * @param idType type id to determinate its global type
+     * @return global type 
+     */
+    public long globalType(long idType);
+    
 }

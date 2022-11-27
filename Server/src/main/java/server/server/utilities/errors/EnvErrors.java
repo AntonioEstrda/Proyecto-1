@@ -21,16 +21,6 @@ public enum EnvErrors {
     ENV102,
 
     /**
-     * Min value for number 100 
-     */
-    ENV103,
-
-    /**
-     * Max value for number 999
-     */
-    ENV104,
-
-    /**
      * IsDisable must have a value 
      */
     ENV105,
