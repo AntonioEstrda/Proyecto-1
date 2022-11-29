@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import server.server.Model.Domain.FacultyResource;
 import server.server.Model.Domain.Resource;
+import server.server.Model.Services.IFacultyResourceService;
 import server.server.Model.Services.IResourceService;
 import server.server.utilities.Labels;
 
@@ -39,22 +41,30 @@ public class ResourceController {
     @Autowired
     public IResourceService envService;
 
-    @GetMapping(value = "/all")
-    public ArrayList<Resource> all() {
-        return envService.getAll();
+    @Autowired
+    public IFacultyResourceService facResService;
+
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ArrayList<Resource> all(@RequestParam("facultyId") long facultyId) {
+        return facResService.findByFacultyIdRes(facultyId);
     }
 
-    @GetMapping(value = "/{id}")
-    @ResponseBody
-    public Resource get(@PathVariable Long id) {
-        Resource envType = new Resource();
-        envType.setResourceId(id);
-        return envService.find(envType);
+    @GetMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Resource> get(@RequestParam("facultyId") long facultyId, @RequestParam("resourceId") long resourceId) {
+        FacultyResource returns = facResService.findByFacultyIdResourceId(facultyId, resourceId);
+        if(returns == null){
+            return new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
+        }else{
+            return new ResponseEntity<>(returns.getResourceFR(), null, HttpStatus.OK);
+        }
     }
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Resource> add(@RequestBody @Valid Resource env, Errors errors) {
+    @RequestMapping("/add")
+    public ResponseEntity<Resource> add(
+            @RequestParam("facultyId") long facultyId,
+            @RequestBody @Valid Resource env, Errors errors) {
         if (errors.hasErrors()) {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Errors", Utility.setErrors(errors).toString());
@@ -63,7 +73,7 @@ public class ResourceController {
             Map<Labels, Object> returns = envService.save(env);
             ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
             Resource res2 = (Resource) returns.get(Labels.objectReturn);
-            
+
             if (!errors2.isEmpty() || res2 == null) {
                 HttpHeaders headers = new HttpHeaders();
                 headers.add(Labels.errors.name(), errors2.toString());
@@ -74,8 +84,10 @@ public class ResourceController {
 
         }
     }
-
-    @PutMapping
+    
+    /* NO probar aun :D */
+    
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping("/update")
     public ResponseEntity<Resource> update(@RequestBody @Valid Resource res, Errors errors) {
         HttpHeaders headers = new HttpHeaders();

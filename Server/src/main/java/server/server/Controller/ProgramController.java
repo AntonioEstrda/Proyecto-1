@@ -45,7 +45,7 @@ public class ProgramController {
     @ResponseBody
     public Program get(@PathVariable Long id) {
         Program env = new Program();
-        env.setProgramID(id);
+        env.setProgramId(id);
         return programService.find(env);
     }
 

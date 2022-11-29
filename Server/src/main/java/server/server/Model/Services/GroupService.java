@@ -26,7 +26,7 @@ public class GroupService implements IGroupService{
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
     public Group find(Group group) {
-        return groupRepo.findById(group.getGroupID()).orElse(null);
+        return groupRepo.findById(group.getGroupId()).orElse(null);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class ProgramService implements IProgramService{
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
     public Program find(Program program) {
-        return programRepo.findById(program.getProgramID()).orElse(null);
+        return programRepo.findById(program.getProgramId()).orElse(null);
     }
 
     @Override

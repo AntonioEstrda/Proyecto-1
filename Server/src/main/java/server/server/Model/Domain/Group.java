@@ -30,7 +30,7 @@ public class Group implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="IDGROUP")
-    private long groupID; 
+    private long groupId; 
     
     @NotEmpty
     @Column(length=100, name="NAME")

@@ -12,12 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.ObjectError;
 import server.server.Model.Access.DAOFacultyResource;
 import server.server.Model.Domain.FacultyResource;
+import server.server.Model.Domain.Resource;
+import server.server.utilities.Labels;
+import server.server.utilities.errors.FacErrors;
+import server.server.utilities.errors.FacResErrors;
+import server.server.utilities.errors.ResErrors;
 
 /**
- *
+ * 
  * @author anmon
  */
 @Service
@@ -35,62 +39,86 @@ public class FacultyResourceService implements IFacultyResourceService{
     
     @Override
     @Transactional(value="DataTransactionManager")
-    public Map<String, Object> save(FacultyResource fr){
-        Map<String, Object> args = new HashMap();
-        ArrayList<ObjectError> errs = new ArrayList();  
+    public Map<Labels, Object> save(FacultyResource fr){
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errs = new ArrayList();  
         
         if (facultyService.find(fr.getFacultyFR()) == null){
-            errs.add(new ObjectError("facultyErr", "faculty not found")); 
+            errs.add(FacErrors.FAC101.name()); 
         }
         if (resourceService.find(fr.getResourceFR()) == null){
-            errs.add(new ObjectError("resourceErr", "resource not found")); 
+            errs.add(ResErrors.RES101.name()); 
+        }
+          
+        if (facRscRep.findByFacultyIdResourceId(
+                fr.getFacultyFR().getFacultyId(), 
+                fr.getResourceFR().getResourceId()) != null){
+            errs.add(FacResErrors.FACRES102.name());  
         }
         
-        if(errs.isEmpty() || facRscRep.findById(fr.getFacResId()) == null){
+        if (facRscRep.findByResourceId(fr.getResourceFR().getResourceId()) != null){
+            errs.add(FacResErrors.FACRES103.name());  
+        }
+        
+        if(errs.isEmpty()){
             fr.setRegistrerDate(new Date(System.currentTimeMillis()));
             fr = facRscRep.save(fr);
-        }else{
-            fr = null;
-            errs.add(new ObjectError("frErrorSave", "an instance of fr encountered"));
         }
         
-        args.put("errors" , errs); 
-        args.put("FacultyResource", fr); 
-        return args; 
+        returns.put(Labels.errors , errs); 
+        returns.put(Labels.objectReturn, fr); 
+        return returns; 
     }
     
     @Override
     @Transactional(value="DataTransactionManager")
-    public Map<String, Object> update(FacultyResource fr){
-        Map<String, Object> args = new HashMap();
-        ArrayList<ObjectError> errs = new ArrayList();  
+    public  Map<Labels, Object> update(FacultyResource fr){
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errs = new ArrayList();   
         
         if (facultyService.find(fr.getFacultyFR()) == null){
-            errs.add(new ObjectError("facultyErr", "faculty not found")); 
+            errs.add(FacErrors.FAC101.name()); 
         }
         if (resourceService.find(fr.getResourceFR()) == null){
-            errs.add(new ObjectError("resourceErr", "resource not found")); 
+            errs.add(ResErrors.RES101.name()); 
         }
         
-        if(errs.isEmpty() || facRscRep.findById(fr.getFacResId()) != null){
+        fr = facRscRep.findByFacultyIdResourceId(
+                fr.getFacultyFR().getFacultyId()
+                , fr.getResourceFR().getResourceId());   
+        
+        if(errs.isEmpty() && fr != null){
             fr.setFinalDate(new Date(System.currentTimeMillis()));
+            fr.setDisable(true);  
             fr = facRscRep.save(fr);
         }else{
             fr = null;
-            errs.add(new ObjectError("frErrorUpdate", "an instance of fr was not encounter"));
+            errs.add(FacResErrors.FACRES101.name()); 
         }
-        
-        args.put("errors" , errs); 
-        args.put("FacultyResource", fr); 
-        return args; 
+
+        returns.put(Labels.errors , errs); 
+        returns.put(Labels.objectReturn, fr); 
+        return returns; 
     }
     
     @Override
     @Transactional(value="DataTransactionManager", readOnly = true)
-    public Map<String, Object> findByResource(long resourceId){
-        Map<String, Object> args = new HashMap();
-        
-        facRscRep.findByResourceIdAndFinaldate(resourceId, null); 
-        return args; 
+    public  ArrayList<FacultyResource> findByFacultyId(long facultyId){
+        return (ArrayList<FacultyResource>) facRscRep.findByFacultyId(facultyId); 
+    }
+
+    @Override
+    @Transactional(value="DataTransactionManager", readOnly = true)
+    public ArrayList<Resource> findByFacultyIdRes(long facultyId) {
+        ArrayList<Resource> resources = new ArrayList(); 
+        for(FacultyResource fr: facRscRep.findByFacultyId(facultyId)){
+            resources.add(fr.getResourceFR()); 
+        }
+        return resources; 
+    }
+
+    @Override
+    public FacultyResource findByFacultyIdResourceId(long facultyId, long resourceId) {
+        return facRscRep.findByFacultyIdResourceId(facultyId, resourceId); 
     }
 }

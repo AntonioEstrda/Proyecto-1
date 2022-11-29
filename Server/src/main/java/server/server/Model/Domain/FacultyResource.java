@@ -33,7 +33,7 @@ public class FacultyResource implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="FAC_AND_RES_ID")
-    private long FacResId;
+    private long facResId;
     
     @NotNull
     @Temporal(TemporalType.DATE)
@@ -44,14 +44,15 @@ public class FacultyResource implements Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name="FINALDATE")
     private Date finalDate;  
+   
+    @NotNull 
+    @Column(name="isDisable")
+    private boolean isDisable; 
     
-  
-    @NotNull
     @ManyToOne
     @JoinColumn(name="RESOURCEID")
     private Resource resourceFR; 
     
-    @NotNull
     @ManyToOne
     @JoinColumn(name="FacultyId")
     private Faculty facultyFR; 

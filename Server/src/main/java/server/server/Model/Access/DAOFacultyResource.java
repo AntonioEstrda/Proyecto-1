@@ -4,7 +4,6 @@
  */
 package server.server.Model.Access;
 
-import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,17 +18,28 @@ import server.server.Model.Domain.FacultyResource;
 @Repository
 public interface DAOFacultyResource extends JpaRepository<FacultyResource, Long>{
     
-    /**
-     *
-     * @param facultyid
-     * @param finaldate
-     * @return
-     */
+    
     @Query(
-        value = "SELECT * FROM faculty_resource fr where fr.FACULTYID = :facultyId AND fr.FINALDATE = :finaldate", 
+        value = "SELECT * FROM faculty_resource fr where fr.RESOURCEID=:resourceId AND fr.FACULTYID=:facultyId"
+                + " AND isDisable = 0" , 
         nativeQuery=true
     )
-    public List<FacultyResource> findByResourceIdAndFinaldate(@Param("facultyId") long facultyid, 
-                                                    @Param("finaldate") Date finaldate); 
-
+    public FacultyResource findByFacultyIdResourceId(@Param("facultyId") long facultyId, 
+                                                    @Param("resourceId") long resourceId); 
+    
+    @Query(
+        value = "SELECT * FROM faculty_resource fr where fr.RESOURCEID=:resourceId"
+                + " AND isDisable = 0" , 
+        nativeQuery=true
+    )
+    public List<FacultyResource> findByResourceId(@Param("resourceId") long resourceId); 
+    
+    
+    @Query(
+        value = "SELECT * FROM faculty_resource fr where fr.FACULTYID=:facultyId"
+                + " AND isDisable = 0" , 
+        nativeQuery=true
+    )
+    public List<FacultyResource> findByFacultyId(@Param("facultyId")long facultyId);
+    
 }

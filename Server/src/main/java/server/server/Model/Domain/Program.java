@@ -30,7 +30,7 @@ public class Program implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="IDPROGRAM")
-    private long programID; 
+    private long programId; 
     
     @NotEmpty
     @Column(length=100, name="NAME")

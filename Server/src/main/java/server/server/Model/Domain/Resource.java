@@ -32,7 +32,7 @@ public class Resource implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="RESOURCEID")
-    private long ResourceId; 
+    private Long resourceId; 
     
     @NotEmpty(message = "RES105")
     @Column(length=100, name="NAME")
@@ -59,13 +59,13 @@ public class Resource implements Serializable {
     @NotNull(message="RES108")
     @Column(columnDefinition="int(3)", name="NUMBER")
     @Min(value = 100, message = "ENV109")
-    private int number;  
+    private Integer number;  
     
     
-    @Column(length=100, name="location")
+    @Column(length=100, name="location", nullable=true)
     private String location;
      
-    @Column(columnDefinition="int(4)", name="CAPACITY")
-    private int capacity;  
+    @Column(columnDefinition="int(4)", name="CAPACITY", nullable=true)
+    private Integer capacity;  
     
 }
