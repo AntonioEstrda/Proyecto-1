@@ -52,9 +52,9 @@ public class ResourceController {
     @GetMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Resource> get(@RequestParam("facultyId") long facultyId, @RequestParam("resourceId") long resourceId) {
         FacultyResource returns = facResService.findByFacultyIdResourceId(facultyId, resourceId);
-        if(returns == null){
+        if (returns == null) {
             return new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
-        }else{
+        } else {
             return new ResponseEntity<>(returns.getResourceFR(), null, HttpStatus.OK);
         }
     }
@@ -67,7 +67,7 @@ public class ResourceController {
             @RequestBody @Valid Resource env, Errors errors) {
         if (errors.hasErrors()) {
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Errors", Utility.setErrors(errors).toString());
+            headers.add(Labels.errors.name(), Utility.setErrors(errors).toString());
             return new ResponseEntity<>(env, headers, HttpStatus.NOT_MODIFIED);
         } else {
             Map<Labels, Object> returns = envService.save(env);
@@ -84,9 +84,7 @@ public class ResourceController {
 
         }
     }
-    
-    /* NO probar aun :D */
-    
+
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping("/update")
     public ResponseEntity<Resource> update(@RequestBody @Valid Resource res, Errors errors) {

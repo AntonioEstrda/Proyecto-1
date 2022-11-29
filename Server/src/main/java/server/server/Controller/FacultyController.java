@@ -63,10 +63,10 @@ public class FacultyController {
             Map<Labels, Object> returns = facultyService.save(faculty);
             ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
             Faculty fac = (Faculty) returns.get(Labels.objectReturn);
-            if (!errors2.isEmpty() || fac != null) {
+            if (!errors2.isEmpty() || fac == null) {
                 headers.add(Labels.errors.name(), errors2.toString());
                 return new ResponseEntity<>(faculty, headers, HttpStatus.NOT_MODIFIED);
-            }else{
+            } else {
                 return new ResponseEntity<>(faculty, null, HttpStatus.ACCEPTED);
             }
         }
