@@ -86,4 +86,9 @@ public class FacultyService implements IFacultyService {
         returns.put(Labels.objectReturn, old); 
         return returns; 
     }
+
+    @Override
+    public Faculty findById(long faculty) {
+        return facultyRepo.findById(faculty).orElse(null);
+    }
 }

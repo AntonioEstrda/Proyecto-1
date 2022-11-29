@@ -20,9 +20,11 @@ public interface IFacultyResourceService {
 
     public Map<Labels, Object> update(FacultyResource fr);
 
-    ArrayList<FacultyResource> findByFacultyId(long facultyId);
+    public ArrayList<FacultyResource> findByFacultyId(long facultyId);
     
-    ArrayList<Resource> findByFacultyIdRes(long facultyId);  
+    public ArrayList<Resource> findByFacultyIdRes(long facultyId);  
     
-    FacultyResource findByFacultyIdResourceId(long facultyId, long resourceId);  
+    public FacultyResource findByFacultyIdResourceId(long facultyId, long resourceId);  
+    
+    public Map<Labels, Object> addNewOneReource(long facultyId, Resource res);  
 }

@@ -24,6 +24,14 @@ public interface IFacultyService {
     public Faculty find(Faculty faculty);  
     
     /**
+     * Receives a Faculty instance to map for search an associated 
+     * register in the repository 
+     * @param faculty Faculty instance
+     * @return
+     */
+    public Faculty findById(long faculty);  
+    
+    /**
      * Saves a new one  or updates a faculty register in the repository 
      * 
      * @param faculty Faculty instance 

@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,10 +38,10 @@ import server.server.utilities.Labels;
 public class ResourceController {
 
     @Autowired
-    public IResourceService envService;
+    private IResourceService envService;
 
     @Autowired
-    public IFacultyResourceService facResService;
+    private IFacultyResourceService facResService;
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ArrayList<Resource> all(@RequestParam("facultyId") long facultyId) {
@@ -60,32 +59,31 @@ public class ResourceController {
     }
 
     @PostMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping("/add")
     public ResponseEntity<Resource> add(
             @RequestParam("facultyId") long facultyId,
-            @RequestBody @Valid Resource env, Errors errors) {
+            @RequestBody @Valid Resource res, Errors errors) {
+        HttpHeaders headers = new HttpHeaders();
         if (errors.hasErrors()) {
-            HttpHeaders headers = new HttpHeaders();
             headers.add(Labels.errors.name(), Utility.setErrors(errors).toString());
-            return new ResponseEntity<>(env, headers, HttpStatus.NOT_MODIFIED);
-        } else {
-            Map<Labels, Object> returns = envService.save(env);
-            ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
-            Resource res2 = (Resource) returns.get(Labels.objectReturn);
-
-            if (!errors2.isEmpty() || res2 == null) {
-                HttpHeaders headers = new HttpHeaders();
-                headers.add(Labels.errors.name(), errors2.toString());
-                return new ResponseEntity<>(env, headers, HttpStatus.NOT_MODIFIED);
-            } else {
-                return new ResponseEntity<>(env, null, HttpStatus.ACCEPTED);
-            }
-
+            return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
         }
+
+        Map<Labels, Object> returns = facResService.addNewOneReource(facultyId, res);
+        ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
+        Resource res2 = (Resource) returns.get(Labels.objectReturn);
+        if (!errors2.isEmpty() || res2 == null) {
+            headers.add(Labels.errors.name(), errors2.toString());
+            return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
+        }
+        return new ResponseEntity<>(res, null, HttpStatus.ACCEPTED);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    /*Desde aqui no se ha probado OJO */
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping("/update")
     public ResponseEntity<Resource> update(@RequestBody @Valid Resource res, Errors errors) {
         HttpHeaders headers = new HttpHeaders();
@@ -107,8 +105,8 @@ public class ResourceController {
     }
 
     @DeleteMapping
-    @RequestMapping("/delete/{id}")
-    public ResponseEntity<Resource> delete(@PathVariable Long id) {
+    @RequestMapping("/delete")
+    public ResponseEntity<Resource> delete(@RequestParam("resourceId") Long id) {
 
         Map<Labels, Object> returns = envService.delete(id);
         ArrayList<String> errors = (ArrayList<String>) returns.get(Labels.errors);
