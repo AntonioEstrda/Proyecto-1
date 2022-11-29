@@ -14,15 +14,25 @@ export function FacultyContextProvider(props) {
     setFacultys([
       ...facultys,
       {
-        name: faculty.name,
+        facultyName: faculty.name,
         id: facultys.length,
         location: faculty.location,
       },
+      // fetch("http://localhost:8080/faculty/", {
+      //   method: "POST",
+      //   body: {
+      //     name: faculty.name,
+      //     id: facultys.length,
+      //     location: faculty.location,
+      //   }, // body data type must match "Content-Type" header
+      // }),
     ]);
   }
 
   useEffect(() => {
-    setFacultys(data);
+    fetch("http://localhost:8080/faculty/all")
+      .then((response) => response.json())
+      .then((dataFaculties) => setFacultys(dataFaculties));
   }, []);
 
   return (

@@ -16,7 +16,7 @@ function FacultyList() {
   return (
     <div className="grid grid-cols-4 gap-2">
       {facultys.map((faculty) => (
-        <FacultyCard key={faculty.id} faculty={faculty} />
+        <FacultyCard key={faculty.facultyId} faculty={faculty} />
       ))}
     </div>
   );
