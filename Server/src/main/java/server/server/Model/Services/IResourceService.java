@@ -49,4 +49,19 @@ public interface IResourceService {
      */
     public ArrayList<Resource> getAll();
     
+    
+    /**
+     * find by code and number 
+     * @param code
+     * @param number
+     * @return 
+     */
+    public Resource findByCodeAndNumber(String code, Integer number); 
+    
+    /**
+     * 
+     * @param id
+     * @return 
+     */
+     public Resource findById(long id); 
 }

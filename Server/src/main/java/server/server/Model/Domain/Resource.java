@@ -32,7 +32,7 @@ public class Resource implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="RESOURCEID")
-    private Long resourceId; 
+    private long resourceId; 
     
     @NotEmpty(message = "RES105")
     @Column(length=100, name="NAME")
@@ -53,7 +53,7 @@ public class Resource implements Serializable {
     
     @NotEmpty(message="RES106")
     @Column(length=5, name="code")
-    @Pattern(regexp = "^[a-zA-Z]{2,5}", message="ENV111")
+    @Pattern(regexp = "^[a-zA-Z]{2,6}", message="RES110")
     private String code;
     
     @NotNull(message="RES108")

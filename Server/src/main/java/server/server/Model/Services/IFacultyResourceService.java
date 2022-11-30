@@ -27,4 +27,6 @@ public interface IFacultyResourceService {
     public FacultyResource findByFacultyIdResourceId(long facultyId, long resourceId);  
     
     public Map<Labels, Object> addNewOneReource(long facultyId, Resource res);  
+    
+    public ArrayList<String> validateAssignment(long facultyId, long resourceId); 
 }

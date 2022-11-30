@@ -48,13 +48,7 @@ public enum EnvErrors {
     /**
      * Code must have a value 
      */
-    ENV110,
-
-    /**
-     * Alphabetic chars min 2 char max 5 char
-     */
-    ENV111,
-    
+    ENV110,    
     /**
      * Environment previous  instance 
      */

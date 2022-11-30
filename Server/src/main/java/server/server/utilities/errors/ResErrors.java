@@ -45,6 +45,14 @@ public enum ResErrors {
     /**
      * number must have a value higher than 1
      */
-    RES109
+    RES109, 
+    /**
+     * Alphabetical min 2, max 6
+     */
+    RES110, 
+    /**
+     * previous existence of codex-number resource  
+     */
+    RES111
     ;
 }

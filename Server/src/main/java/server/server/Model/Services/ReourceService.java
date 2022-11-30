@@ -59,6 +59,9 @@ public class ReourceService implements IResourceService {
             ArrayList<String> validateResourceEnv = validateResourceEnv(res);
             errors.addAll(validateResourceEnv);
         }
+        if(resRepo.findByCodeAndNumber(res.getCode(), res.getNumber()) != null){
+            errors.add(ResErrors.RES111.name());
+        }
         if (errors.isEmpty()) {
             res = resRepo.save(res);
         }
@@ -83,7 +86,10 @@ public class ReourceService implements IResourceService {
             ArrayList<String> validateResourceEnv = validateResourceEnv(res);
             errors.addAll(validateResourceEnv);
         }
-        
+        Resource r2 = resRepo.findByCodeAndNumber(res.getCode(), res.getNumber());  
+        if( r2 != null && r2.getResourceId() != res.getResourceId()){
+            errors.add(ResErrors.RES111.name());
+        }
         if (errors.isEmpty()) {
             res = resRepo.save(res);
         }
@@ -111,7 +117,9 @@ public class ReourceService implements IResourceService {
 
     private ArrayList<String> validateResourceEnv(Resource res) {
         ArrayList<String> errors = new ArrayList();
-        if (res.getCapacity() < 0) {
+        if (res.getCapacity() == null) {
+            errors.add(EnvErrors.ENV106.name());
+        }else if (res.getCapacity() < 1){
             errors.add(EnvErrors.ENV107.name());
         }
         if (res.getLocation() == null || res.getLocation().isBlank()) {
@@ -120,4 +128,15 @@ public class ReourceService implements IResourceService {
         return errors;
     }
 
+    @Override
+    public Resource findByCodeAndNumber(String code, Integer number) {
+        return resRepo.findByCodeAndNumber(code, number); 
+    }
+    
+    
+    @Override
+    @Transactional(value = "DataTransactionManager", readOnly = true)
+    public Resource findById(long id){
+        return resRepo.findById(id).orElse(null);
+    }
 }

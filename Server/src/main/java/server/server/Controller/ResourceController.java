@@ -81,42 +81,55 @@ public class ResourceController {
         return new ResponseEntity<>(res, null, HttpStatus.ACCEPTED);
     }
 
-    /*Desde aqui no se ha probado OJO */
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping("/update")
-    public ResponseEntity<Resource> update(@RequestBody @Valid Resource res, Errors errors) {
+    public ResponseEntity<Resource> update(
+            @RequestParam("facultyId") long facultyId,
+            @RequestBody @Valid Resource res, Errors errors) {
         HttpHeaders headers = new HttpHeaders();
         if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
             headers.add(Labels.errors.name(), setErrors.toString());
             return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
-        } else {
-            Map<Labels, Object> returns = envService.update(res);
-            ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
-            Resource res2 = (Resource) returns.get(Labels.objectReturn);
-            if (!errors2.isEmpty() || res2 == null) {
-                headers.add(Labels.errors.name(), errors2.toString());
-                return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
-            }
-            return new ResponseEntity<>(res, null, HttpStatus.ACCEPTED);
         }
+        ArrayList<String> errors2 = facResService.validateAssignment(facultyId, res.getResourceId());
+        if (!errors2.isEmpty()) {
+            headers.add(Labels.errors.name(), errors2.toString());
+            return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
+        }
+        Map<Labels, Object> returns = envService.update(res);
+        errors2.addAll((ArrayList<String>) returns.get(Labels.errors));
+        Resource res2 = (Resource) returns.get(Labels.objectReturn);
+        if (!errors2.isEmpty() || res2 == null) {
+            headers.add(Labels.errors.name(), errors2.toString());
+            return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
+        }
+        return new ResponseEntity<>(res, null, HttpStatus.ACCEPTED);
 
     }
-
+    
     @DeleteMapping
     @RequestMapping("/delete")
-    public ResponseEntity<Resource> delete(@RequestParam("resourceId") Long id) {
-
-        Map<Labels, Object> returns = envService.delete(id);
-        ArrayList<String> errors = (ArrayList<String>) returns.get(Labels.errors);
+    public ResponseEntity<Resource> delete(
+            @RequestParam("facultyId") long facultyId, 
+            @RequestParam("resourceId") long resourceId) {
+        
+        HttpHeaders headers = new HttpHeaders();
+        ArrayList<String> errors2 = facResService.validateAssignment(facultyId, resourceId);
+        if (!errors2.isEmpty()) {
+            headers.add(Labels.errors.name(), errors2.toString());
+            return new ResponseEntity<>(null, headers, HttpStatus.NOT_MODIFIED);
+        }
+        
+        Map<Labels, Object> returns = envService.delete(resourceId);
+        errors2.addAll((ArrayList<String>) returns.get(Labels.errors));
         Resource res = (Resource) returns.get(Labels.objectReturn);
 
         if (res != null) {
             return new ResponseEntity<>(res, null, HttpStatus.ACCEPTED);
         } else {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(Labels.errors.name(), errors.toString());
+            headers.add(Labels.errors.name(), errors2.toString());
             return (new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED));
         }
     }

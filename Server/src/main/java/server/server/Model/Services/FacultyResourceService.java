@@ -132,24 +132,42 @@ public class FacultyResourceService implements IFacultyResourceService {
 
         if (fac == null) {
             errors2.add(FacErrors.FAC101.name());
-        }else{
+        } else {
             returns = resourceService.save(res);
             Resource res2 = (Resource) returns.get(Labels.objectReturn);
             errors2.addAll((ArrayList<String>) returns.get(Labels.errors));
             if (!errors2.isEmpty() || res2 == null) {
                 res = null;
-            }else{
+            } else {
                 FacultyResource fr = new FacultyResource();
                 fr.setFacultyFR(fac);
                 fr.setResourceFR(res2);
                 fr.setRegistrerDate(new Date(System.currentTimeMillis()));
-                res = res2; 
+                res = res2;
                 facRscRep.save(fr);
             }
         }
-        returns.put(Labels.errors, errors2);  
-        returns.put(Labels.objectReturn, res); 
+        returns.put(Labels.errors, errors2);
+        returns.put(Labels.objectReturn, res);
         return returns;
+    }
+
+    @Override
+    public ArrayList<String> validateAssignment(long facultyId, long resourceId) {
+        ArrayList<String> errors = new ArrayList();
+        Faculty fac = facultyService.findById(facultyId);
+        Resource res  = resourceService.findById(resourceId); 
+        if (fac == null){
+            errors.add(FacErrors.FAC101.name()); 
+        }else if (res == null){
+            errors.add(ResErrors.RES101.name()); 
+        }else {
+            FacultyResource facres = facRscRep.findByFacultyIdResourceId(facultyId,resourceId);
+            if(facres == null){
+                errors.add(FacResErrors.FACRES101.name()); 
+            }
+        }
+        return errors;
     }
 
 }
