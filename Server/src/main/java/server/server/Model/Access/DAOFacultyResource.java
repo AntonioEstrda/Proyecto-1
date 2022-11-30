@@ -21,7 +21,7 @@ public interface DAOFacultyResource extends JpaRepository<FacultyResource, Long>
     
     @Query(
         value = "SELECT * FROM faculty_resource fr where fr.RESOURCEID=:resourceId AND fr.FACULTYID=:facultyId"
-                + " AND isDisable = 0" , 
+                + " AND fr.isDisable=0" , 
         nativeQuery=true
     )
     public FacultyResource findByFacultyIdResourceId(@Param("facultyId") long facultyId, 
@@ -29,7 +29,7 @@ public interface DAOFacultyResource extends JpaRepository<FacultyResource, Long>
     
     @Query(
         value = "SELECT * FROM faculty_resource fr where fr.RESOURCEID=:resourceId"
-                + " AND isDisable = 0" , 
+                + " AND fr.isDisable=0" , 
         nativeQuery=true
     )
     public List<FacultyResource> findByResourceId(@Param("resourceId") long resourceId); 
@@ -37,7 +37,7 @@ public interface DAOFacultyResource extends JpaRepository<FacultyResource, Long>
     
     @Query(
         value = "SELECT * FROM faculty_resource fr where fr.FACULTYID=:facultyId"
-                + " AND isDisable = 0" , 
+                + " AND fr.isDisable=0" , 
         nativeQuery=true
     )
     public List<FacultyResource> findByFacultyId(@Param("facultyId")long facultyId);

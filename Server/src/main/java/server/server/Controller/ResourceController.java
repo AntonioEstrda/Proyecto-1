@@ -121,16 +121,17 @@ public class ResourceController {
             headers.add(Labels.errors.name(), errors2.toString());
             return new ResponseEntity<>(null, headers, HttpStatus.NOT_MODIFIED);
         }
-        
+         
         Map<Labels, Object> returns = envService.delete(resourceId);
         errors2.addAll((ArrayList<String>) returns.get(Labels.errors));
         Resource res = (Resource) returns.get(Labels.objectReturn);
 
         if (res != null) {
+            facResService.deactivate(facultyId, resourceId);
             return new ResponseEntity<>(res, null, HttpStatus.ACCEPTED);
         } else {
             headers.add(Labels.errors.name(), errors2.toString());
             return (new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED));
         }
-    }
+    }   
 }

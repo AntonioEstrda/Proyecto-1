@@ -16,9 +16,7 @@ import server.server.utilities.Labels;
  */
 public interface IFacultyResourceService {
 
-    public Map<Labels, Object> save(FacultyResource fr);
-
-    public Map<Labels, Object> update(FacultyResource fr);
+    public Map<Labels, Object> save(long facultyId, long resourceId);
 
     public ArrayList<FacultyResource> findByFacultyId(long facultyId);
     
@@ -29,4 +27,6 @@ public interface IFacultyResourceService {
     public Map<Labels, Object> addNewOneReource(long facultyId, Resource res);  
     
     public ArrayList<String> validateAssignment(long facultyId, long resourceId); 
+
+    public Map<Labels, Object> deactivate(long facultyId, long resourceId);
 }
