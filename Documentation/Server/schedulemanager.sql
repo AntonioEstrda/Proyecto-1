@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-11-2022 a las 03:19:45
+-- Tiempo de generación: 01-12-2022 a las 01:01:22
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -98,7 +98,9 @@ CREATE TABLE `faculty` (
 --
 
 INSERT INTO `faculty` (`FACULTYID`, `NAME`, `location`) VALUES
-(7, 'Agrarias', '');
+(7, 'Agrarias', ''),
+(16, 'FIET', ''),
+(26, 'Artes', 'Lejos');
 
 -- --------------------------------------------------------
 
@@ -111,8 +113,19 @@ CREATE TABLE `faculty_resource` (
   `FACULTYID` int(11) NOT NULL,
   `RESOURCEID` int(11) NOT NULL,
   `REGISTERDATE` date NOT NULL,
-  `FINALDATE` date DEFAULT NULL
+  `FINALDATE` date DEFAULT NULL,
+  `isDisable` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `faculty_resource`
+--
+
+INSERT INTO `faculty_resource` (`FAC_AND_RES_ID`, `FACULTYID`, `RESOURCEID`, `REGISTERDATE`, `FINALDATE`, `isDisable`) VALUES
+(2, 16, 3, '2022-11-01', NULL, 0),
+(3, 16, 4, '2022-11-01', NULL, 0),
+(5, 16, 6, '2022-11-29', '2022-11-30', 1),
+(6, 16, 6, '2022-11-30', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -181,7 +194,10 @@ CREATE TABLE `resourcet` (
 --
 
 INSERT INTO `resourcet` (`RESOURCEID`, `RESOURCETYPEID`, `NAME`, `DESCRIPTION`, `ISDISABLE`, `code`, `location`, `capacity`, `number`) VALUES
-(3, 8, 'Computador', 'Computador', 0, 'SISCOM', NULL, NULL, NULL);
+(3, 8, 'Computador', 'Computador', 0, 'SISCOM', NULL, NULL, NULL),
+(4, 7, 'Salón de telemática', 'Salón de telemática', 0, 'TEL', 'Segundo Piso ', 30, 101),
+(5, 8, 'Computador2', 'Computador2', 0, 'SISCOM', NULL, NULL, 101),
+(6, 5, 'Salon', 'Salon', 0, 'SISCOM', 'primer piso p3', 45, 102);
 
 -- --------------------------------------------------------
 
@@ -436,13 +452,13 @@ ALTER TABLE `department`
 -- AUTO_INCREMENT de la tabla `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `FACULTYID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `FACULTYID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `faculty_resource`
 --
 ALTER TABLE `faculty_resource`
-  MODIFY `FAC_AND_RES_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `FAC_AND_RES_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `groupt`
@@ -466,7 +482,7 @@ ALTER TABLE `program`
 -- AUTO_INCREMENT de la tabla `resourcet`
 --
 ALTER TABLE `resourcet`
-  MODIFY `RESOURCEID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `RESOURCEID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `resourcetype`
