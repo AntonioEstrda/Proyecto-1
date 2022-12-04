@@ -47,12 +47,8 @@ public class AssignmentResourceService implements IAssignmentResourceService {
         if (this.AssResRepo.findByIsDisableAndEnvIdAndResId(false, envId, resId) == null) {
             FacultyResource res = this.facResSer.findByFacultyIdResourceId(facId, resId);
             FacultyResource env = this.facResSer.findByFacultyIdResourceId(facId, envId);
-            if (res == null) {
-                errors.add(ResErrors.RES101.name());
-            }
-            if (env == null) {
-                errors.add(EnvErrors.ENV101.name());
-            }
+            if (res == null) {errors.add(ResErrors.RES101.name());}
+            if (env == null) {errors.add(EnvErrors.ENV101.name());}
 
             Resource resObj, envObj;
             if (res != null && env != null) {
@@ -63,18 +59,22 @@ public class AssignmentResourceService implements IAssignmentResourceService {
                 boolean ban2 = this.typeSer.globalType(envObj.getResourceType().getResourceTypeId())
                         == IResourceTypeService.ENVIRONMENTTYPE;
                 if (ban1 && ban2) {
-                    ar = new AssignmentResource();
-                    ar.setEnv(envObj);
-                    ar.setRes(resObj);
-                    ar.setDisable(false);
-                    ar.setRegistrerDate(new Date(System.currentTimeMillis()));
-                    ar = this.AssResRepo.save(ar);
+                    if(this.AssResRepo.findByIsDisableAndResId(false, resId) == null){    
+                        ar = new AssignmentResource();
+                        ar.setEnv(envObj);
+                        ar.setRes(resObj);
+                        ar.setDisable(false);
+                        ar.setRegistrerDate(new Date(System.currentTimeMillis()));
+                        ar = this.AssResRepo.save(ar);
+                    }else{
+                        errors.add(AssResErrors.ASSRES102.name());
+                    }
                 }
                 if (!ban1) {
-                    errors.add(EnvErrors.ENV101.name());
+                    errors.add(ResErrors.RES113.name());
                 }
                 if (!ban2) {
-                    errors.add(EnvErrors.ENV101.name());
+                    errors.add(ResErrors.RES112.name());
                 }
             }
         } else {
@@ -101,10 +101,10 @@ public class AssignmentResourceService implements IAssignmentResourceService {
             if (env == null) {
                 errors.add(EnvErrors.ENV101.name());
             }
-            if (res != null && env != null) {
+            if (errors.isEmpty()) {
                 ar.setDisable(true);
                 ar.setFinalDate(new Date(System.currentTimeMillis()));
-                this.AssResRepo.save(ar); 
+                this.AssResRepo.save(ar);
             }
         } else {
             errors.add(AssResErrors.ASSRES101.name());
@@ -142,12 +142,25 @@ public class AssignmentResourceService implements IAssignmentResourceService {
     }
 
     @Override
-    public AssignmentResource findByResId(long facId, long resId) {
+    public Map<Labels, Object> findByResId(long facId, long resId) {
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errors = new ArrayList();
         FacultyResource res = this.facResSer.findByFacultyIdResourceId(facId, resId);
+        Resource resObj = null; 
         if (res != null) {
-            return this.AssResRepo.findByIsDisableAndResId(false, resId);
+            if (this.typeSer.globalType(res.getResourceFR().getResourceType().getResourceTypeId())
+                    != IResourceTypeService.ENVIRONMENTTYPE) {
+                AssignmentResource assObj = this.AssResRepo.findByIsDisableAndResId(false, resId);
+                resObj = assObj == null ? null : assObj.getEnv(); 
+            }else{
+                errors.add(ResErrors.RES113.name());
+            }
+        }else{
+            errors.add(FacResErrors.FACRES101.name()); 
         }
-        return null;
+        returns.put(Labels.errors, errors);
+        returns.put(Labels.objectReturn, resObj);
+        return returns;
     }
 
 }

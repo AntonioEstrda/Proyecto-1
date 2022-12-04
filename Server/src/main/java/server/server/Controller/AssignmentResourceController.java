@@ -11,12 +11,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import server.server.Model.Domain.AssignmentResource;
+import server.server.Model.Domain.Resource;
 import server.server.Model.Services.IAssignmentResourceService;
 import server.server.utilities.Labels;
 
@@ -30,6 +32,38 @@ public class AssignmentResourceController {
 
     @Autowired
     private IAssignmentResourceService asigResService;
+    
+    
+    
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ArrayList<Resource>> getAllAssigned(@RequestParam("facultyId") long facultyId,
+            @RequestParam("environmentId") long environmentId){
+        
+        Map<Labels, Object> returns = asigResService.findByEnvId(facultyId, environmentId);
+        ArrayList<String> errors = (ArrayList<String>) returns.get(Labels.errors);
+        ArrayList<Resource> response = (ArrayList<Resource>) returns.get(Labels.objectReturn);
+        HttpHeaders headers = new HttpHeaders();
+        if(!errors.isEmpty()){
+            headers.add(Labels.errors.name(),errors.toString());
+            return (new ResponseEntity<>(response, headers, HttpStatus.NOT_FOUND)); 
+        }
+         return (new ResponseEntity<>(response, null, HttpStatus.ACCEPTED));   
+    } 
+    
+    @GetMapping(value = "/findResLocation", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Resource> getAssignedEnvironmet(@RequestParam("facultyId") long facultyId,
+            @RequestParam("resourceId") long resourceId){
+        Map<Labels, Object> returns = asigResService.findByResId(facultyId, resourceId); 
+        ArrayList<String> errors = (ArrayList<String>) returns.get(Labels.errors);
+        Resource res = (Resource) returns.get(Labels.objectReturn); 
+        HttpHeaders headers = new HttpHeaders();
+        if(!errors.isEmpty()){
+            headers.add(Labels.errors.name(),errors.toString());
+            return (new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND)); 
+        }
+         return (new ResponseEntity<>(res, null, HttpStatus.ACCEPTED));   
+    } 
+    
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,

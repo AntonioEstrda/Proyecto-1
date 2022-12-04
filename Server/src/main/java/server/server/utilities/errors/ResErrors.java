@@ -39,24 +39,27 @@ public enum ResErrors {
      */
     RES107,
     /**
-     * number must have a value 
+     * number must have a value
      */
     RES108,
     /**
      * number must have a value higher than 1
      */
-    RES109, 
+    RES109,
     /**
      * Alphabetical min 2, max 6
      */
-    RES110, 
+    RES110,
     /**
-     * previous existence of codex-number resource  
+     * previous existence of codex-number resource
      */
-    RES111, 
+    RES111,
     /**
-     * Resource is not an environment  
+     * Resource is not an environment
      */
-    RES112
-    ;
+    RES112, 
+    /**
+     * Resource should not be an environment
+     */
+    RES113;
 }

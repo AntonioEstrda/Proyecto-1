@@ -5,7 +5,6 @@
 package server.server.Model.Services;
 
 import java.util.Map;
-import server.server.Model.Domain.AssignmentResource;
 import server.server.utilities.Labels;
 
 /**
@@ -20,6 +19,6 @@ public interface IAssignmentResourceService {
 
     public Map<Labels, Object> findByEnvId(long facid, long envid);
 
-    public AssignmentResource findByResId(long facid, long resId);
+    public Map<Labels, Object> findByResId(long facid, long resId);
 
 }
