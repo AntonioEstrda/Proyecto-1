@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ArrayList<String> str3 = new ArrayList();
 
         strs.add("http://127.0.0.1:5173/");
-        strs.add("*");
+        strs.add("http://localhost:8080/");
 
         str2.add("HEAD");
         str2.add("POST");
