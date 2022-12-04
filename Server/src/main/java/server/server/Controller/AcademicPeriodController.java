@@ -9,7 +9,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,7 +48,7 @@ public class AcademicPeriodController {
     }
 
     @PostMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE)
+            consumes = {"application/json"})
     public ResponseEntity<AcademicPeriod> add(@RequestBody @Valid AcademicPeriod academicPeriod, Errors errors) {
         if (errors.hasErrors()) {
             HttpHeaders headers = new HttpHeaders();

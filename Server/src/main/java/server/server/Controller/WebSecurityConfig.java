@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -31,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ArrayList<String> str2 = new ArrayList();
         ArrayList<String> str3 = new ArrayList();
 
+        strs.add("http://127.0.0.1:5173/");
         strs.add("*");
 
         str2.add("HEAD");
