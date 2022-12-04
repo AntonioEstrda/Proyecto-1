@@ -4,7 +4,10 @@
  */
 package server.server.Model.Access;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import server.server.Model.Domain.AssignmentResource;
 
@@ -13,6 +16,25 @@ import server.server.Model.Domain.AssignmentResource;
  * @author anmon
  */
 @Repository
-public interface DAOAssignmentResource extends JpaRepository<AssignmentResource, Long>{
-    
+public interface DAOAssignmentResource extends JpaRepository<AssignmentResource, Long> {
+
+    @Query(
+            value = "SELECT * FROM assignmentresource WHERE envId=:envId AND isDisable=:isDisable",
+            nativeQuery = true
+    )
+    public List<AssignmentResource> findAllByEnvIdAndIsDisable(@Param("envId") long envId,
+            @Param("isDisable") boolean isDisable);
+
+    @Query(
+            value = "SELECT * FROM assignmentresource WHERE envId=:envId AND resId=:resId AND isDisable=:isDisable" ,
+            nativeQuery = true
+    )
+    public AssignmentResource findByIsDisableAndEnvIdAndResId( @Param("isDisable") boolean isDisable, @Param("envId")long envId, @Param("resId")long resId);
+
+    @Query(
+            value = "SELECT * FROM assignmentresource WHERE resId=:resId AND isDisable=:isDisable",
+            nativeQuery = true
+    )
+    public AssignmentResource findByIsDisableAndResId(@Param("isDisable") boolean isDisable, @Param("resId")long resId);
+ 
 }

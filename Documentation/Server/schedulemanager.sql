@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-12-2022 a las 01:01:22
+-- Tiempo de generación: 04-12-2022 a las 01:05:52
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -61,11 +61,20 @@ CREATE TABLE `academicperiod` (
 CREATE TABLE `assignmentresource` (
   `id` int(11) NOT NULL,
   `registerdate` date NOT NULL,
-  `finaldate` date NOT NULL,
-  `isDisable` tinyint(1) NOT NULL,
+  `finaldate` date DEFAULT NULL,
+  `isDisable` tinyint(1) NOT NULL DEFAULT 0,
   `envId` int(11) NOT NULL,
   `resId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `assignmentresource`
+--
+
+INSERT INTO `assignmentresource` (`id`, `registerdate`, `finaldate`, `isDisable`, `envId`, `resId`) VALUES
+(1, '2022-12-01', '2022-12-03', 1, 6, 3),
+(2, '2022-12-03', NULL, 0, 6, 3),
+(3, '2022-12-01', NULL, 0, 6, 5);
 
 -- --------------------------------------------------------
 
@@ -440,7 +449,7 @@ ALTER TABLE `academicperiod`
 -- AUTO_INCREMENT de la tabla `assignmentresource`
 --
 ALTER TABLE `assignmentresource`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `department`

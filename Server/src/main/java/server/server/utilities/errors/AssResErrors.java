@@ -8,6 +8,22 @@ package server.server.utilities.errors;
  *
  * @author anmon
  */
-public enum AssiResErrors {
-    
+public enum AssResErrors {
+    /**
+     * Assignment not found 
+     */
+    ASSRES101,
+    /**
+     * Existence of a previous assignment
+     */
+    ASSRES102,
+    /**
+     * 
+     */
+    ASSRES103,
+    /**
+     * 
+     */
+    ASSRES104;
 }
+

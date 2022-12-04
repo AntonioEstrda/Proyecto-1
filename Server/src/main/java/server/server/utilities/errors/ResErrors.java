@@ -53,6 +53,10 @@ public enum ResErrors {
     /**
      * previous existence of codex-number resource  
      */
-    RES111
+    RES111, 
+    /**
+     * Resource is not an environment  
+     */
+    RES112
     ;
 }
