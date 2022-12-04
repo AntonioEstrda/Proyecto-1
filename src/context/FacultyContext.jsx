@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect } from "react";
-import { facultys as data } from "../data/facultys";
 
 export const FacultyContext = createContext();
 
@@ -11,22 +10,27 @@ export function FacultyContextProvider(props) {
   }
 
   function createFaculty(faculty) {
-    setFacultys([
-      ...facultys,
-      {
-        facultyName: faculty.name,
-        id: facultys.length,
-        location: faculty.location,
+    fetch("http://localhost:8080/faculty/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-      // fetch("http://localhost:8080/faculty/", {
-      //   method: "POST",
-      //   body: {
-      //     name: faculty.name,
-      //     id: facultys.length,
-      //     location: faculty.location,
-      //   }, // body data type must match "Content-Type" header
-      // }),
-    ]);
+      mode: "cors",
+      body: JSON.stringify({
+        facultyName: faculty.name,
+        location: faculty.location,
+      }),
+    })
+      .then(() =>
+        setFacultys([
+          ...facultys,
+          {
+            facultyName: faculty.name,
+            location: faculty.location,
+          },
+        ])
+      )
+      .catch((e) => console.log(e));
   }
 
   useEffect(() => {
