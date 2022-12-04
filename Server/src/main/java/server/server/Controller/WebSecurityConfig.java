@@ -4,19 +4,19 @@
  */
 package server.server.Controller;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
-@Configuration
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().anyRequest().permitAll();  
-        http.csrf().and().cors().disable();
-        //http.authorizeRequests().anyRequest().permitAll();   
+public class WebSecurityConfig{
+       @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // ...
+        http.cors().disable();
+        http.csrf().disable();  
+        return http.build();
     }
 }
