@@ -9,16 +9,16 @@ import Navbar from "./templates/Navbar";
 import Footer from "./templates/Footer";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <>
     <Navbar />
-    <div className="grid grid-cols-2">
+    <div className="grid grid-cols-1">
       <FacultyContextProvider>
         <FacultyApp />
+        <ResourceContextProvider>
+          <ResourceApp />
+        </ResourceContextProvider>
       </FacultyContextProvider>
-      <ResourceContextProvider>
-        <ResourceApp />
-      </ResourceContextProvider>
     </div>
     <Footer />
-  </React.StrictMode>
+  </>
 );
