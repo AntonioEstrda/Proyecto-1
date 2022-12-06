@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import server.server.utilities.Labels;
+import server.server.utilities.errors.StdErrors;
 
 /**
  *
@@ -31,6 +32,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         for (final ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(violation.getMessage());
         }
+        headers.add(Labels.errors.name(), errors.toString());
+        return new ResponseEntity<>(null, headers, HttpStatus.NOT_MODIFIED);
+    }
+    
+    @ExceptionHandler(value = {java.sql.SQLIntegrityConstraintViolationException.class})
+    public ResponseEntity handleConstraint(java.sql.SQLIntegrityConstraintViolationException ex){
+        ArrayList<String> errors = new ArrayList();  
+        HttpHeaders headers = new HttpHeaders();
+        errors.add(StdErrors.STD101.name()); 
         headers.add(Labels.errors.name(), errors.toString());
         return new ResponseEntity<>(null, headers, HttpStatus.NOT_MODIFIED);
     }
