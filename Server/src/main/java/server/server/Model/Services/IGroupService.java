@@ -5,7 +5,9 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.Map;
 import server.server.Model.Domain.Group;
+import server.server.utilities.Labels;
 
 /**
  *
@@ -24,7 +26,16 @@ public interface IGroupService {
      * @param group
      * @return Group
      */
-    public Group save(Group group); 
+
+    public Group findById(long group);
+    /**
+     * Saves a new one  or updates a faculty register in the repository 
+     * 
+     * @param group Group instance 
+     * @return String - contains information about saving process (status, an errors if those exist) 
+     */
+    
+    public Map<Labels, Object> save(Group group); 
 
     /**
      * list all groups 
@@ -38,7 +49,7 @@ public interface IGroupService {
      * @param group
      * @return Group
      */
-    public Group update(Group group);  
+    public Map<Labels, Object> update(Group group);  
     
     
     /**
@@ -46,5 +57,5 @@ public interface IGroupService {
      * @param groupId
      * @return Group
      */
-    public Group delete(Long groupId);
+    public Map<Labels, Object> delete(Long groupId);
 }

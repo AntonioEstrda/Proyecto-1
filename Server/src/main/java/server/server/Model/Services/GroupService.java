@@ -5,12 +5,16 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import server.server.Model.Access.DAOGroup;
 import server.server.Model.Domain.Group;
+import server.server.utilities.Labels;
+import server.server.utilities.errors.GroupErrors;
 
 /**
  *
@@ -31,12 +35,18 @@ public class GroupService implements IGroupService{
 
     @Override
     @Transactional(value = "DataTransactionManager")
-    public Group save(Group group) {
-        if (this.find(group) == null) {
+    public Map<Labels, Object> save(Group group) {
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList errors = new ArrayList();
+        if (this.find(group) != null) {
+            errors.add(GroupErrors.GROUP101.name());
+            returns.put(Labels.objectReturn, null);
+        } else {
             Group entitySaved = groupRepo.save(group);
-            return entitySaved;
+            returns.put(Labels.objectReturn, entitySaved);
         }
-        return null;
+        returns.put(Labels.errors, errors);
+        return returns;
     }
 
     @Override
@@ -47,25 +57,39 @@ public class GroupService implements IGroupService{
 
     @Override
     @Transactional(value = "DataTransactionManager")
-    public Group update(Group group) {
+    public Map<Labels, Object> update(Group group) {
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errors = new ArrayList(); 
         Group old = this.find(group);
         if (old == null) {
-            return null;
+            errors.add(GroupErrors.GROUP101.name());  
         } else {
-            return groupRepo.save(group);
+            old = groupRepo.save(group);
         }
+        returns.put(Labels.errors, errors);  
+        returns.put(Labels.objectReturn, old);   
+        return returns;
     }
 
     @Override
     @Transactional(value = "DataTransactionManager")
-    public Group delete(Long GroupId) {
+    public Map<Labels, Object> delete(Long GroupId) {
 
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errors = new ArrayList(); 
         Group old = groupRepo.findById(GroupId).orElse(null);
-        if (old == null) {
-            return null;
-        } else {
+        if(old != null){
             groupRepo.delete(old);
-            return old;
+        }else{
+            errors.add(GroupErrors.GROUP101.name());  
         }
+        returns.put(Labels.errors, errors); 
+        returns.put(Labels.objectReturn, old); 
+        return returns; 
+    }
+    
+    @Override
+    public Group findById(long group) {
+        return groupRepo.findById(group).orElse(null);
     }
 }

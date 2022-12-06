@@ -31,15 +31,15 @@ public class Department implements Serializable{
     @Column(name="DEPARTMENTID")
     private long departmentId; 
     
-    @NotNull
+    @NotEmpty(message = "DEPT103") 
     @Column(length=100, name="NAME")
     private String name;
         
-    @NotEmpty 
+    @NotEmpty(message = "DEPT104")
     @Column(length=25, name="code")
     private String code; 
     
-    @NotEmpty 
+    @NotEmpty(message = "DEPT105")
     @Column(length=100, name="location")
     private String location; 
     

@@ -5,7 +5,9 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.Map;
 import server.server.Model.Domain.Department;
+import server.server.utilities.Labels;
 
 /**
  *
@@ -24,7 +26,14 @@ public interface IDepartmentService {
      * @param department
      * @return Department
      */
-    public Department save(Department department); 
+    public Department findById(long department); 
+    
+    /**
+     * save a department 
+     * @param department
+     * @return Department
+     */
+    public Map<Labels, Object> save(Department department); 
 
     /**
      * list all departments 
@@ -38,7 +47,7 @@ public interface IDepartmentService {
      * @param department
      * @return Department
      */
-    public Department update(Department department);  
+    public Map<Labels, Object> update(Department department);  
     
     
     /**
@@ -46,6 +55,6 @@ public interface IDepartmentService {
      * @param departmentId
      * @return Department
      */
-    public Department delete(Long departmentId);
+    public Map<Labels, Object> delete(Long departmentId);
     
 }
