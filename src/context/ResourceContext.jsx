@@ -1,10 +1,11 @@
-import { createContext, useState, useEffect } from "react";
-import { resources as data } from "../data/resources";
+import { createContext, useState, useEffect, useContext } from "react";
+import { FacultyContext } from "./FacultyContext";
 
 export const ResourceContext = createContext();
 
 export function ResourceContextProvider(props) {
   const [resources, setResources] = useState([]);
+  const { facultys, addResource } = useContext(FacultyContext);
 
   function deleteResource(resourceId) {
     setResources(
@@ -21,17 +22,35 @@ export function ResourceContextProvider(props) {
         description: resource.description,
         resourceType: {
           name: resource.resourceType,
-          parent: null,
-          resourceTypeId: null,
-          disable: false,
+          parent: resource.parent,
+          resourceTypeId: resource.resourceTypeId,
+          disable: resource.disable,
         },
+        code: resource.code,
+        number: resource.number,
+        location: resource.location,
+        capacity: resource.capacity,
         disable: resource.disable,
       },
     ]);
   }
 
   useEffect(() => {
-    setResources(data);
+    facultys.forEach((faculty) => {
+      fetch(
+        "http://localhost:8080/Resource/all?" +
+          new URLSearchParams({
+            facultyId: faculty.facultyId,
+          })
+      )
+        .then((response) => response.json())
+        .then((data) =>
+          addResource({
+            id: faculty.facultyId,
+            resource: data,
+          })
+        );
+    });
   }, []);
 
   return (
