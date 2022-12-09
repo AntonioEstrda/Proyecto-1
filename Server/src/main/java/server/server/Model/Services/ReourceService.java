@@ -59,7 +59,7 @@ public class ReourceService implements IResourceService {
             ArrayList<String> validateResourceEnv = validateResourceEnv(res);
             errors.addAll(validateResourceEnv);
         }
-        if(resRepo.findByCodeAndNumber(res.getCode(), res.getNumber()) != null){
+        if (resRepo.findByCodeAndNumber(res.getCode(), res.getNumber()) != null) {
             errors.add(ResErrors.RES111.name());
         }
         if (errors.isEmpty()) {
@@ -86,8 +86,8 @@ public class ReourceService implements IResourceService {
             ArrayList<String> validateResourceEnv = validateResourceEnv(res);
             errors.addAll(validateResourceEnv);
         }
-        Resource r2 = resRepo.findByCodeAndNumber(res.getCode(), res.getNumber());  
-        if( r2 != null && r2.getResourceId() != res.getResourceId()){
+        Resource r2 = resRepo.findByCodeAndNumber(res.getCode(), res.getNumber());
+        if (r2 != null && r2.getResourceId() != res.getResourceId()) {
             errors.add(ResErrors.RES111.name());
         }
         if (errors.isEmpty()) {
@@ -119,10 +119,10 @@ public class ReourceService implements IResourceService {
         ArrayList<String> errors = new ArrayList();
         if (res.getCapacity() == null) {
             errors.add(EnvErrors.ENV106.name());
-        }else if (res.getCapacity() < 1){
+        } else if (res.getCapacity() < 1) {
             errors.add(EnvErrors.ENV107.name());
         }
-        if (res.getLocation() == null || res.getLocation().isBlank()) {
+        if (res.getLocation() == null) {
             errors.add(EnvErrors.ENV102.name());
         }
         return errors;
@@ -130,13 +130,12 @@ public class ReourceService implements IResourceService {
 
     @Override
     public Resource findByCodeAndNumber(String code, Integer number) {
-        return resRepo.findByCodeAndNumber(code, number); 
+        return resRepo.findByCodeAndNumber(code, number);
     }
-    
-    
+
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
-    public Resource findById(long id){
+    public Resource findById(long id) {
         return resRepo.findById(id).orElse(null);
     }
 }

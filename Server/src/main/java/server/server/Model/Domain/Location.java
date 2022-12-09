@@ -10,35 +10,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.Data;
 import javax.validation.constraints.NotEmpty;
+import lombok.Data;
 
 /**
- * Class Faculty mapped to Faculty Entity 
+ *
  * @author anmon
  */
-
 @Entity
-@Table(name = "faculty")
+@Table(name = "location")
 @Data
-public class Faculty implements Serializable {
-    
-    private static final long serialVersionUID = 1L; 
-    
+public class Location implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="FACULTYID")
-    private long facultyId; 
-    
-    @NotEmpty(message = "FAC103") 
-    @Column(length=100, name="NAME")
-    private String facultyName;
-   
-    @ManyToOne
-    @JoinColumn(name="locId")
-    private Location location;  
-     
+    @Column(name = "id")
+    private long LocationId;
+
+    @NotEmpty(message = "LOC102")
+    @Column(length = 100, name = "Name")
+    private String name;
+
+    @Column(name = "parentId")
+    private Long parent;
 }

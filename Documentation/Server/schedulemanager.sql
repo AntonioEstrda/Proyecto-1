@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-12-2022 a las 01:05:52
+-- Tiempo de generación: 09-12-2022 a las 02:21:15
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -72,9 +72,11 @@ CREATE TABLE `assignmentresource` (
 --
 
 INSERT INTO `assignmentresource` (`id`, `registerdate`, `finaldate`, `isDisable`, `envId`, `resId`) VALUES
-(1, '2022-12-01', '2022-12-03', 1, 6, 3),
-(2, '2022-12-03', NULL, 0, 6, 3),
-(3, '2022-12-01', NULL, 0, 6, 5);
+(3, '2022-12-01', '2022-12-08', 1, 6, 5),
+(5, '2022-12-03', '2022-12-08', 1, 6, 3),
+(7, '2022-12-03', '2022-11-02', 1, 8, 3),
+(8, '2022-12-04', '2022-11-02', 1, 6, 7),
+(10, '2022-12-03', NULL, 0, 8, 7);
 
 -- --------------------------------------------------------
 
@@ -99,17 +101,18 @@ CREATE TABLE `department` (
 CREATE TABLE `faculty` (
   `FACULTYID` int(11) NOT NULL,
   `NAME` varchar(100) NOT NULL,
-  `location` varchar(100) NOT NULL
+  `locId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `faculty`
 --
 
-INSERT INTO `faculty` (`FACULTYID`, `NAME`, `location`) VALUES
-(7, 'Agrarias', ''),
-(16, 'FIET', ''),
-(26, 'Artes', 'Lejos');
+INSERT INTO `faculty` (`FACULTYID`, `NAME`, `locId`) VALUES
+(7, 'Agrarias', 2),
+(16, 'FIET', 2),
+(26, 'Artes', 2),
+(27, 'Nueva sede', 2);
 
 -- --------------------------------------------------------
 
@@ -131,10 +134,14 @@ CREATE TABLE `faculty_resource` (
 --
 
 INSERT INTO `faculty_resource` (`FAC_AND_RES_ID`, `FACULTYID`, `RESOURCEID`, `REGISTERDATE`, `FINALDATE`, `isDisable`) VALUES
+(0, 16, 6, '2022-11-30', '2022-12-06', 0),
 (2, 16, 3, '2022-11-01', NULL, 0),
 (3, 16, 4, '2022-11-01', NULL, 0),
-(5, 16, 6, '2022-11-29', '2022-11-30', 1),
-(6, 16, 6, '2022-11-30', NULL, 0);
+(7, 16, 8, '2022-12-02', '2022-12-03', 1),
+(8, 16, 7, '2022-12-02', '2022-12-03', 1),
+(9, 16, 8, '2022-12-03', NULL, 0),
+(10, 16, 7, '2022-12-03', NULL, 0),
+(11, 16, 9, '2022-12-08', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -169,6 +176,27 @@ CREATE TABLE `hourlyassignment` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `location`
+--
+
+CREATE TABLE `location` (
+  `id` int(11) NOT NULL,
+  `Name` text NOT NULL,
+  `parentId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `location`
+--
+
+INSERT INTO `location` (`id`, `Name`, `parentId`) VALUES
+(2, 'Sede principal', NULL),
+(3, 'Edificio 2', 2),
+(4, 'El Carmen', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `program`
 --
 
@@ -193,7 +221,7 @@ CREATE TABLE `resourcet` (
   `DESCRIPTION` varchar(100) NOT NULL,
   `ISDISABLE` tinyint(1) NOT NULL DEFAULT 0,
   `code` varchar(25) NOT NULL,
-  `location` varchar(100) DEFAULT NULL,
+  `location` int(11) DEFAULT NULL,
   `capacity` int(11) DEFAULT NULL,
   `number` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -204,9 +232,33 @@ CREATE TABLE `resourcet` (
 
 INSERT INTO `resourcet` (`RESOURCEID`, `RESOURCETYPEID`, `NAME`, `DESCRIPTION`, `ISDISABLE`, `code`, `location`, `capacity`, `number`) VALUES
 (3, 8, 'Computador', 'Computador', 0, 'SISCOM', NULL, NULL, NULL),
-(4, 7, 'Salón de telemática', 'Salón de telemática', 0, 'TEL', 'Segundo Piso ', 30, 101),
+(4, 7, 'Salón de telemática', 'Salón de telemática', 0, 'TEL', NULL, 30, 101),
 (5, 8, 'Computador2', 'Computador2', 0, 'SISCOM', NULL, NULL, 101),
-(6, 5, 'Salon', 'Salon', 0, 'SISCOM', 'primer piso p3', 45, 102);
+(6, 5, 'Salon', 'Salon', 1, 'SISCOM', 3, 45, 102),
+(7, 10, 'Tablero', 'Tablero', 0, 'AGR', NULL, NULL, 456),
+(8, 7, 'SALON', 'SALON', 0, 'SIS', NULL, 40, 303),
+(9, 5, 'Salon', 'Salon', 1, 'SISCOM', 3, 45, 105);
+
+--
+-- Disparadores `resourcet`
+--
+DELIMITER $$
+CREATE TRIGGER `upd_IsDisable` BEFORE UPDATE ON `resourcet` FOR EACH ROW BEGIN
+	DECLARE gtype int;  
+   	IF NEW.isDisable = 1 THEN 
+    	SELECT globalType(NEW.RESOURCETYPEID) into gtype;
+        IF  gtype = 4 THEN   
+        	UPDATE assignmentresource SET isDisable = 1, finaldate = CURRENT_DATE() 
+            WHERE envId = NEW.RESOURCEID and isDisable = 0; 
+        
+        ELSE 
+        	UPDATE assignmentresource SET isDisable = 1, finaldate = CURRENT_DATE() 
+            WHERE resId = NEW.RESOURCEID and isDisable = 0;  
+        END IF;  
+    END IF; 
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -226,11 +278,11 @@ CREATE TABLE `resourcetype` (
 --
 
 INSERT INTO `resourcetype` (`RESSOURCETYPEID`, `RES_RESSOURCETYPEID`, `NAME`, `ISDISABLE`) VALUES
-(4, NULL, 'ENVIRONMENT', 0),
+(4, NULL, 'Ambiente', 0),
 (5, 4, 'SALA', 0),
 (6, 4, 'AUDITORIO', 0),
 (7, 4, 'SALON', 0),
-(8, NULL, 'COMPUTACIONAL', 0),
+(8, NULL, 'Computacional', 0),
 (9, 7, 'SubTipo1', 0),
 (10, 8, 'SubTipoComputacional', 0);
 
@@ -339,7 +391,8 @@ ALTER TABLE `department`
 --
 ALTER TABLE `faculty`
   ADD PRIMARY KEY (`FACULTYID`),
-  ADD UNIQUE KEY `FACULTY_PK` (`FACULTYID`);
+  ADD UNIQUE KEY `FACULTY_PK` (`FACULTYID`),
+  ADD KEY `fk_faculty_location` (`locId`);
 
 --
 -- Indices de la tabla `faculty_resource`
@@ -369,6 +422,14 @@ ALTER TABLE `hourlyassignment`
   ADD KEY `TEACHER_HOURLYASSIGNMENT_FK` (`TEACHERID`);
 
 --
+-- Indices de la tabla `location`
+--
+ALTER TABLE `location`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id` (`id`),
+  ADD KEY `fk_location_id` (`parentId`);
+
+--
 -- Indices de la tabla `program`
 --
 ALTER TABLE `program`
@@ -382,7 +443,8 @@ ALTER TABLE `program`
 ALTER TABLE `resourcet`
   ADD PRIMARY KEY (`RESOURCEID`),
   ADD UNIQUE KEY `RESOURCE_PK` (`RESOURCEID`),
-  ADD KEY `fk_resourcet_resourcetype` (`RESOURCETYPEID`);
+  ADD KEY `fk_resourcet_resourcetype` (`RESOURCETYPEID`),
+  ADD KEY `fk_resource_location` (`location`);
 
 --
 -- Indices de la tabla `resourcetype`
@@ -449,7 +511,7 @@ ALTER TABLE `academicperiod`
 -- AUTO_INCREMENT de la tabla `assignmentresource`
 --
 ALTER TABLE `assignmentresource`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `department`
@@ -461,13 +523,13 @@ ALTER TABLE `department`
 -- AUTO_INCREMENT de la tabla `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `FACULTYID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `FACULTYID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `faculty_resource`
 --
 ALTER TABLE `faculty_resource`
-  MODIFY `FAC_AND_RES_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `FAC_AND_RES_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `groupt`
@@ -482,6 +544,12 @@ ALTER TABLE `hourlyassignment`
   MODIFY `vinculationId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `location`
+--
+ALTER TABLE `location`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT de la tabla `program`
 --
 ALTER TABLE `program`
@@ -491,7 +559,7 @@ ALTER TABLE `program`
 -- AUTO_INCREMENT de la tabla `resourcet`
 --
 ALTER TABLE `resourcet`
-  MODIFY `RESOURCEID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `RESOURCEID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `resourcetype`
@@ -547,6 +615,12 @@ ALTER TABLE `department`
   ADD CONSTRAINT `FK_DEPARTME_FACULTY_D_FACULTY` FOREIGN KEY (`FACULTYID`) REFERENCES `faculty` (`FACULTYID`);
 
 --
+-- Filtros para la tabla `faculty`
+--
+ALTER TABLE `faculty`
+  ADD CONSTRAINT `fk_faculty_location` FOREIGN KEY (`locId`) REFERENCES `location` (`id`);
+
+--
 -- Filtros para la tabla `faculty_resource`
 --
 ALTER TABLE `faculty_resource`
@@ -568,6 +642,12 @@ ALTER TABLE `hourlyassignment`
   ADD CONSTRAINT `FK_HOURLYAS_TEACHER_H_TEACHER` FOREIGN KEY (`TEACHERID`) REFERENCES `teacher` (`TEACHERID`);
 
 --
+-- Filtros para la tabla `location`
+--
+ALTER TABLE `location`
+  ADD CONSTRAINT `fk_location_id` FOREIGN KEY (`parentId`) REFERENCES `location` (`id`);
+
+--
 -- Filtros para la tabla `program`
 --
 ALTER TABLE `program`
@@ -577,6 +657,7 @@ ALTER TABLE `program`
 -- Filtros para la tabla `resourcet`
 --
 ALTER TABLE `resourcet`
+  ADD CONSTRAINT `fk_resource_location` FOREIGN KEY (`location`) REFERENCES `location` (`id`),
   ADD CONSTRAINT `fk_resourcet_resourcetype` FOREIGN KEY (`RESOURCETYPEID`) REFERENCES `resourcetype` (`RESSOURCETYPEID`);
 
 --

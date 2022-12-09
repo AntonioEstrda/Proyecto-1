@@ -61,9 +61,9 @@ public class Resource implements Serializable {
     @Min(value = 100, message = "ENV109")
     private Integer number;  
     
-    
-    @Column(length=100, name="location", nullable=true)
-    private String location;
+    @ManyToOne
+    @JoinColumn(name="location")
+    private Location location;  
      
     @Column(columnDefinition="int(4)", name="CAPACITY", nullable=true)
     private Integer capacity;  
