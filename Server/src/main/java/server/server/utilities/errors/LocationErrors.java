@@ -21,5 +21,9 @@ public enum LocationErrors {
     /**
      * Previous instance of location
      */
-    LOC103
+    LOC103, 
+    /**
+     * City must have a value 
+     */
+    LOC104
 }

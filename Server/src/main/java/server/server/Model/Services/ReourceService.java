@@ -15,6 +15,7 @@ import server.server.Model.Access.DAOResource;
 import server.server.Model.Domain.Resource;
 import server.server.utilities.Labels;
 import server.server.utilities.errors.EnvErrors;
+import server.server.utilities.errors.LocationErrors;
 import server.server.utilities.errors.ResErrors;
 import server.server.utilities.errors.ResTypErrors;
 
@@ -31,6 +32,9 @@ public class ReourceService implements IResourceService {
 
     @Autowired
     private IResourceTypeService resTypeServ;
+    
+    @Autowired 
+    private ILocationService locService; 
 
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
@@ -124,6 +128,8 @@ public class ReourceService implements IResourceService {
         }
         if (res.getLocation() == null) {
             errors.add(EnvErrors.ENV102.name());
+        }else if(locService.find(res.getLocation().getLocationId()) == null){
+            errors.add(LocationErrors.LOC101.name()); 
         }
         return errors;
     }

@@ -15,6 +15,7 @@ import server.server.Model.Domain.Faculty;
 import org.springframework.transaction.annotation.Transactional;
 import server.server.utilities.Labels;
 import server.server.utilities.errors.FacErrors;
+import server.server.utilities.errors.LocationErrors;
 
 /**
  *
@@ -26,6 +27,9 @@ public class FacultyService implements IFacultyService {
 
     @Autowired
     private DAOFaculty facultyRepo;
+
+    @Autowired
+    private ILocationService locService;
 
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
@@ -42,8 +46,13 @@ public class FacultyService implements IFacultyService {
             errors.add(FacErrors.FAC102.name());
             returns.put(Labels.objectReturn, null);
         } else {
-            Faculty entitySaved = facultyRepo.save(faculty);
-            returns.put(Labels.objectReturn, entitySaved);
+            if (locService.find(faculty.getLocation().getLocationId()) != null) {
+                Faculty entitySaved = facultyRepo.save(faculty);
+                returns.put(Labels.objectReturn, entitySaved);
+            } else {
+                errors.add(LocationErrors.LOC101.name());
+                returns.put(Labels.objectReturn, null);
+            }
         }
         returns.put(Labels.errors, errors);
         return returns;
@@ -59,15 +68,19 @@ public class FacultyService implements IFacultyService {
     @Transactional(value = "DataTransactionManager")
     public Map<Labels, Object> update(Faculty faculty) {
         Map<Labels, Object> returns = new HashMap();
-        ArrayList<String> errors = new ArrayList(); 
+        ArrayList<String> errors = new ArrayList();
         Faculty old = this.find(faculty);
         if (old == null) {
-            errors.add(FacErrors.FAC101.name());  
+            errors.add(FacErrors.FAC101.name());
         } else {
-            old = facultyRepo.save(faculty);
+            if (locService.find(faculty.getLocation().getLocationId()) != null) {
+                old = facultyRepo.save(faculty);
+            } else {
+                errors.add(LocationErrors.LOC101.name());
+            }
         }
-        returns.put(Labels.errors, errors);  
-        returns.put(Labels.objectReturn, old);   
+        returns.put(Labels.errors, errors);
+        returns.put(Labels.objectReturn, old);
         return returns;
     }
 
@@ -75,16 +88,16 @@ public class FacultyService implements IFacultyService {
     @Transactional(value = "DataTransactionManager")
     public Map<Labels, Object> delete(Long FacultyId) {
         Map<Labels, Object> returns = new HashMap();
-        ArrayList<String> errors = new ArrayList(); 
+        ArrayList<String> errors = new ArrayList();
         Faculty old = facultyRepo.findById(FacultyId).orElse(null);
-        if(old != null){
+        if (old != null) {
             facultyRepo.delete(old);
-        }else{
-            errors.add(FacErrors.FAC101.name());  
+        } else {
+            errors.add(FacErrors.FAC101.name());
         }
-        returns.put(Labels.errors, errors); 
-        returns.put(Labels.objectReturn, old); 
-        return returns; 
+        returns.put(Labels.errors, errors);
+        returns.put(Labels.objectReturn, old);
+        return returns;
     }
 
     @Override

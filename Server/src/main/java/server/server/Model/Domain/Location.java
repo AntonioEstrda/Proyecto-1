@@ -33,6 +33,10 @@ public class Location implements Serializable {
     @NotEmpty(message = "LOC102")
     @Column(length = 100, name = "Name")
     private String name;
+    
+    @NotEmpty(message = "LOC103")
+    @Column(length = 100, name = "city")
+    private String city;
 
     @Column(name = "parentId")
     private Long parent;

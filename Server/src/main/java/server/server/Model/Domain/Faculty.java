@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * Class Faculty mapped to Faculty Entity 
@@ -36,7 +37,8 @@ public class Faculty implements Serializable {
     @NotEmpty(message = "FAC103") 
     @Column(length=100, name="NAME")
     private String facultyName;
-   
+    
+    @NotNull(message = "FAC104")
     @ManyToOne
     @JoinColumn(name="locId")
     private Location location;  
