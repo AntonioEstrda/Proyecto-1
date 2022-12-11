@@ -5,7 +5,9 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.Map;
 import server.server.Model.Domain.Program;
+import server.server.utilities.Labels;
 
 /**
  *
@@ -24,7 +26,7 @@ public interface IProgramService {
      * @param program
      * @return Program
      */
-    public Program save(Program program); 
+    public Map<Labels, Object> save(Program program); 
 
     /**
      * list all programs 
@@ -38,7 +40,7 @@ public interface IProgramService {
      * @param program
      * @return Program
      */
-    public Program update(Program program);  
+    public Map<Labels, Object> update(Program program);  
     
     
     /**
@@ -46,6 +48,9 @@ public interface IProgramService {
      * @param programId
      * @return Program
      */
-    public Program delete(Long programId);
+    public Map<Labels, Object> delete(Long programId);
+    
+    
+    public Program findById(long program);
     
 }

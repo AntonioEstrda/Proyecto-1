@@ -35,23 +35,18 @@ public class AcademicPeriod implements Serializable{
     @Column(name="ACADEMICPERIDODID")
     private long academicPeriodID; 
     
-    @NotEmpty
+    @NotEmpty(message = "AP103")
     @Column(length=100, name="NAME")
     private String name;
     
-    @NotEmpty
+    @NotNull(message = "AP104")
     @Temporal(TemporalType.DATE)
     @Column(length=100, name="INITDATE")
     private Date initDate;
     
-    @NotEmpty
+    @NotNull(message = "AP105")
     @Temporal(TemporalType.DATE)
     @Column(length=100, name="FINALDATE")
     private Date finalDate;
-    
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name="FACULTYID")
-    private Faculty faculty;
         
 }

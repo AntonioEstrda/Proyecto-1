@@ -5,6 +5,7 @@
 package server.server.Controller;
 
 import java.util.ArrayList;
+import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.AcademicPeriod;
 import server.server.Model.Services.IAcademicPeriodService;
+import server.server.utilities.Labels;
 
 /**
  * This one 
@@ -32,11 +34,11 @@ import server.server.Model.Services.IAcademicPeriodService;
 @RequestMapping("/academicperiod")
 public class AcademicPeriodController {
     @Autowired
-    public IAcademicPeriodService deptService;
+    public IAcademicPeriodService academicPeriodService;
 
     @GetMapping(value = "/all")
     public ArrayList<AcademicPeriod> all() {
-        return deptService.getAll();
+        return academicPeriodService.getAll();
     }
 
     @GetMapping(value = "/{academicPeriodId}")
@@ -44,25 +46,28 @@ public class AcademicPeriodController {
     public AcademicPeriod get(@PathVariable Long academicPeriodId) {
         AcademicPeriod academicPeriod = new AcademicPeriod();
         academicPeriod.setAcademicPeriodID(academicPeriodId);
-        return deptService.find(academicPeriod);
+        return academicPeriodService.find(academicPeriod);
     }
 
     @PostMapping(
             consumes = {"application/json"})
     public ResponseEntity<AcademicPeriod> add(@RequestBody @Valid AcademicPeriod academicPeriod, Errors errors) {
+        HttpHeaders headers = new HttpHeaders();
         if (errors.hasErrors()) {
-            HttpHeaders headers = new HttpHeaders();
+            ArrayList<String> setErrors = Utility.setErrors(errors);
             headers.add("Errors", Utility.setErrors(errors).toString());
             return new ResponseEntity<>(academicPeriod, headers, HttpStatus.NOT_MODIFIED);
-        }
-
-        academicPeriod = deptService.save(academicPeriod);
-        if (academicPeriod != null) {
-            return new ResponseEntity<>(academicPeriod, null, HttpStatus.ACCEPTED);
         } else {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Error", "found an instance");
-            return new ResponseEntity<>(academicPeriod, headers, HttpStatus.NOT_MODIFIED);
+            Map<Labels, Object> returns = academicPeriodService.save(academicPeriod);
+            ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
+            AcademicPeriod ac = (AcademicPeriod) returns.get(Labels.objectReturn);
+            if (!errors2.isEmpty() || ac == null) {
+                headers.add(Labels.errors.name(), errors2.toString());
+                return new ResponseEntity<>(academicPeriod, headers, HttpStatus.NOT_MODIFIED);
+            } else {
+                return new ResponseEntity<>(academicPeriod, null, HttpStatus.ACCEPTED);
+
+            }
         }
     }
 
@@ -70,19 +75,20 @@ public class AcademicPeriodController {
     @RequestMapping("/update")
     public ResponseEntity<AcademicPeriod> update(@RequestBody @Valid AcademicPeriod academicPeriod, Errors errors) {
         
+        HttpHeaders headers = new HttpHeaders();
         if (errors.hasErrors()) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Errors", Utility.setErrors(errors).toString());
+            ArrayList<String> setErrors = Utility.setErrors(errors);
+            headers.add(Labels.errors.name(), setErrors.toString());
             return new ResponseEntity<>(academicPeriod, headers, HttpStatus.NOT_MODIFIED);
-        }
-        
-        academicPeriod = deptService.update(academicPeriod);
-        if (academicPeriod != null) {
-            return new ResponseEntity<>(academicPeriod, null, HttpStatus.ACCEPTED);
         } else {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Error", "Not found");
-            return new ResponseEntity<>(academicPeriod, headers, HttpStatus.NOT_MODIFIED);
+            Map<Labels, Object> update = academicPeriodService.update(academicPeriod);
+            ArrayList<String> errors2 = (ArrayList<String>) update.get(Labels.errors);
+            AcademicPeriod ac = (AcademicPeriod) update.get(Labels.objectReturn);
+            if (!errors2.isEmpty() || ac == null) {
+                headers.add(Labels.errors.name(), errors2.toString());
+                return new ResponseEntity<>(academicPeriod, headers, HttpStatus.NOT_MODIFIED);
+            }
+            return new ResponseEntity<>(academicPeriod, null, HttpStatus.ACCEPTED);
         }
         
     }
@@ -91,13 +97,15 @@ public class AcademicPeriodController {
     @RequestMapping("/delete/{academicPeriodId}")
     public ResponseEntity<AcademicPeriod> delete(@PathVariable Long academicPeriodId) {
 
-        AcademicPeriod academicPeriod = deptService.delete(academicPeriodId);
-        if (academicPeriod != null) {
-            return new ResponseEntity<>(academicPeriod, null, HttpStatus.ACCEPTED);
+        Map<Labels, Object> delete = academicPeriodService.delete(academicPeriodId);
+        ArrayList<String> errors = (ArrayList<String>) delete.get(Labels.errors);
+        AcademicPeriod ac = (AcademicPeriod) delete.get(Labels.objectReturn);
+        if (ac != null) {
+            return new ResponseEntity<>(ac, null, HttpStatus.ACCEPTED);
         } else {
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Error", "Not found");
-            return (new ResponseEntity<>(academicPeriod, headers, HttpStatus.NOT_MODIFIED));
+            headers.add(Labels.errors.name(), errors.toString());
+            return (new ResponseEntity<>(ac, headers, HttpStatus.NOT_MODIFIED));
         }
     }
 }

@@ -47,5 +47,10 @@ public enum DeptErrors {
     /**
      * Alphabetical min 2, max 6
      */
-    DEPT108;
+    DEPT108,
+    
+    /**
+     * The Faculty ID field cannot be null
+     */
+    DEPT109;
 }

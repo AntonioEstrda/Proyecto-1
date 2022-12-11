@@ -26,6 +26,12 @@ public class GroupService implements IGroupService{
     
     @Autowired 
     private DAOGroup groupRepo; 
+    
+    @Autowired
+    private IAcademicPeriodService apService;
+    
+    @Autowired
+    private ISubjectService subjService;
 
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
@@ -39,9 +45,17 @@ public class GroupService implements IGroupService{
         Map<Labels, Object> returns = new HashMap();
         ArrayList errors = new ArrayList();
         if (this.find(group) != null) {
-            errors.add(GroupErrors.GROUP101.name());
+            errors.add(GroupErrors.GROUP102.name());
             returns.put(Labels.objectReturn, null);
         } else {
+            if (apService.find(group.getAcademicPeriod()) != null) {
+                Group entitySaved = groupRepo.save(group);
+                returns.put(Labels.objectReturn, entitySaved);
+            }else if (subjService.find(group.getSubject()) != null) {
+                errors.add(GroupErrors.GROUP105.name());
+            }else {
+                errors.add(GroupErrors.GROUP106.name());
+            }
             Group entitySaved = groupRepo.save(group);
             returns.put(Labels.objectReturn, entitySaved);
         }

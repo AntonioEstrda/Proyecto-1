@@ -5,7 +5,9 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.Map;
 import server.server.Model.Domain.Teacher;
+import server.server.utilities.Labels;
 
 /**
  *
@@ -24,7 +26,7 @@ public interface ITeacherService {
      * @param teacher
      * @return Teacher
      */
-    public Teacher save(Teacher teacher); 
+    public Map<Labels, Object> save(Teacher teacher); 
 
     /**
      * list all teachers 
@@ -38,7 +40,7 @@ public interface ITeacherService {
      * @param teacher
      * @return Teacher
      */
-    public Teacher update(Teacher teacher);  
+    public Map<Labels, Object> update(Teacher teacher);  
     
     
     /**
@@ -46,6 +48,6 @@ public interface ITeacherService {
      * @param teacherId
      * @return Teacher
      */
-    public Teacher delete(Long teacherId);
+    public Map<Labels, Object> delete(Long teacherId);
     
 }

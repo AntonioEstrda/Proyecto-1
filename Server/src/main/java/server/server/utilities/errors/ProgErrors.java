@@ -8,30 +8,30 @@ package server.server.utilities.errors;
  *
  * @author anmon
  */
-public enum GroupErrors {
+public enum ProgErrors {
 
     /**
-     * Resource not found
+     * Program not found
      */
-    GROUP101,
+    PRG101,
     /**
-     * Existence of a previous instance with the same id  		
+     * Program registered with that ID previously		
      */
-    GROUP102,
+    PRG102,
     /**
-     * Group name must contain a value
+     * Program name must not be null
      */
-    GROUP103,
+    PRG103,
     /**
-     * Capacity must contain a value
+     * Program code must not be null
      */
-    GROUP104,
+    PRG104,
     /**
-     * Subject ID cannot be null
+     * Program Location must not be null
      */
-    GROUP105,
+    PRG105,
     /**
-     * The Academic Period ID cannot be null
+     * Department ID cannot be null
      */
-    GROUP106;
+    PRG106
 }

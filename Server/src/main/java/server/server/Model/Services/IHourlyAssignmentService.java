@@ -5,7 +5,9 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.Map;
 import server.server.Model.Domain.HourlyAssignment;
+import server.server.utilities.Labels;
 
 /**
  *
@@ -24,7 +26,7 @@ public interface IHourlyAssignmentService {
      * @param hourlyAssignment
      * @return HourlyAssignment
      */
-    public HourlyAssignment save(HourlyAssignment hourlyAssignment); 
+    public Map<Labels, Object> save(HourlyAssignment hourlyAssignment); 
 
     /**
      * list all hourlyAssignments 
@@ -38,7 +40,7 @@ public interface IHourlyAssignmentService {
      * @param hourlyAssignment
      * @return HourlyAssignment
      */
-    public HourlyAssignment update(HourlyAssignment hourlyAssignment);  
+    public Map<Labels, Object> update(HourlyAssignment hourlyAssignment);  
     
     
     /**
@@ -46,6 +48,6 @@ public interface IHourlyAssignmentService {
      * @param hourlyAssignmentId
      * @return HourlyAssignment
      */
-    public HourlyAssignment delete(Long hourlyAssignmentId);
+    public Map<Labels, Object> delete(Long hourlyAssignmentId);
     
 }

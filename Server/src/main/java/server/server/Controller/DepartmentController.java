@@ -105,7 +105,7 @@ public class DepartmentController {
             return new ResponseEntity<>(dept, null, HttpStatus.ACCEPTED);
         } else {
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Error", "Not found");
+            headers.add(Labels.errors.name(), errors.toString());
             return (new ResponseEntity<>(dept, headers, HttpStatus.NOT_MODIFIED));
         }
     }

@@ -5,7 +5,9 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.Map;
 import server.server.Model.Domain.Subject;
+import server.server.utilities.Labels;
 
 /**
  *
@@ -24,7 +26,7 @@ public interface ISubjectService {
      * @param subject
      * @return Subject
      */
-    public Subject save(Subject subject); 
+    public Map<Labels, Object> save(Subject subject); 
 
     /**
      * list all subjects 
@@ -38,7 +40,7 @@ public interface ISubjectService {
      * @param subject
      * @return Subject
      */
-    public Subject update(Subject subject);  
+    public Map<Labels, Object> update(Subject subject);  
     
     
     /**
@@ -46,6 +48,8 @@ public interface ISubjectService {
      * @param subjectId
      * @return Subject
      */
-    public Subject delete(Long subjectId);
+    public Map<Labels, Object> delete(Long subjectId);
+    
+    public Subject findById(long subject);
     
 }

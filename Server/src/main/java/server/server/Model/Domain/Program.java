@@ -32,19 +32,19 @@ public class Program implements Serializable {
     @Column(name="IDPROGRAM")
     private long programId; 
     
-    @NotEmpty
+    @NotEmpty(message = "PRG103") 
     @Column(length=100, name="NAME")
     private String name;
     
-    @NotEmpty 
+    @NotEmpty(message = "PRG104") 
     @Column(length=25, name="code")
     private String code; 
     
-    @NotEmpty 
+    @NotEmpty(message = "PRG105") 
     @Column(length=100, name="location")
     private String location; 
     
-    @NotNull
+    @NotNull(message = "PRG106") 
     @ManyToOne
     @JoinColumn(name="DEPARTMENTID")
     private Department department;

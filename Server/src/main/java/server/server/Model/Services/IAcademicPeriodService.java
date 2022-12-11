@@ -5,7 +5,9 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.Map;
 import server.server.Model.Domain.AcademicPeriod;
+import server.server.utilities.Labels;
 
 /**
  *
@@ -24,7 +26,7 @@ public interface IAcademicPeriodService {
      * @param academicPeriod
      * @return AcademicPeriod
      */
-    public AcademicPeriod save(AcademicPeriod academicPeriod); 
+    public Map<Labels, Object> save(AcademicPeriod academicPeriod); 
 
     /**
      * list all academicPeriods 
@@ -38,7 +40,7 @@ public interface IAcademicPeriodService {
      * @param academicPeriod
      * @return AcademicPeriod
      */
-    public AcademicPeriod update(AcademicPeriod academicPeriod);  
+    public Map<Labels, Object> update(AcademicPeriod academicPeriod);  
     
     
     /**
@@ -46,6 +48,6 @@ public interface IAcademicPeriodService {
      * @param academicPeriodId
      * @return AcademicPeriod
      */
-    public AcademicPeriod delete(Long academicPeriodId);
+    public Map<Labels, Object> delete(Long academicPeriodId);
     
 }

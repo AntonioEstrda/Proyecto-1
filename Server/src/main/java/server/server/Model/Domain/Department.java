@@ -43,7 +43,7 @@ public class Department implements Serializable{
     @Column(length=100, name="location")
     private String location; 
     
-    @NotNull
+    @NotNull(message="DEPT109")
     @ManyToOne
     @JoinColumn(name="FACULTYID")
     private Faculty facultad;

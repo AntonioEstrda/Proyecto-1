@@ -34,39 +34,48 @@ public class Subject implements Serializable{
     @Column(name="IDSUBJECT")
     private long subjectID; 
     
-    @NotEmpty
+    @NotEmpty(message = "SUBJ103") 
     @Column(length=100, name="NAME")
     private String name;
     
-    @NotEmpty
+    @NotEmpty(message = "SUBJ104") 
     @Column(length=100, name="REQUISITS")
     private String requisits;
     
-    @NotEmpty
+    @NotEmpty(message = "SUBJ105") 
     @Column(length=100, name="SEMESTER")
     private String semester;
     
-    @NotEmpty
+    @NotEmpty(message = "SUBJ106") 
     @Column(length=100, name="INTENSITY")
     private String intensity;
     
-    @NotNull
-    @Column(length=8, name="ModalityTime")
+    @NotNull(message = "SUBJ107") 
+    @Column(length=8, name="Modality")
     @Enumerated(EnumType.STRING)
-    private ModalityTime modalityTime;
+    private Modality modality;
     
-    @NotNull
+    @NotNull(message = "SUBJ108") 
     @Column(nullable = false, columnDefinition = "TINYINT(1)", name="ISDISABLE")
     private String isDisable;
     
-    @NotEmpty
+    @NotNull(message = "SUBJ109") 
+    @Column(length=8, name="type")
+    @Enumerated(EnumType.STRING)
+    private Type type;
+    
+    @NotNull(message = "SUBJ110") 
     @ManyToOne
     @JoinColumn(name="IDPROGRAM")
     private Program program;
         
     
-    public enum ModalityTime {
-        Diurn, Nocturn;
+    public enum Modality {
+        Semestral, Anual;
+    }
+    
+    public enum Type {
+        Teórica,Práctica,Híbrida;
     }
     
 }

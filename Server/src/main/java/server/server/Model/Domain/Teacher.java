@@ -34,19 +34,19 @@ public class Teacher implements Serializable{
     @Column(name="TEACHERID")
     private long teacherID; 
     
-    @NotEmpty
+    @NotEmpty(message = "TCH103")
     @Column(length=100, name="FISRTSNAME")
     private String firstName;
     
-    @NotEmpty
+    @NotEmpty(message = "TCH104")
     @Column(length=100, name="LASTNAME")
     private String lastName;
     
-    @NotEmpty
+    @NotNull(message = "TCH105")
     @Column(length=100, name="NUMIDEN")
     private String numIden;
     
-    @NotNull
+    @NotNull(message = "TCH106")
     @Column(nullable = false, columnDefinition = "TINYINT(1)", name="ISDISABLE")
     private String isDisable;
        

@@ -28,7 +28,22 @@ import lombok.Data;
 @Data
 public class HourlyAssignment implements Serializable {
     public enum VinculationType {
-        NOMBRADOTIEMPOCOMPLETO, NOMBRADOMEDIOTIEMPO,OCASIONALTIEMPOCOMPLETO,OCASIONALMEDIOTIEMPO,HORACÁTEDRA,BECARIO; 
+        //NOMBRADOTIEMPOCOMPLETO, NOMBRADOMEDIOTIEMPO,OCASIONALTIEMPOCOMPLETO,OCASIONALMEDIOTIEMPO,HORACÁTEDRA,BECARIO; 
+        NOMBRADOTIEMPOCOMPLETO("Nombrado tiempo completo"),
+        NOMBRADOMEDIOTIEMPO("Nombrado medio tiempo"),
+        OCASIONALTIEMPOCOMPLETO("Ocasional tiempo completo"),
+        OCASIONALMEDIOTIEMPO("Ocasional medio tiempo"),
+        HORACÁTEDRA("Hora cátedra"),BECARIO("Becario");
+        
+        private String name;
+
+        VinculationType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        } 
     }
     
     private static final long serialVersionUID = 1L;
@@ -38,29 +53,29 @@ public class HourlyAssignment implements Serializable {
     @Column(name="vinculationId")
     private long vinculationId; 
        
-    @NotEmpty 
+    @NotEmpty(message = "HA105")
     @Column(name="HOURS")
     private long hours; 
     
-    @NotNull(message = "108")
+    @NotEmpty(message = "HA106")
     @Enumerated(EnumType.STRING)
-    @Column(name="type")
+    @Column(name="VINCULATIONTYPE")
     private VinculationType vinculationtype; 
     
-    @NotEmpty
+    @NotNull(message = "HA107")
     @Column(length=100, name="initialdate")
     private String initialDate;
     
-    @NotEmpty
+    @NotNull(message = "HA108")
     @Column(length=100, name="finaldate")
     private String finaldate;
         
-    @NotNull
+    @NotNull(message = "HA103")
     @ManyToOne
     @JoinColumn(name="DEPARTMENTID")
     private Department department;
     
-    @NotNull
+    @NotNull(message = "HA104")
     @ManyToOne
     @JoinColumn(name="TEACHERID")
     private Teacher teacher;

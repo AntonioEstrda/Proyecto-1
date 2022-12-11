@@ -5,12 +5,16 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import server.server.Model.Access.DAOAcademicPeriod;
 import server.server.Model.Domain.AcademicPeriod;
+import server.server.utilities.Labels;
+import server.server.utilities.errors.APErrors;
 
 /**
  *
@@ -21,51 +25,68 @@ import server.server.Model.Domain.AcademicPeriod;
 public class AcademicPeriodService implements IAcademicPeriodService{
     
     @Autowired 
-    private DAOAcademicPeriod deptRepo; 
+    private DAOAcademicPeriod academicPeriodRepo; 
+    
+    /*@Autowired
+    private IFacultyService facultyService;*/
 
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
     public AcademicPeriod find(AcademicPeriod academicPeriod) {
-        return deptRepo.findById(academicPeriod.getAcademicPeriodID()).orElse(null);
+        return academicPeriodRepo.findById(academicPeriod.getAcademicPeriodID()).orElse(null);
     }
 
     @Override
     @Transactional(value = "DataTransactionManager")
-    public AcademicPeriod save(AcademicPeriod academicPeriod) {
-        if (this.find(academicPeriod) == null) {
-            AcademicPeriod entitySaved = deptRepo.save(academicPeriod);
-            return entitySaved;
+    public Map<Labels, Object> save(AcademicPeriod academicPeriod) {
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList errors = new ArrayList();
+        if (this.find(academicPeriod) != null) {
+            errors.add(APErrors.AP102.name());
+            returns.put(Labels.objectReturn, null);
+        } else {
+                AcademicPeriod entitySaved = academicPeriodRepo.save(academicPeriod);
+                returns.put(Labels.objectReturn, entitySaved);
         }
-        return null;
+        returns.put(Labels.errors, errors);
+        return returns;
     }
 
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
     public ArrayList<AcademicPeriod> getAll() {
-        return (ArrayList<AcademicPeriod>) deptRepo.findAll();
+        return (ArrayList<AcademicPeriod>) academicPeriodRepo.findAll();
     }
 
     @Override
     @Transactional(value = "DataTransactionManager")
-    public AcademicPeriod update(AcademicPeriod academicPeriod) {
+    public Map<Labels, Object> update(AcademicPeriod academicPeriod) {
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errors = new ArrayList(); 
         AcademicPeriod old = this.find(academicPeriod);
         if (old == null) {
-            return null;
+            errors.add(APErrors.AP101.name());  
         } else {
-            return deptRepo.save(academicPeriod);
+            old = academicPeriodRepo.save(academicPeriod);
         }
+        returns.put(Labels.errors, errors);  
+        returns.put(Labels.objectReturn, old);   
+        return returns;
     }
 
     @Override
     @Transactional(value = "DataTransactionManager")
-    public AcademicPeriod delete(Long AcademicPeriodId) {
-
-        AcademicPeriod old = deptRepo.findById(AcademicPeriodId).orElse(null);
-        if (old == null) {
-            return null;
-        } else {
-            deptRepo.delete(old);
-            return old;
+    public Map<Labels, Object> delete(Long AcademicPeriodId) {
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errors = new ArrayList(); 
+        AcademicPeriod old = academicPeriodRepo.findById(AcademicPeriodId).orElse(null);
+        if(old != null){
+            academicPeriodRepo.delete(old);
+        }else{
+            errors.add(APErrors.AP101.name());  
         }
+        returns.put(Labels.errors, errors); 
+        returns.put(Labels.objectReturn, old); 
+        return returns; 
     }
 }

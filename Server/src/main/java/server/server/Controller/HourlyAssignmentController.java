@@ -5,6 +5,7 @@
 package server.server.Controller;
 
 import java.util.ArrayList;
+import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,81 +25,86 @@ import org.springframework.web.bind.annotation.RestController;
 import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.HourlyAssignment;
 import server.server.Model.Services.IHourlyAssignmentService;
+import server.server.utilities.Labels;
 
 /**
  *
  * @author Fernando
  */
 @RestController
-@RequestMapping("/hourlyAssignment")
+@RequestMapping("/hourlyassignment")
 public class HourlyAssignmentController {
     @Autowired
-    public IHourlyAssignmentService deptService;
-
-    @GetMapping(value = "/all")
-    public ArrayList<HourlyAssignment> all() {
-        return deptService.getAll();
-    }
-
-    @GetMapping(value = "/{vinculationId}")
+    public IHourlyAssignmentService hourlyAssignmentService; 
+    
+    @GetMapping(value = "/all") 
+    public ArrayList<HourlyAssignment> all(){
+        return hourlyAssignmentService.getAll();
+    }          
+   
+    @GetMapping(value = "/{HourlyAssignmentId}")
     @ResponseBody
-    public HourlyAssignment get(@PathVariable Long vinculationId) {
+    public HourlyAssignment get(@PathVariable  Long HourlyAssignmentId) {
         HourlyAssignment hourlyAssignment = new HourlyAssignment();
-        hourlyAssignment.setVinculationId(vinculationId);
-        return deptService.find(hourlyAssignment);
+        hourlyAssignment.setVinculationId(HourlyAssignmentId);
+        return hourlyAssignmentService.find(hourlyAssignment);
     }
-
+    
     @PostMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HourlyAssignment> add(@RequestBody @Valid HourlyAssignment hourlyAssignment, Errors errors) {
-        if (errors.hasErrors()) {
-            HttpHeaders headers = new HttpHeaders();
+        consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<HourlyAssignment> add(@RequestBody @Valid HourlyAssignment hourlyAssignment, Errors errors) {     
+       HttpHeaders headers = new HttpHeaders();
+       if (errors.hasErrors()) {
+            ArrayList<String> setErrors = Utility.setErrors(errors);
             headers.add("Errors", Utility.setErrors(errors).toString());
             return new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED);
-        }
-
-        hourlyAssignment = deptService.save(hourlyAssignment);
-        if (hourlyAssignment != null) {
-            return new ResponseEntity<>(hourlyAssignment, null, HttpStatus.ACCEPTED);
         } else {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Error", "found an instance");
-            return new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED);
+            Map<Labels, Object> returns = hourlyAssignmentService.save(hourlyAssignment);
+            ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
+            HourlyAssignment subj = (HourlyAssignment) returns.get(Labels.objectReturn);
+            if (!errors2.isEmpty() || subj == null) {
+                headers.add(Labels.errors.name(), errors2.toString());
+                return new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED);
+            } else {
+                return new ResponseEntity<>(hourlyAssignment, null, HttpStatus.ACCEPTED);
+
+            }
         }
     }
-
+    
     @PutMapping
     @RequestMapping("/update")
-    public ResponseEntity<HourlyAssignment> update(@RequestBody @Valid HourlyAssignment hourlyAssignment, Errors errors) {
-        
+    public ResponseEntity<HourlyAssignment> update(@RequestBody HourlyAssignment hourlyAssignment, Errors errors) {
+        HttpHeaders headers = new HttpHeaders();
         if (errors.hasErrors()) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Errors", Utility.setErrors(errors).toString());
+            ArrayList<String> setErrors = Utility.setErrors(errors);
+            headers.add(Labels.errors.name(), setErrors.toString());
             return new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED);
-        }
-        
-        hourlyAssignment = deptService.update(hourlyAssignment);
-        if (hourlyAssignment != null) {
-            return new ResponseEntity<>(hourlyAssignment, null, HttpStatus.ACCEPTED);
         } else {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Error", "Not found");
-            return new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED);
+            Map<Labels, Object> update = hourlyAssignmentService.update(hourlyAssignment);
+            ArrayList<String> errors2 = (ArrayList<String>) update.get(Labels.errors);
+            HourlyAssignment subj = (HourlyAssignment) update.get(Labels.objectReturn);
+            if (!errors2.isEmpty() || subj == null) {
+                headers.add(Labels.errors.name(), errors2.toString());
+                return new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED);
+            }
+            return new ResponseEntity<>(hourlyAssignment, null, HttpStatus.ACCEPTED);
         }
-        
     }
-
+    
     @DeleteMapping
     @RequestMapping("/delete/{vinculationId}")
-    public ResponseEntity<HourlyAssignment> delete(@PathVariable Long vinculationId) {
-
-        HourlyAssignment hourlyAssignment = deptService.delete(vinculationId);
-        if (hourlyAssignment != null) {
-            return new ResponseEntity<>(hourlyAssignment, null, HttpStatus.ACCEPTED);
+    public ResponseEntity<HourlyAssignment> delete(@PathVariable Long vinculationId
+    ) {
+        Map<Labels, Object> delete = hourlyAssignmentService.delete(vinculationId);
+        ArrayList<String> errors = (ArrayList<String>) delete.get(Labels.errors);
+        HourlyAssignment subj = (HourlyAssignment) delete.get(Labels.objectReturn);
+        if (subj != null) {
+            return new ResponseEntity<>(subj, null, HttpStatus.ACCEPTED);
         } else {
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Error", "Not found");
-            return (new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED));
+            headers.add(Labels.errors.name(), errors.toString());
+            return (new ResponseEntity<>(subj, headers, HttpStatus.NOT_MODIFIED));
         }
     }
 }

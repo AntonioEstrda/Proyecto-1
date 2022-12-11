@@ -32,21 +32,21 @@ public class Group implements Serializable {
     @Column(name="IDGROUP")
     private long groupId; 
     
-    @NotEmpty
+    @NotEmpty(message = "GROUP103")
     @Column(length=100, name="NAME")
     private String name;
     
-    @NotEmpty 
+    @NotNull(message = "GROUP104")
     @Column(name="CAPACITY")
     private long capacity; 
     
-    @NotNull
+    @NotNull(message = "GROUP105")
     @ManyToOne
     @JoinColumn(name="IDSUBJECT")
     private Subject subject;
     
     
-    @NotNull
+    @NotNull(message = "GROUP106")
     @ManyToOne
     @JoinColumn(name="ACADEMICPERIDODID")
     private AcademicPeriod academicPeriod;
