@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-12-2022 a las 02:21:15
+-- Tiempo de generación: 11-12-2022 a las 18:06:26
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -182,6 +182,7 @@ CREATE TABLE `hourlyassignment` (
 CREATE TABLE `location` (
   `id` int(11) NOT NULL,
   `Name` text NOT NULL,
+  `city` varchar(50) NOT NULL,
   `parentId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -189,10 +190,10 @@ CREATE TABLE `location` (
 -- Volcado de datos para la tabla `location`
 --
 
-INSERT INTO `location` (`id`, `Name`, `parentId`) VALUES
-(2, 'Sede principal', NULL),
-(3, 'Edificio 2', 2),
-(4, 'El Carmen', NULL);
+INSERT INTO `location` (`id`, `Name`, `city`, `parentId`) VALUES
+(2, 'Sede principal', '', NULL),
+(3, 'Edificio 2', '', 2),
+(4, 'El Carmen', '', NULL);
 
 -- --------------------------------------------------------
 
