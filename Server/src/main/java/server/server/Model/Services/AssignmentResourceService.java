@@ -48,7 +48,9 @@ public class AssignmentResourceService implements IAssignmentResourceService {
             FacultyResource res = this.facResSer.findByFacultyIdResourceId(facId, resId);
             FacultyResource env = this.facResSer.findByFacultyIdResourceId(facId, envId);
             if (res == null) {errors.add(ResErrors.RES101.name());}
+            else if(res.isDisable()) {errors.add(ResErrors.RES115.name());}
             if (env == null) {errors.add(EnvErrors.ENV101.name());}
+            else if (env.isDisable()) {errors.add(EnvErrors.ENV113.name());}
 
             Resource resObj, envObj;
             if (res != null && env != null) {

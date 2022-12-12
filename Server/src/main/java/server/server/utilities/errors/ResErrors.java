@@ -61,5 +61,9 @@ public enum ResErrors {
     /**
      * Resource should not be an environment
      */
-    RES113;
+    RES113, 
+    /**
+     * Resource is disabled 
+     */
+    RES115;
 }

@@ -52,5 +52,9 @@ public enum EnvErrors {
     /**
      * Environment previous  instance 
      */
-    ENV112;
+    ENV112,
+    /**
+     * Environment is disabled 
+     */
+    ENV113;
 }

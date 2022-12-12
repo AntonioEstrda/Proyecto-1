@@ -52,7 +52,7 @@ public class FacultyResourceService implements IFacultyResourceService {
         }
         if (res == null) {
             errors.add(ResErrors.RES101.name());
-        }
+        }else if(res.isDisable()){ errors.add(ResErrors.RES115.name());}
         
         if (errors.isEmpty() && !(facRscRep.findByResourceId(resourceId)).isEmpty()) {
             errors.add(FacResErrors.FACRES103.name());
