@@ -90,6 +90,7 @@ public class ReourceService implements IResourceService {
             ArrayList<String> validateResourceEnv = validateResourceEnv(res);
             errors.addAll(validateResourceEnv);
         }
+        res.setCode(res.getCode().toUpperCase());
         Resource r2 = resRepo.findByCodeAndNumber(res.getCode(), res.getNumber());
         if (r2 != null && r2.getResourceId() != res.getResourceId()) {
             errors.add(ResErrors.RES111.name());

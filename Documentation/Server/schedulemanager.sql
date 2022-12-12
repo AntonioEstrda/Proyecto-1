@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-12-2022 a las 04:21:29
+-- Tiempo de generación: 12-12-2022 a las 04:53:04
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -277,7 +277,7 @@ CREATE TABLE `resourcet` (
 --
 
 INSERT INTO `resourcet` (`RESOURCEID`, `RESOURCETYPEID`, `NAME`, `DESCRIPTION`, `ISDISABLE`, `code`, `location`, `capacity`, `number`) VALUES
-(3, 8, 'Computador', 'Computador', 0, 'SISCOM', NULL, NULL, NULL),
+(3, 8, 'Computador', 'Computador', 0, '4567894', NULL, NULL, NULL),
 (4, 7, 'Salón de telemática', 'Salón de telemática', 0, 'TEL', NULL, 30, 101),
 (5, 8, 'Computador2', 'Computador2', 0, 'SISCOM', NULL, NULL, 101),
 (6, 5, 'Salon', 'Salon', 1, 'SISCOM', 3, 45, 102),

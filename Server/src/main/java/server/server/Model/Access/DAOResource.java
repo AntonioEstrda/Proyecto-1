@@ -5,7 +5,6 @@
 package server.server.Model.Access;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import server.server.Model.Domain.Resource;
 
@@ -15,6 +14,7 @@ import server.server.Model.Domain.Resource;
  */
 @Repository
 public interface DAOResource extends JpaRepository<Resource, Long>{
+    
  
     public Resource findByCodeAndNumber(String code, Integer number); 
        

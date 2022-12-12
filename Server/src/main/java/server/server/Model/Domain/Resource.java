@@ -53,10 +53,10 @@ public class Resource implements Serializable {
     
     @NotEmpty(message="RES106")
     @Column(length=5, name="code")
-    @Pattern(regexp = "^[a-zA-Z]{2,6}", message="RES110")
+    @Pattern(regexp = "^[a-zA-Z0-9]{2,6}", message="RES110")
     private String code;
     
-    @NotNull(message="RES108")
+    //@NotNull(message="RES108")
     @Column(columnDefinition="int(3)", name="NUMBER")
     @Min(value = 100, message = "ENV109")
     private Integer number;  
