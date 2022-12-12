@@ -28,7 +28,8 @@ import lombok.Data;
 @Data
 public class HourlyAssignment implements Serializable {
     public enum VinculationType {
-        //NOMBRADOTIEMPOCOMPLETO, NOMBRADOMEDIOTIEMPO,OCASIONALTIEMPOCOMPLETO,OCASIONALMEDIOTIEMPO,HORACÁTEDRA,BECARIO; 
+        NOMBRADOTIEMPOCOMPLETO, NOMBRADOMEDIOTIEMPO,OCASIONALTIEMPOCOMPLETO,OCASIONALMEDIOTIEMPO,HORACATEDRA,BECARIO; 
+        /*
         NOMBRADOTIEMPOCOMPLETO("Nombrado tiempo completo"),
         NOMBRADOMEDIOTIEMPO("Nombrado medio tiempo"),
         OCASIONALTIEMPOCOMPLETO("Ocasional tiempo completo"),
@@ -43,7 +44,7 @@ public class HourlyAssignment implements Serializable {
 
         public String getName() {
             return this.name;
-        } 
+        } */
     }
     
     private static final long serialVersionUID = 1L;
@@ -69,6 +70,10 @@ public class HourlyAssignment implements Serializable {
     @NotNull(message = "HA108")
     @Column(length=100, name="finaldate")
     private String finaldate;
+    
+    @NotNull(message = "HA109")
+    @Column(columnDefinition = "TINYINT(1)", name="ISDISABLE")
+    private boolean isDisable;
         
     @NotNull(message = "HA103")
     @ManyToOne

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-12-2022 a las 18:06:26
+-- Tiempo de generación: 12-12-2022 a las 04:21:29
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -52,6 +52,17 @@ CREATE TABLE `academicperiod` (
   `FINALDATE` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `academicperiod`
+--
+
+INSERT INTO `academicperiod` (`ACADEMICPERIDODID`, `NAME`, `INITDATE`, `FINALDATE`) VALUES
+(2, 'Nuevo', '2022-05-03', '2022-12-22'),
+(3, 'Nuevo', '2022-05-03', '2022-12-22'),
+(4, 'Nuevo', '2022-05-03', '2022-12-22'),
+(5, 'Nuevo', '2022-05-03', '2022-12-22'),
+(6, 'Nuevo', '2022-05-03', '2022-12-22');
+
 -- --------------------------------------------------------
 
 --
@@ -91,6 +102,14 @@ CREATE TABLE `department` (
   `code` varchar(25) NOT NULL,
   `location` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `department`
+--
+
+INSERT INTO `department` (`DEPARTMENTID`, `FACULTYID`, `NAME`, `code`, `location`) VALUES
+(1, 16, 'Sistemas', 'DEPT1', 'Aqui'),
+(2, 16, 'Sistemas', 'DEPT1', 'Aqui');
 
 -- --------------------------------------------------------
 
@@ -157,6 +176,14 @@ CREATE TABLE `groupt` (
   `NAME` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `groupt`
+--
+
+INSERT INTO `groupt` (`IDGROUP`, `IDSUBJECT`, `ACADEMICPERIDODID`, `CAPACITY`, `NAME`) VALUES
+(4, 6, 2, 20, 'Uno'),
+(5, 6, 2, 20, 'Uno');
+
 -- --------------------------------------------------------
 
 --
@@ -168,10 +195,18 @@ CREATE TABLE `hourlyassignment` (
   `DEPARTMENTID` int(11) NOT NULL,
   `TEACHERID` int(11) NOT NULL,
   `HOURS` int(2) NOT NULL,
-  `VINCULATIONTYPE` enum('Nombrado tiempo completo','Nombrado medio tiempo','Ocasional tiempo completo','Ocasional medio tiempo','Hora cátedra','Becario') NOT NULL,
+  `VINCULATIONTYPE` enum('NOMBRADOTIEMPOCOMPLETO','NOMBRADOMEDIOTIEMPO','OCASIONALTIEMPOCOMPLETO','OCASIONALMEDIOTIEMPO','HORACATEDRA','BECARIO') NOT NULL,
+  `isDisable` tinyint(1) NOT NULL DEFAULT 0,
   `initialdate` date NOT NULL,
   `finaldate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `hourlyassignment`
+--
+
+INSERT INTO `hourlyassignment` (`vinculationId`, `DEPARTMENTID`, `TEACHERID`, `HOURS`, `VINCULATIONTYPE`, `isDisable`, `initialdate`, `finaldate`) VALUES
+(3, 1, 2, 30, 'HORACATEDRA', 0, '2022-12-01', NULL);
 
 -- --------------------------------------------------------
 
@@ -208,6 +243,16 @@ CREATE TABLE `program` (
   `code` varchar(25) NOT NULL,
   `location` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `program`
+--
+
+INSERT INTO `program` (`IDPROGRAM`, `DEPARTMENTID`, `NAME`, `code`, `location`) VALUES
+(7, 1, 'Sistemas', 'PRG1', 'Tulcan'),
+(8, 1, 'Sistemas', 'PRG1', 'Tulcan'),
+(9, 1, 'Sistemas', 'PRG1', 'Tulcan'),
+(10, 1, 'Sistemas', 'PRG1', 'Tulcan');
 
 -- --------------------------------------------------------
 
@@ -322,6 +367,13 @@ CREATE TABLE `subject` (
   `type` enum('Teórica','Práctica','Híbrida') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `subject`
+--
+
+INSERT INTO `subject` (`IDSUBJECT`, `IDPROGRAM`, `NAME`, `REQUISITS`, `SEMESTER`, `INTENSITY`, `Modality`, `ISDISABLE`, `type`) VALUES
+(6, 7, 'Redes', 'Se necesita Laboratorio', 8, 8, 'Semestral', 1, 'Teórica');
+
 -- --------------------------------------------------------
 
 --
@@ -335,6 +387,13 @@ CREATE TABLE `teacher` (
   `NUMIDEN` varchar(50) NOT NULL,
   `ISDISABLE` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `teacher`
+--
+
+INSERT INTO `teacher` (`TEACHERID`, `FISRTSNAME`, `LASTNAME`, `NUMIDEN`, `ISDISABLE`) VALUES
+(2, 'Hector', 'Dorado', '12345', 1);
 
 -- --------------------------------------------------------
 
@@ -506,7 +565,7 @@ ALTER TABLE `teacher_schedule`
 -- AUTO_INCREMENT de la tabla `academicperiod`
 --
 ALTER TABLE `academicperiod`
-  MODIFY `ACADEMICPERIDODID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ACADEMICPERIDODID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `assignmentresource`
@@ -518,7 +577,7 @@ ALTER TABLE `assignmentresource`
 -- AUTO_INCREMENT de la tabla `department`
 --
 ALTER TABLE `department`
-  MODIFY `DEPARTMENTID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `DEPARTMENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `faculty`
@@ -536,13 +595,13 @@ ALTER TABLE `faculty_resource`
 -- AUTO_INCREMENT de la tabla `groupt`
 --
 ALTER TABLE `groupt`
-  MODIFY `IDGROUP` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IDGROUP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `hourlyassignment`
 --
 ALTER TABLE `hourlyassignment`
-  MODIFY `vinculationId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `vinculationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `location`
@@ -554,7 +613,7 @@ ALTER TABLE `location`
 -- AUTO_INCREMENT de la tabla `program`
 --
 ALTER TABLE `program`
-  MODIFY `IDPROGRAM` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IDPROGRAM` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `resourcet`
@@ -578,13 +637,13 @@ ALTER TABLE `schedule`
 -- AUTO_INCREMENT de la tabla `subject`
 --
 ALTER TABLE `subject`
-  MODIFY `IDSUBJECT` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IDSUBJECT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `TEACHERID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `TEACHERID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `teacher_group`
