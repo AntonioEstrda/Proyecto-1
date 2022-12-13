@@ -47,7 +47,5 @@ public enum HAErrors {
     /**
      * The end date field cannot be null
      */
-    HA108, 
-    
-    HA109
+    HA108
 }

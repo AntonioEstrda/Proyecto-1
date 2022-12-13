@@ -12,5 +12,7 @@ import server.server.Model.Domain.Department;
  * @author Fernando
  */
 public interface DAODepartment extends JpaRepository<Department, Long>{
+    
+    public Department findByCodeAndName(String code, String name); 
    
 }

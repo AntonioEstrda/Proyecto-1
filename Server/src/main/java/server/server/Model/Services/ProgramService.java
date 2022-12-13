@@ -46,15 +46,18 @@ public class ProgramService implements IProgramService{
             returns.put(Labels.objectReturn, null);
         } else {
             if (deptService.find(program.getDepartment()) != null) {
-                Program entitySaved = programRepo.save(program);
-                returns.put(Labels.objectReturn, entitySaved);
+                if (programRepo.findByCodeAndName(program.getCode() ,program.getName()) != null) {
+                    errors.add(ProgErrors.PRG108.name());
+                }else if (errors.isEmpty()) {
+                    program = programRepo.save(program);
+                }
             } else {
                 errors.add(ProgErrors.PRG101.name());
             }
-            Program entitySaved = programRepo.save(program);
-            returns.put(Labels.objectReturn, entitySaved);
+            
         }
         returns.put(Labels.errors, errors);
+        returns.put(Labels.objectReturn, program);
         return returns;
     }
 
@@ -74,6 +77,14 @@ public class ProgramService implements IProgramService{
             errors.add(ProgErrors.PRG101.name());  
         } else {
             old = programRepo.save(program);
+        }
+        program.setCode(program.getCode().toUpperCase());
+        Program r2 = programRepo.findByCodeAndName(program.getCode(), program.getName());
+        if (r2 != null && r2.getProgramId() != program.getProgramId()) {
+            errors.add(ProgErrors.PRG108.name());
+        }
+        if (errors.isEmpty()) {
+            program = programRepo.save(program);
         }
         returns.put(Labels.errors, errors);  
         returns.put(Labels.objectReturn, old);   
@@ -99,5 +110,10 @@ public class ProgramService implements IProgramService{
     @Override
     public Program findById(long program) {
         return programRepo.findById(program).orElse(null);
+    }
+    
+    @Override
+    public Program findByCodeAndName(String code, String name) {
+        return programRepo.findByCodeAndName(code, name);
     }
 }

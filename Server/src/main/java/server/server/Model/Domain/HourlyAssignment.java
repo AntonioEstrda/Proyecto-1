@@ -5,6 +5,7 @@
 package server.server.Model.Domain;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
@@ -54,26 +57,24 @@ public class HourlyAssignment implements Serializable {
     @Column(name="vinculationId")
     private long vinculationId; 
        
-    @NotEmpty(message = "HA105")
+    @NotNull(message = "HA105")
     @Column(name="HOURS")
     private long hours; 
     
-    @NotEmpty(message = "HA106")
+    @NotNull(message = "HA106")
     @Enumerated(EnumType.STRING)
     @Column(name="VINCULATIONTYPE")
     private VinculationType vinculationtype; 
     
     @NotNull(message = "HA107")
+    @Temporal(TemporalType.DATE)
     @Column(length=100, name="initialdate")
-    private String initialDate;
+    private Date initialDate;
     
     @NotNull(message = "HA108")
+    @Temporal(TemporalType.DATE)
     @Column(length=100, name="finaldate")
-    private String finaldate;
-    
-    @NotNull(message = "HA109")
-    @Column(columnDefinition = "TINYINT(1)", name="ISDISABLE")
-    private boolean isDisable;
+    private Date finaldate;
         
     @NotNull(message = "HA103")
     @ManyToOne
@@ -84,5 +85,10 @@ public class HourlyAssignment implements Serializable {
     @ManyToOne
     @JoinColumn(name="TEACHERID")
     private Teacher teacher;
+    
+    @NotNull(message = "HA109")
+    @Column(columnDefinition = "TINYINT(1)", name="ISDISABLE")
+    private boolean isDisable;
+
     
 }

@@ -33,5 +33,14 @@ public enum ProgErrors {
     /**
      * Department ID cannot be null
      */
-    PRG106
+    PRG106,
+    
+    /**
+     * Alphabetical min 2, max 6
+     */
+    PRG107,
+    /**
+     * previous existence of codex-number program
+     */
+    PRG108
 }

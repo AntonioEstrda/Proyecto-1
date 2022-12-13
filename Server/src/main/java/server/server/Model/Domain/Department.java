@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import lombok.Data;
 /**
  *
@@ -37,6 +38,7 @@ public class Department implements Serializable{
         
     @NotEmpty(message = "DEPT104")
     @Column(length=25, name="code")
+    @Pattern(regexp = "^[a-zA-Z0-9]{2,6}", message="DEPT110")
     private String code; 
     
     @NotEmpty(message = "DEPT105")

@@ -43,18 +43,22 @@ public class DepartmentService implements IDepartmentService {
         Map<Labels, Object> returns = new HashMap();
         ArrayList errors = new ArrayList();
         if (this.find(department) != null) {
-            errors.add(DeptErrors.DEPT102.name());
-            returns.put(Labels.objectReturn, null);
+            errors.add(DeptErrors.DEPT102.name());  
         } else {
             if (facService.find(department.getFacultad()) != null) {
-                Department entitySaved = deptRepo.save(department);
-                returns.put(Labels.objectReturn, entitySaved);
+                if (deptRepo.findByCodeAndName(department.getCode() ,department.getName()) != null) {
+                    errors.add(DeptErrors.DEPT111.name());
+                }else if (errors.isEmpty()) {
+                    department = deptRepo.save(department);
+                }
             } else {
                 errors.add(FacErrors.FAC101.name());
             }
-
         }
+        
+        
         returns.put(Labels.errors, errors);
+        returns.put(Labels.objectReturn, department);
         return returns;
     }
 
@@ -82,6 +86,14 @@ public class DepartmentService implements IDepartmentService {
             }
 
         }
+        department.setCode(department.getCode().toUpperCase());
+        Department r2 = deptRepo.findByCodeAndName(department.getCode(), department.getName());
+        if (r2 != null && r2.getDepartmentId() != department.getDepartmentId()) {
+            errors.add(DeptErrors.DEPT111.name());
+        }
+        if (errors.isEmpty()) {
+            department = deptRepo.save(department);
+        }
         returns.put(Labels.errors, errors);
         returns.put(Labels.objectReturn, old);
         return returns;
@@ -106,5 +118,10 @@ public class DepartmentService implements IDepartmentService {
     @Override
     public Department findById(long department) {
         return deptRepo.findById(department).orElse(null);
+    }
+    
+    @Override
+    public Department findByCodeAndName(String code, String name) {
+        return deptRepo.findByCodeAndName(code, name);
     }
 }

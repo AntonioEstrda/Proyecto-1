@@ -57,4 +57,11 @@ public interface IDepartmentService {
      */
     public Map<Labels, Object> delete(Long departmentId);
     
+    /**
+     * find by code and number 
+     * @param code
+     * @param number
+     * @return 
+     */
+    public Department findByCodeAndName(String code, String name); 
 }

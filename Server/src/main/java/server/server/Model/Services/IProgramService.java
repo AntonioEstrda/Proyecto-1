@@ -53,4 +53,7 @@ public interface IProgramService {
     
     public Program findById(long program);
     
+    
+    public Program findByCodeAndName(String code, String name);
+    
 }
