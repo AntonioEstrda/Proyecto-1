@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-12-2022 a las 04:53:04
+-- Tiempo de generación: 13-12-2022 a las 06:15:13
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -49,19 +49,16 @@ CREATE TABLE `academicperiod` (
   `ACADEMICPERIDODID` int(11) NOT NULL,
   `NAME` varchar(100) NOT NULL,
   `INITDATE` date NOT NULL,
-  `FINALDATE` date NOT NULL
+  `FINALDATE` date NOT NULL,
+  `isDisable` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `academicperiod`
 --
 
-INSERT INTO `academicperiod` (`ACADEMICPERIDODID`, `NAME`, `INITDATE`, `FINALDATE`) VALUES
-(2, 'Nuevo', '2022-05-03', '2022-12-22'),
-(3, 'Nuevo', '2022-05-03', '2022-12-22'),
-(4, 'Nuevo', '2022-05-03', '2022-12-22'),
-(5, 'Nuevo', '2022-05-03', '2022-12-22'),
-(6, 'Nuevo', '2022-05-03', '2022-12-22');
+INSERT INTO `academicperiod` (`ACADEMICPERIDODID`, `NAME`, `INITDATE`, `FINALDATE`, `isDisable`) VALUES
+(2, 'Nuevo', '2022-05-03', '2022-12-22', 0);
 
 -- --------------------------------------------------------
 
@@ -100,7 +97,7 @@ CREATE TABLE `department` (
   `FACULTYID` int(11) NOT NULL,
   `NAME` varchar(100) NOT NULL,
   `code` varchar(25) NOT NULL,
-  `location` varchar(100) NOT NULL
+  `location` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -108,8 +105,7 @@ CREATE TABLE `department` (
 --
 
 INSERT INTO `department` (`DEPARTMENTID`, `FACULTYID`, `NAME`, `code`, `location`) VALUES
-(1, 16, 'Sistemas', 'DEPT1', 'Aqui'),
-(2, 16, 'Sistemas', 'DEPT1', 'Aqui');
+(1, 16, 'Sistemas', 'DEPT1', 0);
 
 -- --------------------------------------------------------
 
@@ -241,18 +237,16 @@ CREATE TABLE `program` (
   `DEPARTMENTID` int(11) NOT NULL,
   `NAME` varchar(100) NOT NULL,
   `code` varchar(25) NOT NULL,
-  `location` varchar(100) NOT NULL
+  `location` int(100) NOT NULL,
+  `color` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `program`
 --
 
-INSERT INTO `program` (`IDPROGRAM`, `DEPARTMENTID`, `NAME`, `code`, `location`) VALUES
-(7, 1, 'Sistemas', 'PRG1', 'Tulcan'),
-(8, 1, 'Sistemas', 'PRG1', 'Tulcan'),
-(9, 1, 'Sistemas', 'PRG1', 'Tulcan'),
-(10, 1, 'Sistemas', 'PRG1', 'Tulcan');
+INSERT INTO `program` (`IDPROGRAM`, `DEPARTMENTID`, `NAME`, `code`, `location`, `color`) VALUES
+(7, 1, 'Sistemas', 'PRG1', 0, '');
 
 -- --------------------------------------------------------
 
@@ -444,7 +438,8 @@ ALTER TABLE `assignmentresource`
 ALTER TABLE `department`
   ADD PRIMARY KEY (`DEPARTMENTID`),
   ADD UNIQUE KEY `DEPARTMENT_PK` (`DEPARTMENTID`),
-  ADD KEY `FACULTY_DEPARTMENT_FK` (`FACULTYID`);
+  ADD KEY `FACULTY_DEPARTMENT_FK` (`FACULTYID`),
+  ADD KEY `fk_location_department` (`location`);
 
 --
 -- Indices de la tabla `faculty`
@@ -495,7 +490,8 @@ ALTER TABLE `location`
 ALTER TABLE `program`
   ADD PRIMARY KEY (`IDPROGRAM`),
   ADD UNIQUE KEY `PROGRAM_PK` (`IDPROGRAM`),
-  ADD KEY `DEPARTMENT_PROGRAM_FK` (`DEPARTMENTID`);
+  ADD KEY `DEPARTMENT_PROGRAM_FK` (`DEPARTMENTID`),
+  ADD KEY `fk_location_program` (`location`);
 
 --
 -- Indices de la tabla `resourcet`
@@ -672,7 +668,8 @@ ALTER TABLE `assignmentresource`
 -- Filtros para la tabla `department`
 --
 ALTER TABLE `department`
-  ADD CONSTRAINT `FK_DEPARTME_FACULTY_D_FACULTY` FOREIGN KEY (`FACULTYID`) REFERENCES `faculty` (`FACULTYID`);
+  ADD CONSTRAINT `FK_DEPARTME_FACULTY_D_FACULTY` FOREIGN KEY (`FACULTYID`) REFERENCES `faculty` (`FACULTYID`),
+  ADD CONSTRAINT `fk_location_department` FOREIGN KEY (`location`) REFERENCES `location` (`id`);
 
 --
 -- Filtros para la tabla `faculty`
@@ -711,7 +708,8 @@ ALTER TABLE `location`
 -- Filtros para la tabla `program`
 --
 ALTER TABLE `program`
-  ADD CONSTRAINT `FK_PROGRAM_DEPARTMEN_DEPARTME` FOREIGN KEY (`DEPARTMENTID`) REFERENCES `department` (`DEPARTMENTID`);
+  ADD CONSTRAINT `FK_PROGRAM_DEPARTMEN_DEPARTME` FOREIGN KEY (`DEPARTMENTID`) REFERENCES `department` (`DEPARTMENTID`),
+  ADD CONSTRAINT `fk_location_program` FOREIGN KEY (`location`) REFERENCES `location` (`id`);
 
 --
 -- Filtros para la tabla `resourcet`
