@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-12-2022 a las 06:15:13
+-- Tiempo de generación: 14-12-2022 a las 00:42:41
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -105,7 +105,7 @@ CREATE TABLE `department` (
 --
 
 INSERT INTO `department` (`DEPARTMENTID`, `FACULTYID`, `NAME`, `code`, `location`) VALUES
-(1, 16, 'Sistemas', 'DEPT1', 0);
+(1, 16, 'Sistemas', 'DEPT1', 2);
 
 -- --------------------------------------------------------
 
@@ -246,7 +246,7 @@ CREATE TABLE `program` (
 --
 
 INSERT INTO `program` (`IDPROGRAM`, `DEPARTMENTID`, `NAME`, `code`, `location`, `color`) VALUES
-(7, 1, 'Sistemas', 'PRG1', 0, '');
+(7, 1, 'Sistemas', 'PRG1', 3, '');
 
 -- --------------------------------------------------------
 
