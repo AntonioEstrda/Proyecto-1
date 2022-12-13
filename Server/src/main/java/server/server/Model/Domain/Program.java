@@ -51,4 +51,7 @@ public class Program implements Serializable {
     @JoinColumn(name="DEPARTMENTID")
     private Department department;
     
+    @NotEmpty(message = "PRG109") 
+    @Column(length=100, name="color")
+    private String color;
 }

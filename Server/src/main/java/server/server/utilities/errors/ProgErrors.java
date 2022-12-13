@@ -42,5 +42,9 @@ public enum ProgErrors {
     /**
      * previous existence of codex-number program
      */
-    PRG108
+    PRG108,
+    /**
+     * empty color field
+     */
+    PRG109
 }
