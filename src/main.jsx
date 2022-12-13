@@ -7,18 +7,34 @@ import { FacultyContextProvider } from "./context/FacultyContext";
 import { ResourceContextProvider } from "./context/ResourceContext";
 import Navbar from "./templates/Navbar";
 import Footer from "./templates/Footer";
+import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
-    <Navbar />
-    <div className="grid grid-cols-1">
-      <FacultyContextProvider>
-        <FacultyApp />
-        <ResourceContextProvider>
-          <ResourceApp />
-        </ResourceContextProvider>
-      </FacultyContextProvider>
-    </div>
-    <Footer />
+    <BrowserRouter>
+      <Navbar />
+      <Switch>
+        <Route path="/asd">
+          <FacultyContextProvider>
+            <FacultyApp />
+          </FacultyContextProvider>
+        </Route>
+
+        <Route path="/facultades">
+          <FacultyContextProvider>
+            <FacultyApp />
+          </FacultyContextProvider>
+        </Route>
+
+        <Route path="/">
+          <FacultyContextProvider>
+            <ResourceContextProvider>
+              <ResourceApp />
+            </ResourceContextProvider>
+          </FacultyContextProvider>
+        </Route>
+      </Switch>
+      <Footer />
+    </BrowserRouter>
   </>
 );
