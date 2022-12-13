@@ -34,7 +34,13 @@ public class AssignmentResourceController {
     private IAssignmentResourceService asigResService;
     
     
-    
+    /**
+     * Retorna la lista de recursos asignados a un recurso de tipo ambiente de una facultad 
+     * 
+     * @param facultyId id de la facultad
+     * @param environmentId id del recurso de tipo ambiente 
+     * @return 
+     */
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ArrayList<Resource>> getAllAssigned(@RequestParam("facultyId") long facultyId,
             @RequestParam("environmentId") long environmentId){
@@ -50,6 +56,12 @@ public class AssignmentResourceController {
          return (new ResponseEntity<>(response, null, HttpStatus.ACCEPTED));   
     } 
     
+    /**
+     * Retorna el recurso de tipo ambiente en el que se encuentra asignado un recurso de una facultad 
+     * @param facultyId id de la facultad 
+     * @param resourceId id del recurso (tipo != ambiente)
+     * @return 
+     */
     @GetMapping(value = "/findResLocation", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Resource> getAssignedEnvironmet(@RequestParam("facultyId") long facultyId,
             @RequestParam("resourceId") long resourceId){
@@ -65,6 +77,13 @@ public class AssignmentResourceController {
     } 
     
 
+    /**
+     * Asigna un recurso de tipo no ambiente 
+     * @param facultyId id de la facultad 
+     * @param environmentId id recurso (tipoGlobal == ambiente)
+     * @param resourceId id recurso (tipoGlobal != ambiente)
+     * @return 
+     */
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -85,6 +104,13 @@ public class AssignmentResourceController {
         return (new ResponseEntity<>(fr, null, HttpStatus.ACCEPTED));
     }
 
+    /**
+     * Elimina una asignación de un recurso (tipoGlobal != ambiente) sobre un recurso (tipoGlobal == ambiente)
+     * @param facultyId id de la facultad 
+     * @param environmentId id recurso (tipoGlobal == ambiente)
+     * @param resourceId id recurso (tipoGlobal != ambiente)
+     * @return 
+     */
     @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)

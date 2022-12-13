@@ -42,12 +42,25 @@ public class ResourceController {
 
     @Autowired
     private IFacultyResourceService facResService;
-
+    
+    
+    /**
+     * Obtiene todos los recursos de una facultad  
+     * (tantos los activos como los inactivos)
+     * @param facultyId
+     * @return 
+     */
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ArrayList<Resource> all(@RequestParam("facultyId") long facultyId) {
         return facResService.findByFacultyIdRes(facultyId);
     }
 
+    /**
+     * Busca un recurso de una facultad  
+     * @param facultyId
+     * @param resourceId
+     * @return 
+     */
     @GetMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Resource> get(@RequestParam("facultyId") long facultyId, @RequestParam("resourceId") long resourceId) {
         FacultyResource returns = facResService.findByFacultyIdResourceId(facultyId, resourceId);
@@ -58,6 +71,13 @@ public class ResourceController {
         }
     }
 
+    /**
+     * Crea un recurso, y lo asigna a una facultad  
+     * @param facultyId
+     * @param res
+     * @param errors
+     * @return 
+     */
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -81,6 +101,13 @@ public class ResourceController {
         return new ResponseEntity<>(res, null, HttpStatus.ACCEPTED);
     }
 
+    /**
+     * Actualiza un recurso de una facultad  
+     * @param facultyId
+     * @param res
+     * @param errors
+     * @return 
+     */
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping("/update")
@@ -109,6 +136,12 @@ public class ResourceController {
 
     }
     
+    /**
+     * Desactiva un recurso de una facultad  
+     * @param facultyId
+     * @param resourceId
+     * @return 
+     */
     @DeleteMapping
     @RequestMapping("/delete")
     public ResponseEntity<Resource> delete(

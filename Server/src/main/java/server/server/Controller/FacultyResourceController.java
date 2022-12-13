@@ -31,6 +31,12 @@ public class FacultyResourceController {
     @Autowired
     private IFacultyResourceService facResService;
 
+    /**
+     * Asigna un recurso ya existente a una facultad  
+     * @param facultyId id de la facultad 
+     * @param resourceId id del recurso 
+     * @return 
+     */
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,7 +55,13 @@ public class FacultyResourceController {
 
         return (new ResponseEntity<>(fr, null, HttpStatus.ACCEPTED));
     }
-
+    
+    /**
+     * Elimina la asignación del recurso sobre la facultad 
+     * @param facultyId
+     * @param resourceId
+     * @return 
+     */
     @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
