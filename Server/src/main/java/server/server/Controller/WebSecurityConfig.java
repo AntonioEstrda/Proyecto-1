@@ -31,6 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ArrayList<String> str3 = new ArrayList();
 
         strs.add("http://127.0.0.1:5173/");
+        strs.add("http://localhost:5173/");
         strs.add("http://localhost:8080/");
 
         str2.add("HEAD");
@@ -49,7 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowedOrigins(strs);
         configuration.setAllowedMethods(str2);
         // setAllowCredentials(true) is important, otherwise:
-        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+        // The value of the 'Access-Control-Allow-Origin' header in the response must
+        // not be the wildcard '*' when the request's credentials mode is 'include'.
         configuration.setAllowCredentials(true);
         // setAllowedHeaders is important! Without it, OPTIONS preflight request
         // will fail with 403 Invalid CORS request
