@@ -7,6 +7,7 @@ package server.server.Model.Services;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class FacultyResourceService implements IFacultyResourceService {
     @Transactional(value = "DataTransactionManager")
     public Map<Labels, Object> save(long facultyId, long resourceId) {
         Map<Labels, Object> returns = new HashMap();
-        FacultyResource fr = new FacultyResource(); 
+        FacultyResource fr = new FacultyResource();
         Faculty fac = facultyService.findById(facultyId);
         ArrayList<String> errors = new ArrayList<>();
 
@@ -52,8 +53,10 @@ public class FacultyResourceService implements IFacultyResourceService {
         }
         if (res == null) {
             errors.add(ResErrors.RES101.name());
-        }else if(res.isDisable()){ errors.add(ResErrors.RES115.name());}
-        
+        } else if (res.isDisable()) {
+            errors.add(ResErrors.RES115.name());
+        }
+
         if (errors.isEmpty() && !(facRscRep.findByResourceId(resourceId)).isEmpty()) {
             errors.add(FacResErrors.FACRES103.name());
         }
@@ -158,6 +161,19 @@ public class FacultyResourceService implements IFacultyResourceService {
         }
         returns.put(Labels.errors, errors);
         returns.put(Labels.objectReturn, fr);
+        return returns;
+    }
+
+    @Override
+    public Map<Labels, Object> findByType(long facultyId, List<Long> tipos) {
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errors = new ArrayList();
+        List<Long> ids = facRscRep.findByFacultyId(facultyId, tipos);
+        
+        List<Resource> findByIds = resourceService.findByIds(ids);  
+        
+        returns.put(Labels.errors, errors);
+        returns.put(Labels.objectReturn, findByIds);
         return returns;
     }
 

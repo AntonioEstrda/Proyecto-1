@@ -5,18 +5,21 @@
 package server.server.Controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import server.server.Model.Domain.FacultyResource;
+import server.server.Model.Domain.Resource;
 import server.server.Model.Services.IFacultyResourceService;
 import server.server.utilities.Labels;
 
@@ -25,17 +28,18 @@ import server.server.utilities.Labels;
  * @author anmon
  */
 @RestController
-    @RequestMapping("/FacultyResource")
+@RequestMapping("/FacultyResource")
 public class FacultyResourceController {
 
     @Autowired
     private IFacultyResourceService facResService;
 
     /**
-     * Asigna un recurso ya existente a una facultad  
-     * @param facultyId id de la facultad 
-     * @param resourceId id del recurso 
-     * @return 
+     * Asigna un recurso ya existente a una facultad
+     *
+     * @param facultyId id de la facultad
+     * @param resourceId id del recurso
+     * @return
      */
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -55,12 +59,13 @@ public class FacultyResourceController {
 
         return (new ResponseEntity<>(fr, null, HttpStatus.ACCEPTED));
     }
-    
+
     /**
-     * Elimina la asignación del recurso sobre la facultad 
+     * Elimina la asignación del recurso sobre la facultad
+     *
      * @param facultyId
      * @param resourceId
-     * @return 
+     * @return
      */
     @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -80,4 +85,24 @@ public class FacultyResourceController {
 
         return (new ResponseEntity<>(fr, null, HttpStatus.ACCEPTED));
     }
+
+    /**
+     * Consulta recursos basados en uno o varios tipos y un estado
+     *
+     * @param facultyId
+     * @param tipos
+     * @return
+     */
+    @GetMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping("/findByType")
+    public ResponseEntity<List<Resource>> findResourcesByType(@RequestParam("facultyId") long facultyId,
+            @RequestParam("resTypeId") List<Long> tipos) {
+        Map<Labels, Object> returns = facResService.findByType(facultyId, tipos);
+        ArrayList<String> errors = (ArrayList<String>) returns.get(Labels.errors);
+        List<Resource> resources =   (List<Resource>) returns.get(Labels.objectReturn); 
+        return (new ResponseEntity<>(resources, null, HttpStatus.ACCEPTED));
+    }
+
 }

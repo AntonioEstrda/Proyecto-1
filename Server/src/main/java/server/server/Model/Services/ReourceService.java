@@ -6,6 +6,7 @@ package server.server.Model.Services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,9 @@ public class ReourceService implements IResourceService {
 
     @Autowired
     private IResourceTypeService resTypeServ;
-    
-    @Autowired 
-    private ILocationService locService; 
+
+    @Autowired
+    private ILocationService locService;
 
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
@@ -129,8 +130,8 @@ public class ReourceService implements IResourceService {
         }
         if (res.getLocation() == null) {
             errors.add(EnvErrors.ENV102.name());
-        }else if(locService.find(res.getLocation().getLocationId()) == null){
-            errors.add(LocationErrors.LOC101.name()); 
+        } else if (locService.find(res.getLocation().getLocationId()) == null) {
+            errors.add(LocationErrors.LOC101.name());
         }
         return errors;
     }
@@ -144,5 +145,13 @@ public class ReourceService implements IResourceService {
     @Transactional(value = "DataTransactionManager", readOnly = true)
     public Resource findById(long id) {
         return resRepo.findById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(value = "DataTransactionManager", readOnly = true)
+    public List<Resource> findByIds(List<Long> ids) {
+        
+        List<Resource> findAllById = resRepo.findAllById(ids); 
+        return findAllById; 
     }
 }

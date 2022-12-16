@@ -5,6 +5,7 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import server.server.Model.Domain.FacultyResource;
 import server.server.Model.Domain.Resource;
@@ -29,4 +30,6 @@ public interface IFacultyResourceService {
     public ArrayList<String> validateAssignment(long facultyId, long resourceId); 
 
     public Map<Labels, Object> deactivate(long facultyId, long resourceId);
+
+    public Map<Labels, Object> findByType(long facultyId, List<Long> tipos);
 }

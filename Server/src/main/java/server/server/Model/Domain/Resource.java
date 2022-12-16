@@ -18,6 +18,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 
 /**
  *
@@ -25,6 +26,7 @@ import javax.validation.constraints.Pattern;
  */
 @Entity
 @Table(name="ResourceT")
+@AllArgsConstructor
 @Data
 public class Resource implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -67,5 +69,8 @@ public class Resource implements Serializable {
      
     @Column(columnDefinition="int(4)", name="CAPACITY", nullable=true)
     private Integer capacity;  
+
+    public Resource() {
+    }
     
 }

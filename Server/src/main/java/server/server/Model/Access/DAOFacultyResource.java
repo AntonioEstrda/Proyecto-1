@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import server.server.Model.Domain.FacultyResource;
+import server.server.Model.Domain.Resource;
 
 /**
  * Repository for Faculty Resource intermediate entity 
@@ -41,5 +42,20 @@ public interface DAOFacultyResource extends JpaRepository<FacultyResource, Long>
         nativeQuery=true
     )
     public List<FacultyResource> findByFacultyId(@Param("facultyId")long facultyId);
+    
+    
+    
+    @Query(
+        value = """
+                SELECT R.RESOURCEID FROM resourcet R
+                INNER JOIN faculty_resource FR ON  FR.RESOURCEID = R.RESOURCEID 
+                INNER JOIN resourcetype  RT ON  RT.RESSOURCETYPEID = R.RESOURCETYPEID
+                WHERE FR.isDisable = 0 
+                AND RT.RESSOURCETYPEID in :tipos
+                AND FR.FACULTYID=:facultyId
+                """, 
+        nativeQuery=true
+    )
+    public List<Long> findByFacultyId(@Param("facultyId") long facultyId, @Param("tipos")List<Long> tipos);
     
 }
