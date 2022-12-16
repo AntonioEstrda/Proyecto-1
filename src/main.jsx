@@ -26,7 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           </FacultyContextProvider>
         </Route>
 
-        <Route path="/">
+        <Route path="/recursos">
           <FacultyContextProvider>
             <ResourceContextProvider>
               <ResourceApp />
