@@ -18,7 +18,8 @@ function ScheduleCMS() {
     <div className="max-w-md mx-auto">
       <form onSubmit={handleSubmit} className="bg-slate-800 p-10 mb-4 ">
         <h1 className="text-2xl font-bold text-white mb-3">
-          Crear una facultad
+          No hacer caso a esta plantilla copiada, estoy trabajando en los
+          horarios att:Diego
         </h1>
         <input
           placeholder="Nombre de la facultad"
