@@ -1,7 +1,7 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 
-function ResourceForm() {
+export default function ResourceForm() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [resourceType, setResourceType] = useState("computacional");
@@ -94,4 +94,4 @@ function ResourceForm() {
   );
 }
 
-export default ResourceForm;
+

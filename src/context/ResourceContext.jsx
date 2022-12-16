@@ -5,6 +5,7 @@ export const ResourceContext = createContext();
 
 export function ResourceContextProvider(props) {
   const [resources, setResources] = useState([]);
+  const [resourcesTypes, setResourcesTypes] = useState([]);
   const { facultys, addResource } = useContext(FacultyContext);
 
   function deleteResource(resourceId) {
@@ -13,7 +14,7 @@ export function ResourceContextProvider(props) {
     );
   }
 
-  function createResource(resource) {
+  function createResource(resource, resourceType) {
     setResources([
       ...resources,
       {
@@ -21,10 +22,10 @@ export function ResourceContextProvider(props) {
         resourceId: resources.length,
         description: resource.description,
         resourceType: {
-          name: resource.resourceType,
-          parent: resource.parent,
-          resourceTypeId: resource.resourceTypeId,
-          disable: resource.disable,
+          name: resourceType.name,
+          parent: resourceType.parent,
+          resourceTypeId: resourceType.resourceTypeId,
+          disable: resourceType.disable,
         },
         code: resource.code,
         number: resource.number,
@@ -34,6 +35,14 @@ export function ResourceContextProvider(props) {
       },
     ]);
   }
+
+  useEffect(() => {
+    fetch("http://localhost:8080/ResourceTypes/all")
+      .then((response) => response.json())
+      .then((data) => {
+        setResourcesTypes(data);
+      });
+  }, []);
 
   useEffect(() => {
     facultys.forEach((faculty) => {
@@ -57,6 +66,7 @@ export function ResourceContextProvider(props) {
     <ResourceContext.Provider
       value={{
         resources,
+        resourcesTypes,
         deleteResource,
         createResource,
       }}
