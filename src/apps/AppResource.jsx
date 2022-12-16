@@ -3,7 +3,7 @@ import ResourceForm from "../components/resource/ResourceForm";
 
 function AppResource() {
   return (
-    <main className="bg-zinc-900 h-full">
+    <main className="bg-bone h-full">
       <div className="container mx-auto p-10">
         <ResourceForm />
         <ResourceList />

@@ -1,62 +1,32 @@
 export default function Footer({ fixed }) {
   return (
-    <footer className="bg-white dark:bg-gray-900">
+    <footer className="bg-white dark:bg-blue text-bone">
       <div className="grid grid-cols-2 gap-8 py-8 px-6 md:grid-cols-4">
+        
         <div>
           <h2 className="mb-6 text-sm font-semibold text-gray-500 uppercase dark:text-gray-400">
-            Company
+            Centro de ayuda
           </h2>
           <ul className="text-gray-500 dark:text-gray-400">
             <li className="mb-4">
-              <a href="#" className=" hover:underline">
-                About
+              <a href="https://www.unicauca.edu.co/versionP/" className="hover:underline">
+                Universidad del Cauca
               </a>
             </li>
             <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Careers
+              <a href="https://www.instagram.com/universidadelcauca/" className="hover:underline">
+                Instagram
               </a>
             </li>
             <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Brand Center
-              </a>
-            </li>
-            <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Blog
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h2 className="mb-6 text-sm font-semibold text-gray-500 uppercase dark:text-gray-400">
-            Help center
-          </h2>
-          <ul className="text-gray-500 dark:text-gray-400">
-            <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Discord Server
-              </a>
-            </li>
-            <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Twitter
-              </a>
-            </li>
-            <li className="mb-4">
-              <a href="#" className="hover:underline">
+              <a href="https://www.facebook.com/universidadelcauca/" className="hover:underline">
                 Facebook
               </a>
             </li>
-            <li className="mb-4">
-              <a href="#" className="hover:underline">
-                Contact Us
-              </a>
-            </li>
+           
           </ul>
         </div>
-        <div>
+        {/*<div>
           <h2 className="mb-6 text-sm font-semibold text-gray-500 uppercase dark:text-gray-400">
             Legal
           </h2>
@@ -104,16 +74,20 @@ export default function Footer({ fixed }) {
               </a>
             </li>
           </ul>
-        </div>
+  </div>*/}
       </div>
       <div className="py-6 px-4 bg-gray-100 dark:bg-gray-700 md:flex md:items-center md:justify-between">
-        <span className="text-sm text-gray-500 dark:text-gray-300 sm:text-center">
+        {/*<span className="text-sm text-gray-500 dark:text-gray-300 sm:text-center">
           © 2022 <a href="https://flowbite.com/">Flowbite™</a>. All Rights
           Reserved.
-        </span>
+  </span>*/}
+          <span className="text-sm text-gray-500 dark:text-gray-300 sm:text-center">
+          © 2022 <a href="https://www.unicauca.edu.co/versionP/">Universidad del Cauca.</a>. All Rights
+          Reserved.
+          </span>
         <div className="flex mt-4 space-x-6 sm:justify-center md:mt-0">
           <a
-            href="#"
+            href="https://www.facebook.com/universidadelcauca/"
             className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
             <svg
@@ -131,7 +105,7 @@ export default function Footer({ fixed }) {
             <span className="sr-only">Facebook page</span>
           </a>
           <a
-            href="#"
+            href="https://www.instagram.com/universidadelcauca/"
             className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
             <svg
@@ -149,7 +123,7 @@ export default function Footer({ fixed }) {
             <span className="sr-only">Instagram page</span>
           </a>
           <a
-            href="#"
+            href="https://twitter.com/unicauca/"
             className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
             <svg
@@ -162,7 +136,7 @@ export default function Footer({ fixed }) {
             </svg>
             <span className="sr-only">Twitter page</span>
           </a>
-          <a
+          {/*<a
             href="#"
             className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
@@ -179,7 +153,7 @@ export default function Footer({ fixed }) {
               />
             </svg>
             <span className="sr-only">GitHub account</span>
-          </a>
+</a>*/}
           <a
             href="#"
             className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
