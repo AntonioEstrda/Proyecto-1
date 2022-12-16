@@ -14,7 +14,7 @@ export function ResourceTypeContextProvider(props) {
       mode: "cors",
       body: JSON.stringify({
         name: resourceTypes.name,
-        typeId: resourceTypes.resourceTypeId,
+        resourceTypeId: resourceTypes.resourceTypeId,
         parent: resourceTypes.parent,
         disable: resourceTypes.disable,
       }),
@@ -28,12 +28,12 @@ export function ResourceTypeContextProvider(props) {
 
   function deleteResourceType(resourceTypeId) {
     setTask(
-      task.filter((resourceTypes) => resourceTypes.id !== resourceTypeId)
+        resourcesTypes.filter((resourceType) => resourceType.resourceTypeId !== resourceTypeId)
     );
   }
 
   useEffect(() => {
-    fetch("http://localhost:8080/ResourceTypes/all")
+    fetch("http://localhost:8080/ResourceType/all")
       .then((response) => response.json())
       .then((data) => {
         setResourcesTypes(data);

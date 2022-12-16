@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import {ResourceTypeContext} from '../context/ResourceTypeContext'
+import {ResourceTypeContext} from '../../context/ResourceTypeContext'
 
 export default function ResourceTypeForm() {
   const [name, setName] = useState("");
@@ -32,7 +32,7 @@ export default function ResourceTypeForm() {
           placeholder="Parent del tipo de recurso"
           onChange={(e) => setParent(e.target.value)}
           className="bg-slate-200 p-3 w-full mb-0"
-          value={description}
+          value={parent}
         ></textarea>
         <select
           name="disable"

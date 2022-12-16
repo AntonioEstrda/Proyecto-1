@@ -1,4 +1,4 @@
-import ResourceTypeList from "../components/resourcetype/ResourceTypeList";
+import ResourceTypeList from "../components/resourceType/ResourceTypeList";
 import ResourceTypeForm from "../components/resourceType/ResourceTypeForm";
 
 export default function AppResource() {
