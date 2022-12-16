@@ -34,7 +34,7 @@ function FacultyForm() {
           onChange={(e) => setLocation(e.target.value)}
           className="bg-slate-200 p-3 w-full mb-2"
         ></textarea>
-        <button className="bg-indigo-500 px-3 py-1 text-white">Guardar</button>
+        <button className="bg-indigo-500 px-8 py-3 text-white">Guardar</button>
       </form>
     </div>
   );

@@ -23,8 +23,8 @@ function ResourceForm() {
     setDisable(false);
     setCode("");
     setLocation("");
-    setCapacity(0);
-    setNumber(0);
+    setCapacity("");
+    setNumber("");
   };
 
   return (
@@ -88,7 +88,7 @@ function ResourceForm() {
           className="bg-slate-200 p-3 w-full mb-2"
           value={number}
         />
-        <button className="bg-indigo-500 px-3 py-1 text-white">Guardar</button>
+        <button className="bg-indigo-500 px-8 py-3 text-white ">Guardar</button>
       </form>
     </div>
   );
