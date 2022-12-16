@@ -2,10 +2,12 @@ import ReactDOM from "react-dom/client";
 import AppFaculty from "./apps/AppFaculty";
 import AppResource from "./apps/AppResource";
 import AppSchedule from "./apps/AppSchedule";
+import AppResourceType from './apps/AppResourceType'
 import "./index.css";
 import { ScheduleContextProvider } from "./context/ScheduleContext";
 import { FacultyContextProvider } from "./context/FacultyContext";
 import { ResourceContextProvider } from "./context/ResourceContext";
+import {ResourceTypeContextProvider} from './context/ResourceTypeContext'
 import Navbar from "./templates/Navbar";
 import Footer from "./templates/Footer";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -32,6 +34,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               <AppResource />
             </ResourceContextProvider>
           </FacultyContextProvider>
+        </Route>
+        <Route path="/recursosTypes">
+            <ResourceTypeContextProvider>
+              <AppResourceType />
+            </ResourceTypeContextProvider>
         </Route>
       </Route>
 
