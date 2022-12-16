@@ -1,24 +1,17 @@
 import { useContext } from "react";
-import ScheduleGUI from "./ScheduleGUI";
+import ScheduleCMS from "./ScheduleCMS";
 import { ScheduleContext } from "../../context/ScheduleContext";
 
 function ScheduleParametrizer() {
-  const { facultys } = useContext(ScheduleContext);
+  const { listaProgramas, listaSemestres, listaMaterias, listaSalones } =
+    useContext(ScheduleContext);
 
-  if (facultys.length === 0) {
-    return (
-      <h1 className="text-white text-4xl font-bold text-center">
-        No hay facultades registradas aún
-      </h1>
-    );
-  }
+  console.log(listaProgramas, listaSemestres, listaMaterias, listaSalones);
 
   return (
-    <div className="grid grid-cols-4 gap-2">
-      {facultys.map((faculty) => (
-        <ScheduleGUI key={faculty.facultyId} faculty={faculty} />
-      ))}
-    </div>
+    <>
+      <ScheduleCMS />
+    </>
   );
 }
 

@@ -3,61 +3,68 @@ import { createContext, useState, useEffect } from "react";
 export const ScheduleContext = createContext();
 
 export function ScheduleContextProvider(props) {
-  const [facultys, setFacultys] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [listaProgramas, setListaProgramas] = useState();
+  const [programasCargados, setProgramasCargados] = useState(false);
 
-  function deleteFaculty(facultyId) {
-    setFacultys(facultys.filter((faculty) => faculty.id !== facultyId));
-  }
+  const listaSemestres = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const [semestre, setSemestre] = useState();
 
-  const addResource = ({ resource, id }) => {
-    const aux = facultys.find((fc) => fc.facultyId === id);
-    aux.resources.push(...resource);
-    const dsd = facultys.filter((res) => res.facultyId !== id);
-    setFacultys([...dsd, aux]);
-  };
+  const [listaMaterias, setListaMaterias] = useState();
 
-  //facultys[index].resources += resource
-
-  async function createFaculty(faculty) {
-    await fetch("http://localhost:8080/faculty/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-      body: JSON.stringify({
-        facultyName: faculty.name,
-        location: faculty.location,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => setFacultys((prevState) => prevState.concat([data])))
-      .catch((e) => console.log(e));
-  }
+  const [listaSalones, setlistaSalones] = useState();
 
   useEffect(() => {
-    fetch("http://localhost:8080/faculty/all")
+    fetch("http://localhost:8080/Program/all")
       .then((response) => response.json())
       .then((data) => {
-        const ctx = data.map((d) => ({
-          ...d,
-          resources: [],
-        }));
-        setFacultys(ctx);
+        setListaProgramas(data);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setProgramasCargados(true));
   }, []);
 
-  if (loading) return null;
+  useEffect(() => {
+    fetch("http://localhost:8080/subject/all")
+      .then((response) => response.json())
+      .then((data) => {
+        setListaMaterias(data);
+      });
+  }, [listaProgramas, semestre]);
+
+  useEffect(() => {
+    fetch(
+      "http://localhost:8080/FacultyResource/findByType?facultyId=16&resTypeId=7&resTypeId=10"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setlistaSalones(data);
+      });
+  }, [listaMaterias]);
+
+  if (!programasCargados) return null;
+
+  function Ceils() {
+    let itemList = [];
+
+    for (let i = 0; i < 25; i++) {
+      itemList.push(<Ceil key={i} ceil={{ number: i + 1 }} />);
+    }
+
+    return (
+      <div className="container">
+        <h1>Celdas</h1>
+        <div className="celdas">{itemList}</div>
+      </div>
+    );
+  }
 
   return (
     <ScheduleContext.Provider
       value={{
-        facultys,
-        deleteFaculty,
-        createFaculty,
-        addResource,
+        listaProgramas,
+        listaSemestres,
+        listaMaterias,
+        listaSalones,
+        Ceils,
       }}
     >
       {props.children}

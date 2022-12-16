@@ -33,7 +33,7 @@ export function ResourceTypeContextProvider(props) {
   }
 
   useEffect(() => {
-    fetch("http://localhost:8080/ResourceTypes/all")
+    fetch("http://localhost:8080/ResourceType/all")
       .then((response) => response.json())
       .then((data) => {
         setResourcesTypes(data);
