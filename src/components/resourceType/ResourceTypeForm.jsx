@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import {ResourceTypeContext} from '../context/ResourceTypeContext'
+import { ResourceTypeContext } from "../../context/ResourceTypeContext";
 
 export default function ResourceTypeForm() {
   const [name, setName] = useState("");
@@ -19,7 +19,9 @@ export default function ResourceTypeForm() {
   return (
     <div className="max-w-md mx-auto">
       <form onSubmit={handleSubmit} className="bg-slate-800 p-10 mb-4 ">
-        <h1 className="text-2xl font-bold text-white mb-3">Crear un Tipo de Recurso</h1>
+        <h1 className="text-2xl font-bold text-white mb-3">
+          Crear un Tipo de Recurso
+        </h1>
         <input
           placeholder="Nombre del tipo"
           onChange={(e) => setName(e.target.value)}
@@ -43,10 +45,9 @@ export default function ResourceTypeForm() {
           <option value="false">Activo</option>
           <option value="true">Inactivo</option>
         </select>
-    
+
         <button className="bg-indigo-500 px-8 py-3 text-white ">Guardar</button>
       </form>
     </div>
   );
 }
-

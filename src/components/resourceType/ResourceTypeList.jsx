@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import ResourceTypeCard from "./ResourceCard";
+import ResourceTypeCard from "./ResourceTypeCard";
 import { ResourceTypeContext } from "../../context/ResourceTypeContext";
 
 export default function ResourceTypeList() {
@@ -16,7 +16,10 @@ export default function ResourceTypeList() {
   return (
     <div className="grid grid-cols-4 gap-2">
       {resourcesTypes.map((resourceType) => (
-        <ResourceTypeCard key={resourceType.typeId} resourceType={resourceType} />
+        <ResourceTypeCard
+          key={resourceType.typeId}
+          resourceType={resourceType}
+        />
       ))}
     </div>
   );
