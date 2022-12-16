@@ -46,7 +46,7 @@ public class Teacher implements Serializable{
     @Column(length=100, name="NUMIDEN")
     private String numIden;
     
-    @NotNull(message = "TCH106")
+    @NotNull(message = "TCH107")
     @Column(nullable = false, columnDefinition = "TINYINT(1)", name="ISDISABLE")
     private String isDisable;
        

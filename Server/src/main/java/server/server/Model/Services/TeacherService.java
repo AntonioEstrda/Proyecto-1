@@ -33,18 +33,37 @@ public class TeacherService implements ITeacherService{
     public Teacher find(Teacher teacher) {
         return teacherRepo.findById(teacher.getTeacherID()).orElse(null);
     }
+    
+        
+    //Nos sirve para validar si el dato identificación que estamos recibiendo es numerico
+    private static boolean isNumeric(String cadena){
+	try {
+		Integer.parseInt(cadena);
+		return true;
+	} catch (NumberFormatException nfe){
+		return false;
+	}
+    }
 
     @Override
     @Transactional(value = "DataTransactionManager")
     public Map<Labels, Object> save(Teacher teacher) {
         Map<Labels, Object> returns = new HashMap();
         ArrayList errors = new ArrayList();
-        if (this.find(teacher) != null) {
+        if(isNumeric(teacher.getNumIden())){
+            if (this.find(teacher) != null) {
             errors.add(TeacherErrors.TCH102.name());
             returns.put(Labels.objectReturn, null);
         } else {
-                Teacher entitySaved = teacherRepo.save(teacher);
-                returns.put(Labels.objectReturn, entitySaved);
+                if(teacherRepo.findByNumIden(teacher.getNumIden())==null){
+                    Teacher entitySaved = teacherRepo.save(teacher);
+                    returns.put(Labels.objectReturn, entitySaved);
+                }else{
+                    errors.add(TeacherErrors.TCH108.name());
+                }
+            }
+        }else{
+            errors.add(TeacherErrors.TCH106.name());
         }
         returns.put(Labels.errors, errors);
         return returns;
@@ -65,7 +84,11 @@ public class TeacherService implements ITeacherService{
         if (old == null) {
             errors.add(TeacherErrors.TCH101.name());  
         } else {
-            old = teacherRepo.save(teacher);
+            if(isNumeric(teacher.getNumIden())){
+                old = teacherRepo.save(teacher);
+            }else{
+                errors.add(TeacherErrors.TCH106.name());
+            }
         }
         returns.put(Labels.errors, errors);  
         returns.put(Labels.objectReturn, old);   
@@ -87,5 +110,10 @@ public class TeacherService implements ITeacherService{
         returns.put(Labels.errors, errors); 
         returns.put(Labels.objectReturn, old); 
         return returns; 
+    }
+    
+    @Override
+    public Teacher findByNumIden(String numIden) {
+        return teacherRepo.findByNumIden(numIden);
     }
 }

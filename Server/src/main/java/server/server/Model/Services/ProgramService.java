@@ -46,7 +46,7 @@ public class ProgramService implements IProgramService{
             returns.put(Labels.objectReturn, null);
         } else {
             if (deptService.find(program.getDepartment()) != null) {
-                if (programRepo.findByCodeAndName(program.getCode() ,program.getName()) != null) {
+                if (programRepo.findByCode(program.getCode()) != null) {
                     errors.add(ProgErrors.PRG108.name());
                 }else if (errors.isEmpty()) {
                     program = programRepo.save(program);
@@ -79,7 +79,7 @@ public class ProgramService implements IProgramService{
             old = programRepo.save(program);
         }
         program.setCode(program.getCode().toUpperCase());
-        Program r2 = programRepo.findByCodeAndName(program.getCode(), program.getName());
+        Program r2 = programRepo.findByCode(program.getCode());
         if (r2 != null && r2.getProgramId() != program.getProgramId()) {
             errors.add(ProgErrors.PRG108.name());
         }
@@ -113,7 +113,7 @@ public class ProgramService implements IProgramService{
     }
     
     @Override
-    public Program findByCodeAndName(String code, String name) {
-        return programRepo.findByCodeAndName(code, name);
+    public Program findByCode(String code) {
+        return programRepo.findByCode(code);
     }
 }

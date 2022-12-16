@@ -45,7 +45,7 @@ public enum DeptErrors {
     DEPT107,
     
     /**
-     * Alphabetical min 2, max 6
+     * Alphabetical min 2, max 8
      */
     DEPT108,
     
@@ -55,11 +55,16 @@ public enum DeptErrors {
     DEPT109,
     
     /**
-     * Alphabetical min 2, max 6
+     * There must be a registered faculty
      */
     DEPT110,
     /**
+     * Alphabetical min 2, max 6
+     */
+    DEPT111,
+    /**
      * previous existence of codex-number department
      */
-    DEPT111
+    DEPT112
+    
 }

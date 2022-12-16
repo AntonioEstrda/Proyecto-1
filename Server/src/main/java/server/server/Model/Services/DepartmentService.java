@@ -46,17 +46,17 @@ public class DepartmentService implements IDepartmentService {
             errors.add(DeptErrors.DEPT102.name());  
         } else {
             if (facService.find(department.getFacultad()) != null) {
-                if (deptRepo.findByCodeAndName(department.getCode() ,department.getName()) != null) {
-                    errors.add(DeptErrors.DEPT111.name());
+                if (deptRepo.findByCode(department.getCode()) != null) {
+                    errors.add(DeptErrors.DEPT112.name());
                 }else if (errors.isEmpty()) {
                     department = deptRepo.save(department);
                 }
             } else {
                 errors.add(FacErrors.FAC101.name());
+                errors.add(DeptErrors.DEPT110.name());
             }
         }
-        
-        
+
         returns.put(Labels.errors, errors);
         returns.put(Labels.objectReturn, department);
         return returns;
@@ -87,7 +87,7 @@ public class DepartmentService implements IDepartmentService {
 
         }
         department.setCode(department.getCode().toUpperCase());
-        Department r2 = deptRepo.findByCodeAndName(department.getCode(), department.getName());
+        Department r2 = deptRepo.findByCode(department.getCode());
         if (r2 != null && r2.getDepartmentId() != department.getDepartmentId()) {
             errors.add(DeptErrors.DEPT111.name());
         }
@@ -121,7 +121,7 @@ public class DepartmentService implements IDepartmentService {
     }
     
     @Override
-    public Department findByCodeAndName(String code, String name) {
-        return deptRepo.findByCodeAndName(code, name);
+    public Department findByCode(String code) {
+        return deptRepo.findByCode(code);
     }
 }

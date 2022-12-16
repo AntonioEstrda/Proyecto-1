@@ -13,6 +13,6 @@ import server.server.Model.Domain.Department;
  */
 public interface DAODepartment extends JpaRepository<Department, Long>{
     
-    public Department findByCodeAndName(String code, String name); 
+    public Department findByCode(String code); 
    
 }

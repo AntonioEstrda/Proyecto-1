@@ -12,5 +12,7 @@ import server.server.Model.Domain.Teacher;
  * @author Fernando
  */
 public interface DAOTeacher extends JpaRepository<Teacher, Long>{
+    
+    public Teacher findByNumIden(String numIden);
    
 }

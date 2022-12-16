@@ -63,5 +63,5 @@ public interface IDepartmentService {
      * @param number
      * @return 
      */
-    public Department findByCodeAndName(String code, String name); 
+    public Department findByCode(String code); 
 }

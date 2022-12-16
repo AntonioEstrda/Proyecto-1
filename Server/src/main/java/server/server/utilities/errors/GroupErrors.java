@@ -33,5 +33,9 @@ public enum GroupErrors {
     /**
      * The Academic Period ID cannot be null
      */
-    GROUP106;
+    GROUP106,
+    /**
+     * Alphabetical min 1, max 2
+     */
+    GROUP107
 }

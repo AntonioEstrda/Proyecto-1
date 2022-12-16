@@ -41,7 +41,7 @@ public class TeacherController {
     @GetMapping(value = "/all") 
     public ArrayList<Teacher> all(){
         return teacherService.getAll();  
-    }          
+    }         
    
     @GetMapping(value = "/{TeacherId}")
     @ResponseBody

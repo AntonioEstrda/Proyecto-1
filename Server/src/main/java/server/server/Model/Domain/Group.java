@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import lombok.Data;
 
 /**
@@ -34,11 +35,12 @@ public class Group implements Serializable {
     
     @NotEmpty(message = "GROUP103")
     @Column(length=100, name="NAME")
+    @Pattern(regexp = "^[a-zA-Z0-9]{1,2}", message="GROUP107")
     private String name;
     
     @NotNull(message = "GROUP104")
     @Column(name="CAPACITY")
-    private long capacity; 
+    private long capacity;
     
     @NotNull(message = "GROUP105")
     @ManyToOne

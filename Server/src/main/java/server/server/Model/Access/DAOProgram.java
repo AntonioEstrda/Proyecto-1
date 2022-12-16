@@ -13,6 +13,6 @@ import server.server.Model.Domain.Program;
  */
 public interface DAOProgram extends JpaRepository<Program, Long>{
     
-    public Program findByCodeAndName(String code, String name);
+    public Program findByCode(String code);
    
 }

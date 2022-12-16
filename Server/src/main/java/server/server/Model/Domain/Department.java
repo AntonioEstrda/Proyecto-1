@@ -38,7 +38,7 @@ public class Department implements Serializable{
         
     @NotEmpty(message = "DEPT104")
     @Column(length=25, name="code")
-    @Pattern(regexp = "^[a-zA-Z0-9]{2,6}", message="DEPT110")
+    @Pattern(regexp = "^[a-zA-Z0-9]{2,8}", message="DEPT111")
     private String code; 
     
     @NotEmpty(message = "DEPT105")

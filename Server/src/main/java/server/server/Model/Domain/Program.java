@@ -39,7 +39,7 @@ public class Program implements Serializable {
     
     @NotEmpty(message = "PRG104") 
     @Column(length=25, name="code")
-    @Pattern(regexp = "^[a-zA-Z0-9]{2,6}", message="PRG107")
+    @Pattern(regexp = "^[a-zA-Z0-9]{2,8}", message="PRG107")
     private String code; 
     
     @NotEmpty(message = "PRG105") 

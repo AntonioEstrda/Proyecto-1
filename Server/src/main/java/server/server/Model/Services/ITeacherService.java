@@ -50,4 +50,7 @@ public interface ITeacherService {
      */
     public Map<Labels, Object> delete(Long teacherId);
     
+    
+    public Teacher findByNumIden(String numIden);
+    
 }

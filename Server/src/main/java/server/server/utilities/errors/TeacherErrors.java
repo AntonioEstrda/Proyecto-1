@@ -34,7 +34,15 @@ public enum TeacherErrors {
      */
     TCH105,
     /**
+     * The teacher identification number must be numeric.
+     */
+    TCH106,
+    /**
      * The isDisable field must contain a value
      */
-    TCH106
+    TCH107,
+    /**
+     * Teacher registered with this ID
+     */
+    TCH108
 }

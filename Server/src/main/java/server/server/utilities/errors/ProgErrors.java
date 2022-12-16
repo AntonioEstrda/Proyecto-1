@@ -36,7 +36,7 @@ public enum ProgErrors {
     PRG106,
     
     /**
-     * Alphabetical min 2, max 6
+     * Alphabetical min 2, max 8
      */
     PRG107,
     /**
