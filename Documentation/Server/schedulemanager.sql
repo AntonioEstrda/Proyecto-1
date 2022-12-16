@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-12-2022 a las 00:42:41
+-- Tiempo de generación: 16-12-2022 a las 22:22:06
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -106,6 +106,19 @@ CREATE TABLE `department` (
 
 INSERT INTO `department` (`DEPARTMENTID`, `FACULTYID`, `NAME`, `code`, `location`) VALUES
 (1, 16, 'Sistemas', 'DEPT1', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `event`
+--
+
+CREATE TABLE `event` (
+  `id` int(11) NOT NULL,
+  `Name` varchar(100) NOT NULL,
+  `Description` varchar(150) NOT NULL,
+  `teacherId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -335,12 +348,14 @@ INSERT INTO `resourcetype` (`RESSOURCETYPEID`, `RES_RESSOURCETYPEID`, `NAME`, `I
 CREATE TABLE `schedule` (
   `IDSCHEDEULE` int(11) NOT NULL,
   `IDGROUP` int(11) DEFAULT NULL,
+  `resourceId` int(11) NOT NULL,
   `ACADEMICPERIDODID` int(11) NOT NULL,
-  `STARTIME` date NOT NULL,
-  `ENDTIME` date NOT NULL,
-  `DAY` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') NOT NULL,
   `TYPE` enum('Academic','Event') NOT NULL,
-  `resourceId` int(11) NOT NULL
+  `DAY` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') NOT NULL,
+  `STARTIME` time NOT NULL,
+  `ENDTIME` time NOT NULL,
+  `initialdate` date NOT NULL,
+  `finaldate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -353,6 +368,7 @@ CREATE TABLE `subject` (
   `IDSUBJECT` int(11) NOT NULL,
   `IDPROGRAM` int(11) NOT NULL,
   `NAME` varchar(100) NOT NULL,
+  `code` varchar(100) NOT NULL,
   `REQUISITS` varchar(200) NOT NULL,
   `SEMESTER` int(2) NOT NULL,
   `INTENSITY` int(2) NOT NULL,
@@ -365,8 +381,8 @@ CREATE TABLE `subject` (
 -- Volcado de datos para la tabla `subject`
 --
 
-INSERT INTO `subject` (`IDSUBJECT`, `IDPROGRAM`, `NAME`, `REQUISITS`, `SEMESTER`, `INTENSITY`, `Modality`, `ISDISABLE`, `type`) VALUES
-(6, 7, 'Redes', 'Se necesita Laboratorio', 8, 8, 'Semestral', 1, 'Teórica');
+INSERT INTO `subject` (`IDSUBJECT`, `IDPROGRAM`, `NAME`, `code`, `REQUISITS`, `SEMESTER`, `INTENSITY`, `Modality`, `ISDISABLE`, `type`) VALUES
+(6, 7, 'Redes', 'SIS101', 'Se necesita Laboratorio', 8, 8, 'Semestral', 1, 'Teórica');
 
 -- --------------------------------------------------------
 
@@ -401,18 +417,6 @@ CREATE TABLE `teacher_group` (
   `IDGROUP` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `teacher_schedule`
---
-
-CREATE TABLE `teacher_schedule` (
-  `TEAC_SCHED_ID` int(11) NOT NULL,
-  `TEACHERID` int(11) NOT NULL,
-  `SCHEDEULEID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 --
 -- Índices para tablas volcadas
 --
@@ -440,6 +444,14 @@ ALTER TABLE `department`
   ADD UNIQUE KEY `DEPARTMENT_PK` (`DEPARTMENTID`),
   ADD KEY `FACULTY_DEPARTMENT_FK` (`FACULTYID`),
   ADD KEY `fk_location_department` (`location`);
+
+--
+-- Indices de la tabla `event`
+--
+ALTER TABLE `event`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_pk_id` (`id`),
+  ADD KEY `fk_teacher_event` (`teacherId`);
 
 --
 -- Indices de la tabla `faculty`
@@ -545,15 +557,6 @@ ALTER TABLE `teacher_group`
   ADD KEY `TEACHER_GROUP_FK` (`TEACHERID`);
 
 --
--- Indices de la tabla `teacher_schedule`
---
-ALTER TABLE `teacher_schedule`
-  ADD PRIMARY KEY (`TEAC_SCHED_ID`),
-  ADD UNIQUE KEY `TEACHER_SCHEDULE_PK` (`TEAC_SCHED_ID`),
-  ADD KEY `TEACHER_SCHEDULE2_FK` (`SCHEDEULEID`),
-  ADD KEY `TEACHER_SCHEDULE_FK` (`TEACHERID`);
-
---
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -574,6 +577,12 @@ ALTER TABLE `assignmentresource`
 --
 ALTER TABLE `department`
   MODIFY `DEPARTMENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `event`
+--
+ALTER TABLE `event`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `faculty`
@@ -648,12 +657,6 @@ ALTER TABLE `teacher_group`
   MODIFY `TEAC_GRP_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `teacher_schedule`
---
-ALTER TABLE `teacher_schedule`
-  MODIFY `TEAC_SCHED_ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- Restricciones para tablas volcadas
 --
 
@@ -670,6 +673,12 @@ ALTER TABLE `assignmentresource`
 ALTER TABLE `department`
   ADD CONSTRAINT `FK_DEPARTME_FACULTY_D_FACULTY` FOREIGN KEY (`FACULTYID`) REFERENCES `faculty` (`FACULTYID`),
   ADD CONSTRAINT `fk_location_department` FOREIGN KEY (`location`) REFERENCES `location` (`id`);
+
+--
+-- Filtros para la tabla `event`
+--
+ALTER TABLE `event`
+  ADD CONSTRAINT `fk_teacher_event` FOREIGN KEY (`teacherId`) REFERENCES `teacher` (`TEACHERID`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `faculty`
@@ -689,7 +698,7 @@ ALTER TABLE `faculty_resource`
 --
 ALTER TABLE `groupt`
   ADD CONSTRAINT `FK_GROUP_ACADEMICP_ACADEMIC` FOREIGN KEY (`ACADEMICPERIDODID`) REFERENCES `academicperiod` (`ACADEMICPERIDODID`),
-  ADD CONSTRAINT `FK_GROUP_SUBJECT_G_SUBJECT` FOREIGN KEY (`IDSUBJECT`) REFERENCES `subject` (`IDSUBJECT`);
+  ADD CONSTRAINT `FK_GROUP_SUBJECT_G_SUBJECT` FOREIGN KEY (`IDSUBJECT`) REFERENCES `subject` (`IDSUBJECT`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `hourlyassignment`
@@ -722,13 +731,20 @@ ALTER TABLE `resourcet`
 -- Filtros para la tabla `schedule`
 --
 ALTER TABLE `schedule`
-  ADD CONSTRAINT `fk_schedule_res` FOREIGN KEY (`resourceId`) REFERENCES `resourcet` (`RESOURCEID`);
+  ADD CONSTRAINT `fk_schedule_group` FOREIGN KEY (`IDGROUP`) REFERENCES `groupt` (`IDGROUP`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_schedule_res` FOREIGN KEY (`resourceId`) REFERENCES `resourcet` (`RESOURCEID`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `subject`
+--
+ALTER TABLE `subject`
+  ADD CONSTRAINT `fk_program_subject` FOREIGN KEY (`IDPROGRAM`) REFERENCES `program` (`IDPROGRAM`);
 
 --
 -- Filtros para la tabla `teacher_group`
 --
 ALTER TABLE `teacher_group`
-  ADD CONSTRAINT `fk_teacher_group_group` FOREIGN KEY (`IDGROUP`) REFERENCES `groupt` (`IDGROUP`),
+  ADD CONSTRAINT `fk_teacher_group_group` FOREIGN KEY (`IDGROUP`) REFERENCES `groupt` (`IDGROUP`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_teacher_group_teacher` FOREIGN KEY (`TEACHERID`) REFERENCES `teacher` (`TEACHERID`);
 COMMIT;
 
