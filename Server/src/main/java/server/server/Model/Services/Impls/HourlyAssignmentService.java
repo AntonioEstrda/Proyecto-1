@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package server.server.Model.Services;
+package server.server.Model.Services.Impls;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +15,9 @@ import server.server.Model.Access.DAOHourlyAssignment;
 import server.server.Model.Access.DAOHourlyAssignment;
 import server.server.Model.Domain.HourlyAssignment;
 import server.server.Model.Domain.HourlyAssignment;
+import server.server.Model.Services.IDepartmentService;
+import server.server.Model.Services.IHourlyAssignmentService;
+import server.server.Model.Services.ITeacherService;
 import server.server.utilities.Labels;
 import server.server.utilities.errors.HAErrors;
 import server.server.utilities.errors.HAErrors;

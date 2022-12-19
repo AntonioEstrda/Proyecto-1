@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package server.server.Model.Services;
+package server.server.Model.Services.Impls;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import server.server.Model.Access.DAOAcademicPeriod;
 import server.server.Model.Domain.AcademicPeriod;
+import server.server.Model.Services.IAcademicPeriodService;
 import server.server.utilities.Labels;
 import server.server.utilities.errors.APErrors;
 

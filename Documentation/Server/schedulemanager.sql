@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-12-2022 a las 22:22:06
+-- Tiempo de generación: 19-12-2022 a las 14:06:43
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -117,6 +117,7 @@ CREATE TABLE `event` (
   `id` int(11) NOT NULL,
   `Name` varchar(100) NOT NULL,
   `Description` varchar(150) NOT NULL,
+  `Code` varchar(10) NOT NULL,
   `teacherId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -348,8 +349,8 @@ INSERT INTO `resourcetype` (`RESSOURCETYPEID`, `RES_RESSOURCETYPEID`, `NAME`, `I
 CREATE TABLE `schedule` (
   `IDSCHEDEULE` int(11) NOT NULL,
   `IDGROUP` int(11) DEFAULT NULL,
+  `eventId` int(11) NOT NULL,
   `resourceId` int(11) NOT NULL,
-  `ACADEMICPERIDODID` int(11) NOT NULL,
   `TYPE` enum('Academic','Event') NOT NULL,
   `DAY` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') NOT NULL,
   `STARTIME` time NOT NULL,
@@ -529,8 +530,8 @@ ALTER TABLE `schedule`
   ADD PRIMARY KEY (`IDSCHEDEULE`),
   ADD UNIQUE KEY `SCHEDULE_PK` (`IDSCHEDEULE`),
   ADD KEY `GROUP_SCHEDEULE_FK` (`IDGROUP`),
-  ADD KEY `ACADEMICPERIOD_SCHEDULE_FK` (`ACADEMICPERIDODID`),
-  ADD KEY `fk_schedule_res` (`resourceId`);
+  ADD KEY `fk_schedule_res` (`resourceId`),
+  ADD KEY `fk_schedule_event` (`eventId`);
 
 --
 -- Indices de la tabla `subject`
@@ -731,6 +732,7 @@ ALTER TABLE `resourcet`
 -- Filtros para la tabla `schedule`
 --
 ALTER TABLE `schedule`
+  ADD CONSTRAINT `fk_schedule_event` FOREIGN KEY (`eventId`) REFERENCES `event` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_schedule_group` FOREIGN KEY (`IDGROUP`) REFERENCES `groupt` (`IDGROUP`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_schedule_res` FOREIGN KEY (`resourceId`) REFERENCES `resourcet` (`RESOURCEID`) ON DELETE CASCADE;
 
