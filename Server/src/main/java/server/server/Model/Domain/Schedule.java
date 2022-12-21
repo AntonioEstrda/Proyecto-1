@@ -31,11 +31,13 @@ import lombok.Data;
 @Data
 public class Schedule implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     public enum scheduleType {
         ACADEMICO, EVENTO;
     }
 
-    public enum Day {
+    public enum Days {
         LUNES, MARTES, MIERCOLES, JUEVES, VIERNES;
     }
 
@@ -51,16 +53,14 @@ public class Schedule implements Serializable {
 
     @NotNull()
     @Enumerated(EnumType.STRING)
-    @Column(name = "TYPE")
-    private Day day;
+    @Column(name = "DAY")
+    private Days day;
 
     @NotNull()
-    @Temporal(TemporalType.TIME)
     @Column(name = "STARTIME")
     private Time startime;
 
     @NotNull()
-    @Temporal(TemporalType.TIME)
     @Column(name = "ENDTIME")
     private Time endtime;
 

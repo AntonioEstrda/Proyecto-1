@@ -5,6 +5,8 @@
 package server.server.Model.Access;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import server.server.Model.Domain.Event;
 
@@ -15,5 +17,11 @@ import server.server.Model.Domain.Event;
 @Repository
 public interface DAOEvent extends JpaRepository<Event, Long> {
 
-    public Event findbyCode(String code);
+    @Query(
+            value = """
+                    SELECT * FROM `event` WHERE `Code`=:Code
+                    """,
+            nativeQuery = true
+    )
+    public Event findbyCode(@Param("Code") String code);
 }

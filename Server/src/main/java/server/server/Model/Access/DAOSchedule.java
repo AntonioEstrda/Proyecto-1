@@ -13,6 +13,6 @@ import server.server.Model.Domain.Schedule;
  * @author anmon
  */
 @Repository
-public interface DAOSchedule extends JpaRepository<Long, Schedule>  {
+public interface DAOSchedule extends JpaRepository<Schedule, Long>  {
     
 }
