@@ -13,6 +13,7 @@ import server.server.Model.Domain.Event;
  * @author anmon
  */
 @Repository
-public interface DAOEvent extends JpaRepository<Long, Event>{
-    
+public interface DAOEvent extends JpaRepository<Event, Long> {
+
+    public Event findbyCode(String code);
 }

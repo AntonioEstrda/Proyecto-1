@@ -23,10 +23,12 @@ import lombok.Data;
  * @author anmon
  */
 @Entity
-@Table(name = "schedule")
+@Table(name = "event")
 @Data
 public class Event implements Serializable {
-
+    
+    private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
