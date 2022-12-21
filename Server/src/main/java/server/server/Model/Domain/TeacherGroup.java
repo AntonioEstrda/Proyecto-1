@@ -32,12 +32,12 @@ public class TeacherGroup implements Serializable{
     @Column(name="TEAC_GRP_ID")
     private long teacherGroupID; 
     
-    @NotEmpty
+    @NotNull(message = "TG103")
     @ManyToOne
     @JoinColumn(name="TEACHERID")
     private Teacher teacher;
     
-    @NotEmpty
+    @NotNull(message = "TG104")
     @ManyToOne
     @JoinColumn(name="IDGROUP")
     private Group group;

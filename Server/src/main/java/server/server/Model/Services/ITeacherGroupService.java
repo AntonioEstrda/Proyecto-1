@@ -5,7 +5,9 @@
 package server.server.Model.Services;
 
 import java.util.ArrayList;
+import java.util.Map;
 import server.server.Model.Domain.TeacherGroup;
+import server.server.utilities.Labels;
 
 /**
  *
@@ -13,39 +15,39 @@ import server.server.Model.Domain.TeacherGroup;
  */
 public interface ITeacherGroupService {
     /**
-     * Find an teacher
-     * @param teacher
+     * Find an teacherGroup
+     * @param teacherGroup
      * @return TeacherGroup 
      */
-    public TeacherGroup find(TeacherGroup teacher); 
+    public TeacherGroup find(TeacherGroup teacherGroup); 
     
     /**
-     * save a teacher 
-     * @param teacher
+     * save a teacherGroup 
+     * @param teacherGroup
      * @return TeacherGroup
      */
-    public TeacherGroup save(TeacherGroup teacher); 
+    public Map<Labels, Object> save(TeacherGroup teacherGroup); 
 
     /**
-     * list all teachers 
+     * list all teacherGroups 
      * @return ArrayList
      */
     public ArrayList<TeacherGroup> getAll();  
     
     
     /**
-     * Updates an teacher
-     * @param teacher
+     * Updates an teacherGroup
+     * @param teacherGroup
      * @return TeacherGroup
      */
-    public TeacherGroup update(TeacherGroup teacher);  
+    public Map<Labels, Object> update(TeacherGroup teacherGroup);  
     
     
     /**
      * Deactivates an TeacherGroup
-     * @param teacherId
+     * @param teacherGroupId
      * @return TeacherGroup
      */
-    public TeacherGroup delete(Long teacherId);
+    public Map<Labels, Object> delete(Long teacherGroupId);
     
 }
