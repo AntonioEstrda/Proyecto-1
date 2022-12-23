@@ -12,14 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import server.server.Model.Access.DAOHourlyAssignment;
-import server.server.Model.Access.DAOHourlyAssignment;
-import server.server.Model.Domain.HourlyAssignment;
 import server.server.Model.Domain.HourlyAssignment;
 import server.server.Model.Services.IDepartmentService;
 import server.server.Model.Services.IHourlyAssignmentService;
 import server.server.Model.Services.ITeacherService;
 import server.server.utilities.Labels;
-import server.server.utilities.errors.HAErrors;
 import server.server.utilities.errors.HAErrors;
 
 /**

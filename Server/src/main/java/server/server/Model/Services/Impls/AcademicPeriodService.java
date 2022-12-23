@@ -90,4 +90,14 @@ public class AcademicPeriodService implements IAcademicPeriodService{
         returns.put(Labels.objectReturn, old); 
         return returns; 
     }
+
+    @Override
+    public Map<Labels, Object> getCurrent() {
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errors = new ArrayList(); 
+        AcademicPeriod findCurrent = academicPeriodRepo.findCurrent();  
+        returns.put(Labels.errors, errors); 
+        returns.put(Labels.objectReturn, findCurrent); 
+        return returns; 
+    }
 }

@@ -5,7 +5,7 @@
 package server.server.Model.Domain;
 
 import java.io.Serializable;
-import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,7 +38,7 @@ public class Schedule implements Serializable {
     }
 
     public enum Days {
-        LUNES, MARTES, MIERCOLES, JUEVES, VIERNES;
+        LUNES, MARTES, MIERCOLES, JUEVES, VIERNES, SABADO;
     }
 
     @Id
@@ -53,16 +53,16 @@ public class Schedule implements Serializable {
 
     @NotNull()
     @Enumerated(EnumType.STRING)
-    @Column(name = "DAY")
-    private Days day;
+    @Column(name = "DAYS")   
+    private Days days;
 
     @NotNull()
     @Column(name = "STARTIME")
-    private Time startime;
+    private LocalTime startime;
 
     @NotNull()
     @Column(name = "ENDTIME")
-    private Time endtime;
+    private LocalTime endtime;
 
     @NotNull()
     @Temporal(TemporalType.DATE)

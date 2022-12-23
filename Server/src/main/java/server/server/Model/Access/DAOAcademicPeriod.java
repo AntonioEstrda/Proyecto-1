@@ -5,6 +5,7 @@
 package server.server.Model.Access;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import server.server.Model.Domain.AcademicPeriod;
 
 /**
@@ -12,5 +13,13 @@ import server.server.Model.Domain.AcademicPeriod;
  * @author Fernando
  */
 public interface DAOAcademicPeriod extends JpaRepository<AcademicPeriod, Long>{
+    
+    @Query(
+          value="""
+                SELECT * FROM academicperiod WHERE isDisable = 0 ORDER BY FINALDATE DESC LIMIT 1;
+                """,
+          nativeQuery=true
+    )
+    public AcademicPeriod findCurrent();
    
 }
