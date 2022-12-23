@@ -1,6 +1,6 @@
 function ScheduleGUI() {
   return (
-    <div className="mt-10 w-full bg-slate-200 rounded overflow-hidden shadow-lg mr-10 grid grid-cols-1 divide-y-8">
+    <div className="mt-4 w-full bg-slate-200 rounded overflow-hidden shadow-lg grid grid-cols-1 divide-y-8">
       <div className="p-4 text-center">
         <table className="w-full table-fixed">
           <thead>
@@ -23,7 +23,7 @@ function ScheduleGUI() {
             <tr>
               <td className="h-10 border-r-2 rounded border-amber-600">8 am</td>
               <td></td>
-              <td className="bg-slate-700 text-red-600 text-m rounded border-amber-600">
+              <td className="bg-green-600 text-gray-50 text-m rounded border-amber-600">
                 Programación Orientada a objetos
               </td>
             </tr>
@@ -73,8 +73,8 @@ function ScheduleGUI() {
               <td></td>
               <td></td>
               <td></td>
-              <td className="bg-slate-700 text-red-600 text-m rounded border-amber-600">
-                Circuitos II / Inglés I
+              <td className="bg-green-600 text-gray-200 text-m rounded border-amber-600">
+                Circuitos II
               </td>
             </tr>
             <tr>

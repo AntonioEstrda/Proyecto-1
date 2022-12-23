@@ -5,12 +5,14 @@ import ScheduleInfo from "../components/schedule/ScheduleInfo";
 function AppSchedule() {
   return (
     <main className="bg-slate-500 h-full">
-      <div className="container w-full mx-auto p-10">
-        <div className="grid justify-items-center">
+      <div className="container mx-auto p-4 flex w-full tablet:min-w-full">
+        <div className="mx-2 justify-items-center min-w-max w-25">
           <ScheduleParametrizer />
         </div>
-        <ScheduleInfo />
-        <ScheduleGUI />
+        <div className="w-75 mx-2">
+          <ScheduleInfo />
+          <ScheduleGUI />
+        </div>
       </div>
     </main>
   );

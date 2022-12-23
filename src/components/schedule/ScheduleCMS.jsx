@@ -5,62 +5,48 @@ function ScheduleCMS() {
   const { setPrograma, setSemestre, setMateria, setSalones } =
     useContext(ScheduleContext);
   return (
-    <div className="bg-slate-200 w-full rounded overflow-visible shadow-lg">
-      <div className="flex ... text-center justify-around">
-        <div className="h-auto w-25 my-7 ...">
+    <div className="bg-slate-200 rounded shadow-lg">
+      <div className="text-center justify-around p-3">
+        <div className=" ">
           <div className="font-bold text-xl mb-2">Programa:</div>
           <select
-            id="programaSeleccionado"
-            className="bg-slate-200 p-3 w-full mb-2"
-            onChange={(e) => setPrograma(e.target.value)}
-            value="computacional"
+            id="countries"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
-            <option value="ingSistemas">Ingeniería de Sistemas</option>
-            <option value="ingElectrónica">Ingeniería Electrónica</option>
+            <option>Ingeniería de Sistemas</option>
+            <option>Ingeniería Electrónica</option>
           </select>
         </div>
-        <div className="h-auto w-25 my-7 ...">
+        <div className="pt-3 ">
           <div className="font-bold text-xl mb-2">Semestre:</div>
-          <select
-            id="semestreSeleccionado"
-            className="bg-slate-200 p-3 w-full mb-2"
-            onChange={(e) => setSemestre(e.target.value)}
-            value="computacional"
-          >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
+          <input
+            type="text"
+            id="disabled-input-2"
+            aria-label="disabled input 2"
+            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            value="1"
+            disabled
+            readOnly
+          ></input>
         </div>
-        <div className="h-auto w-25 my-7 ...">
+        <div className="pt-3">
           <div className="font-bold text-xl mb-2">Materia:</div>
           <select
-            id="materiaSeleccionada"
-            className="bg-slate-200 p-3 w-full mb-2"
-            onChange={(e) => setMateria(e.target.value)}
-            value="computacional"
+            id="countries"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
-            <option value="informatica1">Informática 1</option>
-            <option value="calculo1">Cálculo 1</option>
+            <option>Informática 1</option>
+            <option>Cálculo 1</option>
           </select>
         </div>
-        <div className="h-auto w-25 my-7 ...">
+        <div className="pt-3 mb-2">
           <div className="font-bold text-xl mb-2">Salon:</div>
           <select
-            id="salonSeleccionado"
-            className="bg-slate-200 p-3 w-full mb-2"
-            onChange={(e) => setSalon(e.target.value)}
-            value="computacional"
+            id="countries"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
-            <option value="Ing. Sistemas">201</option>
-            <option value="Ing. Electrónica">202</option>
+            <option>201</option>
+            <option>202</option>
           </select>
         </div>
       </div>
