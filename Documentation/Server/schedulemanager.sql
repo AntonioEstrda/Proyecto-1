@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-12-2022 a las 14:06:43
+-- Tiempo de generación: 25-12-2022 a las 21:51:30
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -25,6 +25,47 @@ DELIMITER $$
 --
 -- Funciones
 --
+CREATE DEFINER=`root`@`localhost` FUNCTION `academicHoursTeacher` (`teacherId` INT) RETURNS INT(11) DETERMINISTIC BEGIN
+	DECLARE vHours int; 
+    SET vHours = 0; 
+	WITH Consulta as ( 
+        SELECT TC.TEACHERID as Tchr, TIME_TO_SEC(TIMEDIFF(SH.ENDTIME, SH.STARTIME))/3600 as Hours 
+        FROM `schedule` SH  
+            INNER JOIN groupt GP ON SH.IDGROUP = GP.IDGROUP 
+            INNER JOIN teacher_group TG ON TG.IDGROUP = GP.IDGROUP 
+            INNER JOIN teacher TC ON  TC.TEACHERID = TG.TEACHERID 
+            INNER JOIN academicperiod AP ON  AP.ACADEMICPERIDODID = GP.ACADEMICPERIDODID
+        WHERE TC.ISDISABLE = 0 
+            AND AP.isDisable = 0
+        	AND GP.ACADEMICPERIDODID = getCrrntAcdPer() 
+        	AND SH.TYPE = 'ACADEMICO'
+    		AND TC.TEACHERID = 2
+)SELECT sum(Hours) into vHours FROM CONSULTA;
+RETURN vHours; 	
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `AssigSbjtGpsHours` (`groupId` INT) RETURNS DOUBLE  BEGIN 
+	DECLARE hoursT double; 
+    SET hoursT = 0;  
+	WITH consulta as ( 
+        SELECT GP.IDGROUP, SUM(TIME_TO_SEC(TIMEDIFF(SH.ENDTIME, SH.STARTIME))/3600) as TotalHours FROM `schedule` SH 
+        INNER JOIN  groupt GP ON GP.IDGROUP = SH.IDGROUP
+        WHERE GP.ACADEMICPERIDODID = getCrrntAcdPer()
+        AND SH.TYPE = 'ACADEMICO'
+        GROUP BY  GP.IDGROUP 	
+    ) SELECT TotalHours into hoursT FROM  consulta WHERE IDGROUP = groupId;  
+    RETURN hoursT; 
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `getCrrntAcdPer` () RETURNS INT(11) DETERMINISTIC BEGIN
+ DECLARE apId int;
+  Select academicperiod.ACADEMICPERIDODID into apId 
+  FROM academicperiod 
+  WHERE academicperiod.isDisable = 0 ORDER BY academicperiod.INITDATE DESC LIMIT 1;
+  
+  RETURN apId;
+END$$
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `globalType` (`idType` INT) RETURNS INT(11)  BEGIN
     	DECLARE var_2 int;  
         SET var_2 = -1; 
@@ -58,7 +99,8 @@ CREATE TABLE `academicperiod` (
 --
 
 INSERT INTO `academicperiod` (`ACADEMICPERIDODID`, `NAME`, `INITDATE`, `FINALDATE`, `isDisable`) VALUES
-(2, 'Nuevo', '2022-05-03', '2022-12-22', 0);
+(2, 'Periodo 2022-2', '2022-05-03', '2022-12-22', 0),
+(7, 'Periodo 2021-1', '2022-01-01', '2022-05-18', 0);
 
 -- --------------------------------------------------------
 
@@ -191,8 +233,8 @@ CREATE TABLE `groupt` (
 --
 
 INSERT INTO `groupt` (`IDGROUP`, `IDSUBJECT`, `ACADEMICPERIDODID`, `CAPACITY`, `NAME`) VALUES
-(4, 6, 2, 20, 'Uno'),
-(5, 6, 2, 20, 'Uno');
+(4, 6, 2, 20, 'A'),
+(5, 6, 2, 20, 'B');
 
 -- --------------------------------------------------------
 
@@ -216,7 +258,19 @@ CREATE TABLE `hourlyassignment` (
 --
 
 INSERT INTO `hourlyassignment` (`vinculationId`, `DEPARTMENTID`, `TEACHERID`, `HOURS`, `VINCULATIONTYPE`, `isDisable`, `initialdate`, `finaldate`) VALUES
-(3, 1, 2, 30, 'HORACATEDRA', 0, '2022-12-01', NULL);
+(3, 1, 2, 30, 'HORACATEDRA', 0, '2022-12-01', NULL),
+(4, 1, 3, 40, 'NOMBRADOTIEMPOCOMPLETO', 0, '2022-12-01', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `intensitygroup`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `intensitygroup` (
+`IDGROUP` int(11)
+,`INTENSITY` int(2)
+);
 
 -- --------------------------------------------------------
 
@@ -349,15 +403,22 @@ INSERT INTO `resourcetype` (`RESSOURCETYPEID`, `RES_RESSOURCETYPEID`, `NAME`, `I
 CREATE TABLE `schedule` (
   `IDSCHEDEULE` int(11) NOT NULL,
   `IDGROUP` int(11) DEFAULT NULL,
-  `eventId` int(11) NOT NULL,
+  `eventId` int(11) DEFAULT NULL,
   `resourceId` int(11) NOT NULL,
-  `TYPE` enum('Academic','Event') NOT NULL,
-  `DAY` enum('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') NOT NULL,
+  `TYPE` enum('ACADEMICO','EVENTO') NOT NULL,
+  `DAYS` enum('LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO') NOT NULL,
   `STARTIME` time NOT NULL,
   `ENDTIME` time NOT NULL,
   `initialdate` date NOT NULL,
   `finaldate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `schedule`
+--
+
+INSERT INTO `schedule` (`IDSCHEDEULE`, `IDGROUP`, `eventId`, `resourceId`, `TYPE`, `DAYS`, `STARTIME`, `ENDTIME`, `initialdate`, `finaldate`) VALUES
+(3, 4, NULL, 4, 'ACADEMICO', 'LUNES', '14:00:00', '16:00:00', '2022-12-01', '2022-12-31');
 
 -- --------------------------------------------------------
 
@@ -375,7 +436,7 @@ CREATE TABLE `subject` (
   `INTENSITY` int(2) NOT NULL,
   `Modality` enum('Semestral','Anual') NOT NULL,
   `ISDISABLE` tinyint(1) NOT NULL,
-  `type` enum('Teórica','Práctica','Híbrida') NOT NULL
+  `type` enum('TEORICA','PRACTICA','HIBRIDA','FISH') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -383,7 +444,8 @@ CREATE TABLE `subject` (
 --
 
 INSERT INTO `subject` (`IDSUBJECT`, `IDPROGRAM`, `NAME`, `code`, `REQUISITS`, `SEMESTER`, `INTENSITY`, `Modality`, `ISDISABLE`, `type`) VALUES
-(6, 7, 'Redes', 'SIS101', 'Se necesita Laboratorio', 8, 8, 'Semestral', 1, 'Teórica');
+(6, 7, 'Redes', 'SIS101', '{\"environment\":[], \"resources\":[]}', 8, 8, 'Semestral', 1, 'TEORICA'),
+(7, 7, 'Redes', 'TEL102', '{\"environment\":[], \"resources\":[]}', 8, 8, 'Semestral', 1, 'TEORICA');
 
 -- --------------------------------------------------------
 
@@ -396,7 +458,7 @@ CREATE TABLE `teacher` (
   `FISRTSNAME` varchar(100) NOT NULL,
   `LASTNAME` varchar(100) NOT NULL,
   `NUMIDEN` varchar(50) NOT NULL,
-  `ISDISABLE` tinyint(1) NOT NULL
+  `ISDISABLE` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -404,7 +466,8 @@ CREATE TABLE `teacher` (
 --
 
 INSERT INTO `teacher` (`TEACHERID`, `FISRTSNAME`, `LASTNAME`, `NUMIDEN`, `ISDISABLE`) VALUES
-(2, 'Hector', 'Dorado', '12345', 1);
+(2, 'Hector', 'Dorado', '12345', 0),
+(3, 'Carlos', 'Papas', '78945', 0);
 
 -- --------------------------------------------------------
 
@@ -417,6 +480,44 @@ CREATE TABLE `teacher_group` (
   `TEACHERID` int(11) NOT NULL,
   `IDGROUP` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `teacher_group`
+--
+
+INSERT INTO `teacher_group` (`TEAC_GRP_ID`, `TEACHERID`, `IDGROUP`) VALUES
+(1, 3, 4),
+(2, 2, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `vinculations`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `vinculations` (
+`TEACHERID` int(11)
+,`HOURS` int(2)
+,`VINCULATIONTYPE` enum('NOMBRADOTIEMPOCOMPLETO','NOMBRADOMEDIOTIEMPO','OCASIONALTIEMPOCOMPLETO','OCASIONALMEDIOTIEMPO','HORACATEDRA','BECARIO')
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `intensitygroup`
+--
+DROP TABLE IF EXISTS `intensitygroup`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `intensitygroup`  AS SELECT `gp`.`IDGROUP` AS `IDGROUP`, `sb`.`INTENSITY` AS `INTENSITY` FROM (`groupt` `gp` join `subject` `sb` on(`gp`.`IDSUBJECT` = `sb`.`IDSUBJECT`)) WHERE `gp`.`ACADEMICPERIDODID` = `getCrrntAcdPer`()  ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `vinculations`
+--
+DROP TABLE IF EXISTS `vinculations`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vinculations`  AS SELECT `tc`.`TEACHERID` AS `TEACHERID`, `ha`.`HOURS` AS `HOURS`, `ha`.`VINCULATIONTYPE` AS `VINCULATIONTYPE` FROM (`teacher` `tc` join `hourlyassignment` `ha` on(`tc`.`TEACHERID` = `ha`.`TEACHERID`)) WHERE `tc`.`ISDISABLE` = 0 AND `ha`.`isDisable` = 00  ;
 
 --
 -- Índices para tablas volcadas
@@ -565,7 +666,7 @@ ALTER TABLE `teacher_group`
 -- AUTO_INCREMENT de la tabla `academicperiod`
 --
 ALTER TABLE `academicperiod`
-  MODIFY `ACADEMICPERIDODID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ACADEMICPERIDODID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `assignmentresource`
@@ -607,7 +708,7 @@ ALTER TABLE `groupt`
 -- AUTO_INCREMENT de la tabla `hourlyassignment`
 --
 ALTER TABLE `hourlyassignment`
-  MODIFY `vinculationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `vinculationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `location`
@@ -637,25 +738,25 @@ ALTER TABLE `resourcetype`
 -- AUTO_INCREMENT de la tabla `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `IDSCHEDEULE` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IDSCHEDEULE` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `subject`
 --
 ALTER TABLE `subject`
-  MODIFY `IDSUBJECT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `IDSUBJECT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `TEACHERID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `TEACHERID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `teacher_group`
 --
 ALTER TABLE `teacher_group`
-  MODIFY `TEAC_GRP_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `TEAC_GRP_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
