@@ -32,7 +32,7 @@ import lombok.Data;
 public class Schedule implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     public enum scheduleType {
         ACADEMICO, EVENTO;
     }
@@ -53,7 +53,7 @@ public class Schedule implements Serializable {
 
     @NotNull()
     @Enumerated(EnumType.STRING)
-    @Column(name = "DAYS")   
+    @Column(name = "DAYS")
     private Days days;
 
     @NotNull()

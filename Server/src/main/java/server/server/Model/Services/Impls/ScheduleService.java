@@ -5,6 +5,7 @@
 package server.server.Model.Services.Impls;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,10 +15,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import server.server.Model.Domain.AcademicPeriod;
+import server.server.Model.Domain.Resource;
 import server.server.Model.Domain.Schedule;
+import server.server.Model.Domain.Subject;
 import server.server.Model.Services.IAcademicPeriodService;
+import server.server.Model.Services.IGroupService;
+import server.server.Model.Services.IResourceService;
+import server.server.Model.Services.IResourceTypeService;
 import server.server.Model.Services.IScheduleService;
 import server.server.utilities.Labels;
+import server.server.utilities.errors.EnvErrors;
+import server.server.utilities.errors.ResErrors;
 import server.server.utilities.errors.ScheduleErrors;
 
 /**
@@ -30,6 +38,15 @@ public class ScheduleService implements IScheduleService {
 
     @Autowired
     private IAcademicPeriodService acpeService;
+
+    @Autowired
+    private IGroupService groupService;
+
+    @Autowired
+    private IResourceService resourceService;
+
+    @Autowired
+    private IResourceTypeService resTypeServ;
 
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
@@ -70,26 +87,38 @@ public class ScheduleService implements IScheduleService {
     private Map<Labels, Object> validateAcademicSchedule(Schedule schedule) {
         Map<Labels, Object> returns = new HashMap();
         ArrayList<String> errors = new ArrayList();
-        errors.addAll(validateDates(schedule.getInitialdate(), schedule.getFinaldate()));
+
+        if (schedule.getEvent() != null) {
+            errors.add(ScheduleErrors.SCH107.name());
+        }
+
+        if (errors.isEmpty() && schedule.getGroup() != null
+                && groupService.findById(schedule.getGroup().getGroupId()) == null) {
+            errors.add(ScheduleErrors.SCH111.name());
+        }
+
+        if (errors.isEmpty()) {
+
+        }
+
+        if (errors.isEmpty()) {
+            errors.addAll(validateDates(schedule.getInitialdate(), schedule.getFinaldate()));
+        }
         if (errors.isEmpty()) {
             Map<Labels, Object> current = acpeService.getCurrent();
             AcademicPeriod ap = (AcademicPeriod) current.get(Labels.objectReturn);
-            if(!ap.getInitDate().equals(schedule.getInitialdate()) || !ap.getFinalDate().equals(schedule.getFinaldate())){
-                errors.add(ScheduleErrors.SCH107.name());  
+            if (!ap.getInitDate().equals(schedule.getInitialdate()) || !ap.getFinalDate().equals(schedule.getFinaldate())) {
+                errors.add(ScheduleErrors.SCH107.name());
             }
         }
-        if (errors.isEmpty()){
-            
+        if (errors.isEmpty()) {
+            errors.addAll(validateTime(schedule.getStartime(), schedule.getEndtime()));
         }
-        
-        if (errors.isEmpty()){
-            
+
+        if (errors.isEmpty()) {
+            errors.addAll(validateTimeAcademicSchedule(schedule));
         }
-        
-        if (errors.isEmpty()){
-            
-        }
-        
+
         return returns;
     }
 
@@ -131,4 +160,48 @@ public class ScheduleService implements IScheduleService {
         return errors;
     }
 
+    private ArrayList<String> validateTimeAcademicSchedule(Schedule schedule) {
+        ArrayList<String> errors = new ArrayList();
+
+        LocalTime startime = schedule.getStartime();
+        LocalTime endtime = schedule.getEndtime();
+        if (startime.getMinute() != 0 || startime.getSecond() != 0
+                || endtime.getMinute() != 0 || endtime.getSecond() != 0) {
+            errors.add(ScheduleErrors.SCH109.name());
+        }
+
+        if (errors.isEmpty()) {
+            long until = schedule.getStartime().until(schedule.getEndtime(), ChronoUnit.HOURS);
+            Subject subject = schedule.getGroup().getSubject();
+            if (subject.getType() == Subject.Type.FISH) {
+                if (until != 2 || until != 4) {
+                    errors.add(ScheduleErrors.SCH108.name());
+                }
+            } else {
+                if (until != 2) {
+                    errors.add(ScheduleErrors.SCH108.name());
+                }
+            }
+        }
+        return errors;
+    }
+
+    private ArrayList<String> validateAmbienteEnvironment(Schedule schedule) {
+        ArrayList<String> errors = new ArrayList();
+        Resource obj = resourceService.find(schedule.getRes());
+        if (obj == null) {
+            errors.add(EnvErrors.ENV101.name());
+        }
+        if (obj != null) {
+            long globalType = resTypeServ.globalType(obj.getResourceType().getResourceTypeId());
+            if (globalType != IResourceTypeService.ENVIRONMENTTYPE) {
+                errors.add(ResErrors.RES112.name());
+            }
+        }
+        if (errors.isEmpty()) {
+
+        }
+
+        return errors;
+    }
 }

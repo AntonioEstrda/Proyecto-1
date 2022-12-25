@@ -16,7 +16,7 @@ public interface DAOAcademicPeriod extends JpaRepository<AcademicPeriod, Long>{
     
     @Query(
           value="""
-                SELECT * FROM academicperiod WHERE isDisable = 0 ORDER BY FINALDATE DESC LIMIT 1;
+                SELECT * FROM academicperiod WHERE ACADEMICPERIDODID=getCrrntAcdPer();
                 """,
           nativeQuery=true
     )

@@ -28,7 +28,28 @@ public enum ScheduleErrors {
      */
     SCH106,
     /**
-     * Academic Schedule must have same initial and final date that the current active academic period  
+     * Academic Schedule must have same initial and final date that the current
+     * active academic period
      */
-    SCH107;
+    SCH107,
+    /**
+     * Invalid hour range
+     */
+    SCH108, 
+    
+    /**
+     * Invalid time for Academic Schedule
+     */
+    SCH109, 
+    
+    /**
+     * Academic Schedule must not have an event 
+     */
+    SCH110, 
+    
+    /**
+     * Academic schedule must have a group   
+     */
+    SCH111;  
+
 }
