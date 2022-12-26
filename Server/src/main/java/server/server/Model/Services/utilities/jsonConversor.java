@@ -4,8 +4,11 @@
  */
 package server.server.Model.Services.utilities;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
-import server.server.utilities.Labels;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -13,10 +16,8 @@ import server.server.utilities.Labels;
  */
 public class jsonConversor {
 
-    public static ArrayList<Long> getRequirements(String requirements, Labels label) {
-        ArrayList<Long> ids = null;
-        
-        
-        return ids;
+    public static Map<String, ArrayList<Long>> getRequirements(String requirements) throws JsonProcessingException {
+        Map<String, ArrayList<Long>> result = new ObjectMapper().readValue(requirements, HashMap.class);
+        return result;
     }
 }

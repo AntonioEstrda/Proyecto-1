@@ -9,5 +9,5 @@ package server.server.utilities;
  * @author anmon
  */
 public enum Labels {
-    objectReturn, errors, resources, environments; 
+    objectReturn, errors; 
 }

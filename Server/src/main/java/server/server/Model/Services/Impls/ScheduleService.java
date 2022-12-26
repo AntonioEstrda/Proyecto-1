@@ -199,9 +199,12 @@ public class ScheduleService implements IScheduleService {
             }
         }
         if (errors.isEmpty()) {
-
+            Map<String, ArrayList<Long>> requirements1 = new HashMap();
+            for (Map.Entry<String, ArrayList<Long>> entry : requirements1.entrySet()) {
+                System.out.println("Key = " + Long.parseLong(entry.getKey())
+                        + ", Value = " + entry.getValue());
+            }
         }
-
         return errors;
     }
 }
