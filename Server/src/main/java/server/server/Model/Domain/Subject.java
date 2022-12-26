@@ -42,7 +42,7 @@ public class Subject implements Serializable {
 
     @NotEmpty(message = "SUBJ104")
     @Column(length = 100, name = "REQUISITS")
-    @Pattern(regexp = "^\\{\\s*((?i)(\\\"environment\\\"))\\s*:\\s*(\\[((\\d+,?)*\\d+)*\\]|(null))\\s*,\\s*((?i)(\\\"resources\\\"))\\s*:\\s*(\\[((\\d+,?)*\\d+)*\\]|(null))\\s*\\}$",
+    @Pattern(regexp = "^\\{\\s*(\\s*(\\\"\\d+\\\")+\\s*:\\s*(\\[((\\d+,?)*\\d+)*\\]|(null))\\s*,)*\\s*(\\s*(\\\"\\d+\\\")+\\s*:\\s*(\\[((\\d+,?)*\\d+)*\\]|(null))\\s*)\\}$",
             message = "SUB111")
     private String requisits;
 
