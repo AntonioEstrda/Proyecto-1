@@ -26,15 +26,28 @@ public interface DAOAssignmentResource extends JpaRepository<AssignmentResource,
             @Param("isDisable") boolean isDisable);
 
     @Query(
-            value = "SELECT * FROM assignmentresource WHERE envId=:envId AND resId=:resId AND isDisable=:isDisable" ,
+            value = "SELECT * FROM assignmentresource WHERE envId=:envId AND resId=:resId AND isDisable=:isDisable",
             nativeQuery = true
     )
-    public AssignmentResource findByIsDisableAndEnvIdAndResId( @Param("isDisable") boolean isDisable, @Param("envId")long envId, @Param("resId")long resId);
+    public AssignmentResource findByIsDisableAndEnvIdAndResId(@Param("isDisable") boolean isDisable, @Param("envId") long envId, @Param("resId") long resId);
 
     @Query(
             value = "SELECT * FROM assignmentresource WHERE resId=:resId AND isDisable=:isDisable",
             nativeQuery = true
     )
-    public AssignmentResource findByIsDisableAndResId(@Param("isDisable") boolean isDisable, @Param("resId")long resId);
- 
+    public AssignmentResource findByIsDisableAndResId(@Param("isDisable") boolean isDisable, @Param("resId") long resId);
+    
+    
+    @Query(
+            value = """
+                    WITH consulta as ( 
+                        SELECT distinct envId, count(typeID) as foundcount FROM AssertAssignments
+                            WHERE envId=:envId and typeID in (:types)    
+                        GROUP BY envId
+                    )SELECT foundcount FROM consulta;
+                    """, 
+            nativeQuery = true
+    )
+    public int CountAssertAssignments(@Param("envId") long envId, @Param("types") List<Long> types);
+
 }

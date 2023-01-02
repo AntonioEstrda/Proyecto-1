@@ -13,12 +13,15 @@ import server.server.utilities.Labels;
  * @author anmon
  */
 public interface IScheduleService {
-    public Map<Labels, Object> find(Schedule schedule); 
-    
+
+    public Map<Labels, Object> find(Schedule schedule);
+
     public Map<Labels, Object> add(Schedule schedule);
-    
+
     public Map<Labels, Object> update(Schedule schedule);
+
+    public Map<Labels, Object> delete(long id);
     
-    public Map<Labels, Object> delete(long id);     
-   
+    public Map<Labels, Object> findByProgSem(long prog, long sem);  
+    
 }

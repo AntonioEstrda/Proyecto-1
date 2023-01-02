@@ -167,5 +167,12 @@ public class AssignmentResourceService implements IAssignmentResourceService {
         returns.put(Labels.objectReturn, resObj);
         return returns;
     }
+    
+    @Override 
+    public int AssertAssignments(long envId, List<Long> types){
+        int count = 0;  
+        count = this.AssResRepo.CountAssertAssignments(envId, types); 
+        return count;  
+    }
 
 }

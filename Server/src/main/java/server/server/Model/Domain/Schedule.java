@@ -4,6 +4,10 @@
  */
 package server.server.Model.Domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.Date;
@@ -17,10 +21,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import server.server.Controller.config.CustomDateDeserializer;
+import server.server.Controller.config.CustomDateSerializer;
 
 /**
  *
@@ -43,35 +47,41 @@ public class Schedule implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "IDSCHEDEULE ")
+    @Column(name = "IDSCHEDEULE")
     private long id;
 
     @NotNull()
-    @Enumerated(EnumType.STRING)
     @Column(name = "TYPE")
+    @Enumerated(EnumType.STRING)
     private scheduleType type;
 
     @NotNull()
-    @Enumerated(EnumType.STRING)
     @Column(name = "DAYS")
+    @Enumerated(EnumType.STRING)
     private Days days;
 
     @NotNull()
     @Column(name = "STARTIME")
+    @JsonDeserialize(using = LocalTimeDeserializer.class)
+    @JsonSerialize(using = LocalTimeSerializer.class)
     private LocalTime startime;
 
     @NotNull()
     @Column(name = "ENDTIME")
+    @JsonDeserialize(using = LocalTimeDeserializer.class)
+    @JsonSerialize(using = LocalTimeSerializer.class)
     private LocalTime endtime;
 
     @NotNull()
-    @Temporal(TemporalType.DATE)
     @Column(name = "initialdate")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     private Date initialdate;
 
     @NotNull()
-    @Temporal(TemporalType.DATE)
     @Column(name = "finaldate")
+    @JsonSerialize(using = CustomDateSerializer.class)
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     private Date finaldate;
 
     @NotNull

@@ -4,6 +4,7 @@
  */
 package server.server.Model.Services;
 
+import java.util.List;
 import java.util.Map;
 import server.server.utilities.Labels;
 
@@ -20,5 +21,7 @@ public interface IAssignmentResourceService {
     public Map<Labels, Object> findByEnvId(long facid, long envid);
 
     public Map<Labels, Object> findByResId(long facid, long resId);
+    
+    public int AssertAssignments(long envid, List<Long> types); 
 
 }
