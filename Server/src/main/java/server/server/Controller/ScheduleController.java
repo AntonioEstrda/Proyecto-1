@@ -65,19 +65,24 @@ public class ScheduleController {
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping("/add")
-    public ResponseEntity<Schedule> add(@RequestBody @Valid Schedule schedule, Errors errors) {
+    public ResponseEntity<Schedule> add(@RequestBody @Valid Schedule schedule,
+            @RequestParam("departmentId") long departmentId, Errors errors) {
         ResponseEntity<Schedule> reponse;
         HttpHeaders headers = new HttpHeaders();
 
         if (!errors.hasErrors()) {
-            Map<Labels, Object> returns = scheduleService.add(schedule);
-            ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
-            Schedule schedule2 = (Schedule) returns.get(Labels.objectReturn);
-            if (errors2.isEmpty()) {
-                reponse = new ResponseEntity<>(schedule2, null, HttpStatus.ACCEPTED);
+            Map<Labels, Object> returns = scheduleService.add(schedule, departmentId);
+            if (returns != null) {
+                ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
+                Schedule schedule2 = (Schedule) returns.get(Labels.objectReturn);
+                if (errors2.isEmpty()) {
+                    reponse = new ResponseEntity<>(schedule2, null, HttpStatus.ACCEPTED);
+                } else {
+                    headers.add(Labels.errors.name(), errors2.toString());
+                    reponse = new ResponseEntity<>(schedule, headers, HttpStatus.BAD_REQUEST);
+                }
             } else {
-                headers.add(Labels.errors.name(), errors2.toString());
-                reponse = new ResponseEntity<>(schedule, headers, HttpStatus.BAD_REQUEST);
+                reponse = new ResponseEntity<>(schedule, null, HttpStatus.BAD_REQUEST);
             }
         } else {
             ArrayList<String> setErrors = new ArrayList();
@@ -90,19 +95,23 @@ public class ScheduleController {
 
     @PutMapping
     @RequestMapping("/update")
-    public ResponseEntity<Schedule> update(@RequestBody @Valid Schedule schedule, Errors errors) {
+    public ResponseEntity<Schedule> update(@RequestBody @Valid Schedule schedule, @RequestParam("departmentId") long departmentId, Errors errors) {
         ResponseEntity<Schedule> reponse;
         HttpHeaders headers = new HttpHeaders();
 
         if (!errors.hasErrors()) {
-            Map<Labels, Object> returns = scheduleService.update(schedule);
-            ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
-            Schedule schedule2 = (Schedule) returns.get(Labels.objectReturn);
-            if (errors2.isEmpty()) {
-                reponse = new ResponseEntity<>(schedule2, null, HttpStatus.ACCEPTED);
+            Map<Labels, Object> returns = scheduleService.update(schedule, departmentId);
+            if (returns != null) {
+                ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
+                Schedule schedule2 = (Schedule) returns.get(Labels.objectReturn);
+                if (errors2.isEmpty()) {
+                    reponse = new ResponseEntity<>(schedule2, null, HttpStatus.ACCEPTED);
+                } else {
+                    headers.add(Labels.errors.name(), errors2.toString());
+                    reponse = new ResponseEntity<>(schedule, headers, HttpStatus.BAD_REQUEST);
+                }
             } else {
-                headers.add(Labels.errors.name(), errors2.toString());
-                reponse = new ResponseEntity<>(schedule, headers, HttpStatus.BAD_REQUEST);
+                reponse = new ResponseEntity<>(schedule, null, HttpStatus.BAD_REQUEST);
             }
         } else {
             ArrayList<String> setErrors = new ArrayList();
@@ -114,20 +123,20 @@ public class ScheduleController {
     }
 
     @DeleteMapping
-    @RequestMapping("/delete/{id}")
-    public ResponseEntity<Schedule> delete(@PathVariable Long id) {
+    @RequestMapping("/delete")
+    public ResponseEntity<Schedule> delete(@RequestParam("id") long id, @RequestParam("departmentId") long departmentId) {
         ResponseEntity<Schedule> response;
-        Map<Labels, Object> returns = scheduleService.delete(id);
+        Map<Labels, Object> returns = scheduleService.delete(id, departmentId);
         ArrayList<String> errors = (ArrayList<String>) returns.get(Labels.errors);
         Schedule schedule = (Schedule) returns.get(Labels.objectReturn);
         if (errors.isEmpty()) {
-            response =  new ResponseEntity<>(schedule, null, HttpStatus.ACCEPTED);
+            response = new ResponseEntity<>(schedule, null, HttpStatus.ACCEPTED);
         } else {
             HttpHeaders headers = new HttpHeaders();
             headers.add(Labels.errors.name(), errors.toString());
-            response =  new ResponseEntity<>(schedule, headers, HttpStatus.BAD_REQUEST);
+            response = new ResponseEntity<>(schedule, headers, HttpStatus.BAD_REQUEST);
         }
-        return response;  
+        return response;
     }
 
 }

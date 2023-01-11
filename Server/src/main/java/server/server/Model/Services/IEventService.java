@@ -4,6 +4,7 @@
  */
 package server.server.Model.Services;
 
+import java.util.List;
 import java.util.Map;
 import server.server.Model.Domain.Event;
 import server.server.utilities.Labels;
@@ -14,12 +15,18 @@ import server.server.utilities.Labels;
  */
 public interface IEventService {
 
-    public Map<Labels, Object> create(Event event, long teacherId);
+    public Map<Labels, Object> create(Event event);
 
-    public Map<Labels, Object> delete(long eventId);
+    public Map<Labels, Object> delete(long eventId, long departmentId);
 
     public Map<Labels, Object> update(Event event);
 
     public Map<Labels, Object> findbyId(long eventId);
+
+    public Map<Labels, Object> findbyCode(String code);
+
+    public Map<Labels, Object> findByDeparmentId(List<Long> departmentId);
+    
+    public Map<Labels, Object> findByDepartmentIdAndEventId(long dpo, long eve);  
 
 }

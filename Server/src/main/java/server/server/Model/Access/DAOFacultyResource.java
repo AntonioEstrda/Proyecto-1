@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import server.server.Model.Domain.FacultyResource;
-import server.server.Model.Domain.Resource;
 
 /**
  * Repository for Faculty Resource intermediate entity 

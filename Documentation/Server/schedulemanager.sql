@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-01-2023 a las 04:16:00
+-- Tiempo de generación: 11-01-2023 a las 02:43:09
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -57,76 +57,183 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `AssigSbjtGpsHours` (`groupId` INT) R
     RETURN hoursT; 
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `AssigSbjtGpsHoursOnUpd` (`groupId` INT, `schId` INT) RETURNS DOUBLE  BEGIN 
-	DECLARE hoursT double; 
-    SET hoursT = 0;  
-	WITH consulta as ( 
-        SELECT GP.IDGROUP, SUM(TIME_TO_SEC(TIMEDIFF(SH.ENDTIME, SH.STARTIME))/3600) as TotalHours FROM `schedule` SH 
-        INNER JOIN  groupt GP ON GP.IDGROUP = SH.IDGROUP
-        WHERE GP.ACADEMICPERIDODID = getCrrntAcdPer()
-        AND SH.TYPE = 'ACADEMICO'
-        AND SH.IDSCHEDEULE != schId 
-        GROUP BY  GP.IDGROUP 	
-    ) SELECT TotalHours into hoursT FROM  consulta WHERE IDGROUP = groupId;  
-    RETURN hoursT; 
-END$$
-
 CREATE DEFINER=`root`@`localhost` FUNCTION `CrossSubjectCOnUpd` (`vday` VARCHAR(50), `groupId` INT, `startime` TIME, `endtime` TIME, `schId` INT) RETURNS INT(11) DETERMINISTIC BEGIN 
 DECLARE ban int DEFAULT 0; 
+DECLARE progId int DEFAULT -1;  
+DECLARE sem int DEFAULT -1;  
+WITH consProgram as (
+	SELECT distinct SB.IDPROGRAM as programId FROM groupt G 
+    INNER JOIN subject SB  ON SB.IDSUBJECT = G.IDSUBJECT 
+    INNER JOIN program PG ON PG.IDPROGRAM = SB.IDPROGRAM
+    WHERE G.IDGROUP = groupId
+)SELECT programId into progId FROM consProgram;  
+
+WITH subjectSemester as (
+        SELECT DISTINCT S.SEMESTER FROM groupt G 
+        INNER JOIN subject S ON  G.IDSUBJECT = S.IDSUBJECT 
+        WHERE G.IDGROUP = groupId 
+)SELECT SEMESTER into sem FROM subjectSemester;  
+
 if schId is  not null then  
-    WITH subjectSemester as (
-        SELECT S.SEMESTER FROM groupt G 
-        INNER JOIN subject S ON  G.IDSUBJECT = S.IDSUBJECT 
-        WHERE G.IDGROUP = groupId 
-    )
-    SELECT count(*) into ban FROM  `schedule` S 
-    INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
-    INNER JOIN subject SB ON  SB.IDSUBJECT = G.IDSUBJECT
+    WITH academicSchedule as (
+        SELECT S.* FROM `schedule` S 
+            INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
+            INNER JOIN subject SB ON  SB.IDSUBJECT = G.IDSUBJECT
+            INNER JOIN program PG ON  PG.IDPROGRAM = SB.IDPROGRAM
+        WHERE G.ACADEMICPERIDODID = getCrrntAcdPer()
+            AND S.`IDSCHEDEULE` != schId 
+            AND S.DAYS = vday AND S.TYPE = 'ACADEMICO' 
+            AND SB.SEMESTER = sem
+            AND PG.IDPROGRAM = progId
+    ), eventSchedule as (
+        SELECT S.* FROM `schedule` S 
+            INNER JOIN  `event` EV ON  EV.id = S.eventId
+            INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
+            INNER JOIN subject SB ON  SB.IDSUBJECT = G.IDSUBJECT
+            INNER JOIN program PG ON  PG.IDPROGRAM = SB.IDPROGRAM
+        WHERE EV.type = 'PRESTAMO_ACADEMICO'
+            AND EV.academicPeriodId = getCrrntAcdPer() 
+            AND S.`IDSCHEDEULE` != schId 
+            AND S.DAYS = vday AND S.TYPE = 'EVENTO' 
+            AND SB.SEMESTER = sem
+            AND PG.IDPROGRAM = progId
+    ), consulta as (
+      SELECT * FROM  academicSchedule
+        UNION  
+      SELECT * FROM  eventSchedule
+    ) SELECT COUNT(*) into ban FROM consulta S WHERE  
+        (( TIME(startime) >= TIME(S.STARTIME) and TIME(startime) < TIME(S.ENDTIME)) 
+            OR  ( TIME(endtime) > TIME(S.STARTIME) and TIME(endtime) <= TIME(S.ENDTIME))
+            OR ( TIME(startime) <= TIME(S.STARTIME) and TIME(endtime) >= TIME(S.ENDTIME)));
+ELSE 
+	WITH academicSchedule as (
+    SELECT S.* FROM `schedule` S 
+        INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
+        INNER JOIN subject SB ON  SB.IDSUBJECT = G.IDSUBJECT
+        INNER JOIN program PG ON  PG.IDPROGRAM = SB.IDPROGRAM
     WHERE G.ACADEMICPERIDODID = getCrrntAcdPer()
-    AND S.`IDSCHEDEULE` != schId 
-    AND S.DAYS = vday AND S.TYPE = 'ACADEMICO' 
-    AND SB.SEMESTER = (SELECT SEMESTER FROM subjectSemester)
-    AND 
-    (( TIME(startime) >= TIME(S.STARTIME) and TIME(startime) < TIME(S.ENDTIME)) 
+        AND S.DAYS = vday AND S.TYPE = 'ACADEMICO' 
+        AND SB.SEMESTER = sem
+        AND PG.IDPROGRAM = progId
+), eventSchedule as (
+	SELECT S.* FROM `schedule` S 
+        INNER JOIN  `event` EV ON  EV.id = S.eventId
+    	INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
+        INNER JOIN subject SB ON  SB.IDSUBJECT = G.IDSUBJECT
+        INNER JOIN program PG ON  PG.IDPROGRAM = SB.IDPROGRAM
+    WHERE EV.type = 'PRESTAMO_ACADEMICO'
+        AND EV.academicPeriodId = getCrrntAcdPer() 
+        AND S.DAYS = vday AND S.TYPE = 'EVENTO' 
+        AND SB.SEMESTER = sem
+        AND PG.IDPROGRAM = progId
+), consulta as (
+  SELECT * FROM  academicSchedule
+    UNION  
+  SELECT * FROM  eventSchedule
+) SELECT COUNT(*) into ban FROM consulta S WHERE  
+	(( TIME(startime) >= TIME(S.STARTIME) and TIME(startime) < TIME(S.ENDTIME)) 
         OR  ( TIME(endtime) > TIME(S.STARTIME) and TIME(endtime) <= TIME(S.ENDTIME))
-        OR ( TIME(startime) <= TIME(S.STARTIME) and TIME(endtime) >= TIME(S.ENDTIME)));  
-else 
-	  WITH subjectSemester as (
-        SELECT S.SEMESTER FROM groupt G 
-        INNER JOIN subject S ON  G.IDSUBJECT = S.IDSUBJECT 
-        WHERE G.IDGROUP = groupId 
-    )
-    SELECT count(*) into ban FROM  `schedule` S 
-    INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
-    INNER JOIN subject SB ON  SB.IDSUBJECT = G.IDSUBJECT
-    WHERE G.ACADEMICPERIDODID = getCrrntAcdPer()
-    AND S.`IDSCHEDEULE` is not null 
-    AND S.DAYS = vday AND S.TYPE = 'ACADEMICO' 
-    AND SB.SEMESTER = (SELECT SEMESTER FROM subjectSemester)
-    AND 
-    (( TIME(startime) >= TIME(S.STARTIME) and TIME(startime) < TIME(S.ENDTIME)) 
-        OR  ( TIME(endtime) > TIME(S.STARTIME) and TIME(endtime) <= TIME(S.ENDTIME))
-        OR ( TIME(startime) <= TIME(S.STARTIME) and TIME(endtime) >= TIME(S.ENDTIME))); 
+        OR ( TIME(startime) <= TIME(S.STARTIME) and TIME(endtime) >= TIME(S.ENDTIME)));
 END IF;  
 
 RETURN ban; 
 END$$
 
+CREATE DEFINER=`root`@`localhost` FUNCTION `existAssigmentScheudleDpto` (`schId` INT, `dptid` INT) RETURNS INT(11) DETERMINISTIC BEGIN 
+	DECLARE ban int DEFAULT 0;  
+    WITH academicSchedule as (
+    	SELECT S.* FROM `schedule` S
+        INNER JOIN  groupt G on G.IDGROUP = S.IDGROUP
+    	INNER JOIN  subject SB ON  G.IDSUBJECT =SB.IDSUBJECT
+    	INNER JOIN  program P ON P.IDPROGRAM = SB.IDPROGRAM 
+    	INNER JOIN 	department DP ON  DP.DEPARTMENTID = P.DEPARTMENTID 
+        WHERE S.TYPE = 'ACADEMICO' 
+    		AND DP.DEPARTMENTID = dptId  
+    		AND S.IDSCHEDEULE = schId  
+        AND G.ACADEMICPERIDODID = getCrrntAcdPer() 
+    ), eventSchedule as (
+	    SELECT S.* FROM `schedule` S 
+        INNER JOIN  `event` e on e.id = S.eventId 
+        INNER JOIN  academicperiod AP ON e.academicPeriodId = AP.ACADEMICPERIDODID
+        WHERE S.TYPE = 'EVENTO' 
+        	AND S.IDSCHEDEULE = schId 
+        	AND e.departmentId = dptId
+        AND AP.ACADEMICPERIDODID = getCrrntAcdPer() 
+    ), schedules as (
+    	SELECT * FROM academicSchedule 
+        UNION 
+        SELECT * FROM eventSchedule
+    )SELECT count(*) into ban FROM  schedules S; 
+	return ban;  
+END$$
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `existsAssigmentOnUpd` (`vday` VARCHAR(50), `groupId` INT, `schId` INT) RETURNS INT(11) DETERMINISTIC BEGIN 
-DECLARE ban int DEFAULT 0; 
+DECLARE ban int DEFAULT 0;
+DECLARE progId int DEFAULT -1;  
+WITH consProgram as (
+	SELECT SB.IDPROGRAM as programId FROM groupt G 
+    INNER JOIN subject SB  ON SB.IDSUBJECT = G.IDSUBJECT 
+    INNER JOIN program PG ON PG.IDPROGRAM = SB.IDPROGRAM
+    WHERE G.IDGROUP = groupId
+)SELECT programId into progId FROM consProgram;  
+
 if schId is not null then  
-    SELECT count(*) into ban FROM `schedule` S
-    INNER JOIN  groupt G ON  S.IDGROUP = G.IDGROUP 
-        WHERE S.DAYS = vday 
-        AND S.IDGROUP = groupId
-        AND G.ACADEMICPERIDODID = getCrrntAcdPer()  
-        AND S.IDSCHEDEULE != schId;
+    WITH academicSchedule as (
+        SELECT S.* FROM `schedule` S 
+            INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
+            INNER JOIN subject SB ON  SB.IDSUBJECT = G.IDSUBJECT
+            INNER JOIN program PG ON  PG.IDPROGRAM = SB.IDPROGRAM
+        WHERE G.ACADEMICPERIDODID = getCrrntAcdPer()
+        	AND S.IDGROUP = groupId
+            AND S.`IDSCHEDEULE` != schId 
+            AND S.DAYS = vday AND S.TYPE = 'ACADEMICO' 
+            AND PG.IDPROGRAM = progId
+    ), eventSchedule as (
+        SELECT S.* FROM `schedule` S 
+            INNER JOIN  `event` EV ON  EV.id = S.eventId
+            INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
+            INNER JOIN subject SB ON  SB.IDSUBJECT = G.IDSUBJECT
+            INNER JOIN program PG ON  PG.IDPROGRAM = SB.IDPROGRAM
+        WHERE EV.type = 'PRESTAMO_ACADEMICO'
+            AND EV.academicPeriodId = getCrrntAcdPer() 
+        	AND G.ACADEMICPERIDODID = EV.academicPeriodId
+            AND S.`IDSCHEDEULE` != schId 
+            AND S.DAYS = vday AND S.TYPE = 'EVENTO' 
+            AND PG.IDPROGRAM = progId
+        	AND S.IDGROUP = groupId
+    ), consulta as (
+      SELECT * FROM  academicSchedule
+        UNION  
+      SELECT * FROM  eventSchedule
+    ) SELECT COUNT(*) into ban FROM consulta S;   
 else 
-	SELECT count(*) into ban FROM `schedule` S
-    INNER JOIN  groupt G ON  S.IDGROUP = G.IDGROUP 
-        WHERE S.DAYS = vday 
-        AND S.IDGROUP = groupId
-        AND G.ACADEMICPERIDODID = getCrrntAcdPer();   
+    WITH academicSchedule as (
+        SELECT S.* FROM `schedule` S 
+            INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
+            INNER JOIN subject SB ON  SB.IDSUBJECT = G.IDSUBJECT
+            INNER JOIN program PG ON  PG.IDPROGRAM = SB.IDPROGRAM
+        WHERE G.ACADEMICPERIDODID = getCrrntAcdPer()
+        	AND S.IDGROUP = groupId
+            AND S.DAYS = vday AND S.TYPE = 'ACADEMICO' 
+            AND PG.IDPROGRAM = progId
+    ), eventSchedule as (
+        SELECT S.* FROM `schedule` S 
+            INNER JOIN  `event` EV ON  EV.id = S.eventId
+            INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
+            INNER JOIN subject SB ON  SB.IDSUBJECT = G.IDSUBJECT
+            INNER JOIN program PG ON  PG.IDPROGRAM = SB.IDPROGRAM
+        WHERE EV.type = 'PRESTAMO_ACADEMICO'
+            AND EV.academicPeriodId = getCrrntAcdPer() 
+        	AND G.ACADEMICPERIDODID = EV.academicPeriodId
+            AND S.DAYS = vday AND S.TYPE = 'EVENTO' 
+            AND PG.IDPROGRAM = progId
+        	AND S.IDGROUP = groupId
+    ), consulta as (
+      SELECT * FROM  academicSchedule
+        UNION  
+      SELECT * FROM  eventSchedule
+    ) SELECT COUNT(*) into ban FROM consulta S;   
+
 end if; 
 RETURN ban; 
 END$$
@@ -152,6 +259,67 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `globalType` (`idType` INT) RETURNS I
         RETURN var_2; 
     END$$
 
+CREATE DEFINER=`root`@`localhost` FUNCTION `permitEvents` (`dptId` INT) RETURNS INT(11) DETERMINISTIC BEGIN  
+
+	DECLARE totalSubGrop int DEFAULT 0; 
+    DECLARE assgs int DEFAULT 0; 
+    DECLARE facId int DEFAULT -1; 
+    WITH facultyProgram as (
+        SELECT F.FACULTYID FROM program P 
+        INNER JOIN  department D ON P.DEPARTMENTID = D.DEPARTMENTID
+        INNER JOIN  faculty F ON  F.FACULTYID = D.FACULTYID
+        WHERE D.DEPARTMENTID = dptId
+    )SELECT FACULTYID into facId from facultyProgram;  
+    
+    WITH totalSubjectGroups as 
+    (
+    	SELECT OIA.FACULTYID, count(*) as total FROM overviewIntensityAssignedHours OIA
+        WHERE OIA.FACULTYID = facId
+		GROUP BY  OIA.FACULTYID
+    )SELECT total into totalSubGrop FROM totalSubjectGroups; 
+    
+	
+	WITH assigneds as (
+        SELECT OIA.FACULTYID, SUM(CASE WHEN OIA.INTENSITY = OIA.AssignedHours THEN 1 ELSE 0 END)  AS AssigAchievement 
+        FROM overviewIntensityAssignedHours OIA 
+        WHERE OIA.FACULTYID = facId
+        GROUP BY OIA.FACULTYID
+   	)SELECT AssigAchievement into assgs FROM assigneds; 
+     
+    IF facId = -1 OR totalSubGrop <> assgs OR (totalSubGrop = 0 and assgs = 0) THEN 
+    	RETURN 0; 
+    ELSE 
+    	RETURN 1;  
+    END IF; 
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `validateAssignmentEnvDpoGro` (`dptId` INT, `groupId` INT, `envId` INT) RETURNS INT(11) DETERMINISTIC BEGIN 
+	DECLARE facres int DEFAULT -1; 
+    DECLARE facprogGroup int DEFAULT -1; 
+    
+	WITH facultyResource as ( 
+        SELECT FR.FACULTYID, RT.RESOURCEID FROM  faculty_resource FR 
+        INNER JOIN  resourcet RT ON  FR.RESOURCEID = RT.RESOURCEID
+        WHERE FR.isDisable = 0
+        AND RT.ISDISABLE = 0 
+    )SELECT FACULTYID into facres FROM facultyResource 
+    	WHERE RESOURCEID = envId;  
+    
+    IF groupId IS NOT NULL THEN 
+    	SELECT DISTINCT OIA.FACULTYID into facprogGroup  FROM overviewintensityassignedhours OIA
+        WHERE OIA.DEPARTMENTID = dptId AND OIA.IDGROUP = groupId;  
+    ELSE 
+    	SELECT DISTINCT OIA.FACULTYID into facprogGroup  FROM overviewintensityassignedhours OIA
+        WHERE OIA.DEPARTMENTID = dptId;  
+    END IF; 
+    
+    IF facprogGroup <> -1 and facres <> -1 and facprogGroup = facres THEN 
+    	RETURN 1;  
+    ELSE  
+    	RETURN 0;  
+    END IF;  
+END$$
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `validateAssOverFaculty` (`envId` INT, `groupId` INT) RETURNS INT(11) DETERMINISTIC BEGIN
 	DECLARE facres int DEFAULT null;  
     DECLARE facGrp int DEFAULT null;  
@@ -176,6 +344,29 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `validateAssOverFaculty` (`envId` INT
        SET ban = 1;  
 	END IF; 
     return ban;  
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `validateGroupProgram` (`schId` INT, `type` VARCHAR(50), `progIdEx` INT) RETURNS INT(11) DETERMINISTIC BEGIN                                
+	DECLARE ban int DEFAULT 0;  
+    DECLARE progId int DEFAULT -1;
+	IF type = 'ACADEMICO' THEN 
+        SELECT DISTINCT PG.IDPROGRAM into progId FROM `schedule` S 
+            INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP 
+            INNER JOIN subject SB ON  SB.IDSUBJECT = G.IDSUBJECT 
+            INNER JOIN program PG ON  PG.IDPROGRAM = SB.IDPROGRAM 
+        WHERE S.IDSCHEDEULE = schId AND S.TYPE = type;  
+	ELSEIF type = 'EVENTO' THEN 
+        SELECT DISTINCT PG.IDPROGRAM into progId FROM `schedule` S 
+        INNER JOIN `event` EV ON  S.eventId = EV.id 
+        INNER JOIN program PG ON  PG.IDPROGRAM = EV.programId 
+        WHERE S.IDSCHEDEULE = schId; 
+    END IF; 
+    
+    IF progIdEx = progId THEN 
+    	SET ban = 1;  
+    END IF; 
+    
+    return ban; 
 END$$
 
 CREATE DEFINER=`root`@`localhost` FUNCTION `validateHourAssignment` (`groupId` INT, `crrtime` INT, `uptTime` INT) RETURNS INT(11) DETERMINISTIC BEGIN 
@@ -354,8 +545,10 @@ CREATE TABLE `event` (
   `Name` varchar(100) NOT NULL,
   `Description` varchar(150) NOT NULL,
   `Code` varchar(10) NOT NULL,
+  `type` enum('GENERAL','PRESTAMO_POR_MATERIA','ACADEMICO') NOT NULL,
   `teacherId` int(11) NOT NULL,
-  `academicPeriodId` int(11) NOT NULL
+  `academicPeriodId` int(11) NOT NULL,
+  `departmentId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -464,7 +657,8 @@ INSERT INTO `hourlyassignment` (`vinculationId`, `DEPARTMENTID`, `TEACHERID`, `H
 -- (Véase abajo para la vista actual)
 --
 CREATE TABLE `intensitysubjectgroup` (
-`DEPARTMENTID` int(11)
+`FACULTYID` int(11)
+,`DEPARTMENTID` int(11)
 ,`IDPROGRAM` int(11)
 ,`IDSUBJECT` int(11)
 ,`IDGROUP` int(11)
@@ -492,6 +686,22 @@ INSERT INTO `location` (`id`, `Name`, `city`, `parentId`) VALUES
 (2, 'Sede principal', '', NULL),
 (3, 'Edificio 2', '', 2),
 (4, 'El Carmen', '', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `overviewintensityassignedhours`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `overviewintensityassignedhours` (
+`FACULTYID` int(11)
+,`DEPARTMENTID` int(11)
+,`IDPROGRAM` int(11)
+,`IDSUBJECT` int(11)
+,`IDGROUP` int(11)
+,`INTENSITY` int(2)
+,`AssignedHours` double
+);
 
 -- --------------------------------------------------------
 
@@ -636,16 +846,17 @@ CREATE TABLE `subject` (
   `INTENSITY` int(2) NOT NULL,
   `Modality` enum('Semestral','Anual') NOT NULL,
   `ISDISABLE` tinyint(1) NOT NULL,
-  `type` enum('TEORICA','PRACTICA','HIBRIDA','FISH') NOT NULL
+  `type` enum('TEORICA','PRACTICA','HIBRIDA','FISH') NOT NULL,
+  `isExtern` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `subject`
 --
 
-INSERT INTO `subject` (`IDSUBJECT`, `IDPROGRAM`, `NAME`, `code`, `REQUISITS`, `SEMESTER`, `INTENSITY`, `Modality`, `ISDISABLE`, `type`) VALUES
-(6, 7, 'Redes', 'SIS101', '{\"7\":null}', 8, 2, 'Semestral', 1, 'TEORICA'),
-(7, 7, 'IA', 'SIS104', '{\"7\":null}', 8, 8, 'Semestral', 1, 'TEORICA');
+INSERT INTO `subject` (`IDSUBJECT`, `IDPROGRAM`, `NAME`, `code`, `REQUISITS`, `SEMESTER`, `INTENSITY`, `Modality`, `ISDISABLE`, `type`, `isExtern`) VALUES
+(6, 7, 'Redes', 'SIS101', '{\"7\":null}', 8, 2, 'Semestral', 0, 'TEORICA', 0),
+(7, 7, 'IA', 'SIS104', '{\"7\":null}', 8, 8, 'Semestral', 0, 'TEORICA', 0);
 
 -- --------------------------------------------------------
 
@@ -726,7 +937,16 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `intensitysubjectgroup`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `intensitysubjectgroup`  AS SELECT `dp`.`DEPARTMENTID` AS `DEPARTMENTID`, `p`.`IDPROGRAM` AS `IDPROGRAM`, `s`.`IDSUBJECT` AS `IDSUBJECT`, `g`.`IDGROUP` AS `IDGROUP`, `s`.`INTENSITY` AS `INTENSITY` FROM (((`groupt` `g` join `subject` `s` on(`g`.`IDSUBJECT` = `s`.`IDSUBJECT`)) join `program` `p` on(`p`.`IDPROGRAM` = `s`.`IDPROGRAM`)) join `department` `dp` on(`dp`.`DEPARTMENTID` = `p`.`DEPARTMENTID`)) WHERE `g`.`ACADEMICPERIDODID` = `getCrrntAcdPer`()  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `intensitysubjectgroup`  AS SELECT `f`.`FACULTYID` AS `FACULTYID`, `dp`.`DEPARTMENTID` AS `DEPARTMENTID`, `pg`.`IDPROGRAM` AS `IDPROGRAM`, `sb`.`IDSUBJECT` AS `IDSUBJECT`, `gp`.`IDGROUP` AS `IDGROUP`, `sb`.`INTENSITY` AS `INTENSITY` FROM ((((`faculty` `f` join `department` `dp` on(`dp`.`FACULTYID` = `f`.`FACULTYID`)) join `program` `pg` on(`pg`.`DEPARTMENTID` = `dp`.`DEPARTMENTID`)) join `subject` `sb` on(`sb`.`IDPROGRAM` = `pg`.`IDPROGRAM`)) join `groupt` `gp` on(`gp`.`IDSUBJECT` = `sb`.`IDSUBJECT`)) WHERE `gp`.`ACADEMICPERIDODID` = `getCrrntAcdPer`()  ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `overviewintensityassignedhours`
+--
+DROP TABLE IF EXISTS `overviewintensityassignedhours`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `overviewintensityassignedhours`  AS SELECT `isg`.`FACULTYID` AS `FACULTYID`, `isg`.`DEPARTMENTID` AS `DEPARTMENTID`, `isg`.`IDPROGRAM` AS `IDPROGRAM`, `isg`.`IDSUBJECT` AS `IDSUBJECT`, `isg`.`IDGROUP` AS `IDGROUP`, `isg`.`INTENSITY` AS `INTENSITY`, `AssigSbjtGpsHours`(`isg`.`IDGROUP`) AS `AssignedHours` FROM (`intensitysubjectgroup` `isg` join `subject` `sb` on(`sb`.`IDSUBJECT` = `isg`.`IDSUBJECT`)) WHERE `sb`.`isExtern` = 0 AND `sb`.`ISDISABLE` = 00  ;
 
 -- --------------------------------------------------------
 
@@ -772,7 +992,8 @@ ALTER TABLE `event`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `unique_pk_id` (`id`),
   ADD KEY `fk_teacher_event` (`teacherId`),
-  ADD KEY `fk_academicperiod_event` (`academicPeriodId`);
+  ADD KEY `fk_academicperiod_event` (`academicPeriodId`),
+  ADD KEY `fk_department_event` (`departmentId`);
 
 --
 -- Indices de la tabla `faculty`
@@ -1000,6 +1221,7 @@ ALTER TABLE `department`
 --
 ALTER TABLE `event`
   ADD CONSTRAINT `fk_academicperiod_event` FOREIGN KEY (`academicPeriodId`) REFERENCES `academicperiod` (`ACADEMICPERIDODID`),
+  ADD CONSTRAINT `fk_department_event` FOREIGN KEY (`departmentId`) REFERENCES `department` (`DEPARTMENTID`),
   ADD CONSTRAINT `fk_teacher_event` FOREIGN KEY (`teacherId`) REFERENCES `teacher` (`TEACHERID`) ON DELETE CASCADE;
 
 --

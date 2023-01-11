@@ -48,8 +48,6 @@ public interface DAOSchedule extends JpaRepository<Schedule, Long> {
             @Param("startime") LocalTime startime, @Param("endtime") LocalTime endtime,
             @Param("schId") Long schId);
 
-
-
     @Query(
             value = """
                     SELECT validateHourAssignment(:groupId, :crrtime, :uptTime) FROM DUAL;  
@@ -58,17 +56,14 @@ public interface DAOSchedule extends JpaRepository<Schedule, Long> {
     )
     public int validateHourAssignment(@Param("groupId") Long groupId, @Param("crrtime") long crrtime, @Param("uptTime") long uptTime);
 
-    
-    
     @Query(
             value = """
                     SELECT validateAssOverFaculty(:envId, :groupId) FROM DUAL;  
                     """,
             nativeQuery = true
     )
-    public int validateAssOverFaculty(@Param("envId") long envId, @Param("groupId") long groupId); 
-    
-    
+    public int validateAssOverFaculty(@Param("envId") long envId, @Param("groupId") long groupId);
+
     @Query(
             value = """
                     WITH consulta as ( 
@@ -79,10 +74,28 @@ public interface DAOSchedule extends JpaRepository<Schedule, Long> {
                         WHERE G.ACADEMICPERIDODID = getCrrntAcdPer() 
                     	AND PG.IDPROGRAM=:programId
                         AND SB.SEMESTER=:semester
-                    ) SELECT * FROM `schedule` S WHERE S.IDSCHEDEULE in (SELECT distinct id FROM consulta);;  
+                    ) SELECT * FROM `schedule` S WHERE S.IDSCHEDEULE in (SELECT distinct id FROM consulta); 
                     """,
             nativeQuery = true
     )
     public List<Schedule> findByProgramIdAndSemester(@Param("programId") long programId, @Param("semester") long semester);
-      
+
+    @Query(
+            value = "SELECT permitEvents(:id) from dual;",
+            nativeQuery = true
+    )
+    public int permitEvents(@Param("id") long departmentId);
+
+    @Query(
+            value = "SELECT validateAssignmentEnvDpoGro(:departmentId, :groupId, :envId) from dual;",
+            nativeQuery = true
+    )
+    public int validateAssignmentEnvProGro(@Param("departmentId") Long departmentId, @Param("groupId") Long groupId, @Param("envId") Long envId);
+
+    @Query(
+            value = "SELECT existAssigmentScheudleDpto(:schId,:departmentId); from dual;",
+            nativeQuery = true
+    )
+    public int existAssigmentScheudleDpto(@Param("departmentId") Long departmentId, @Param("schId") Long schId);
+
 }

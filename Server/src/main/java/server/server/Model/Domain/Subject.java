@@ -61,7 +61,7 @@ public class Subject implements Serializable {
 
     @NotNull(message = "SUBJ108")
     @Column(nullable = false, columnDefinition = "TINYINT(1)", name = "ISDISABLE")
-    private String isDisable;
+    private boolean isDisable;
 
     @NotNull(message = "SUBJ109")
     @Column(length = 8, name = "type")
@@ -78,6 +78,10 @@ public class Subject implements Serializable {
     @Pattern(regexp = "^(?i)(\\w{2,6})\\d{1,3}$",
             message = "SUB113")
     private String code;
+    
+    @NotNull(message = "SUBJ108")
+    @Column(columnDefinition = "TINYINT(1)", name = "isExtern")
+    private boolean isExtern; 
 
     public enum Modality {
         Semestral, Anual;

@@ -10,7 +10,7 @@ package server.server.utilities.errors;
  */
 public enum ScheduleErrors {
     /**
-     * Schedule not found
+     * Schedule not found or Assignation not found department schedule 
      */
     SCH101,
     /**
@@ -83,6 +83,31 @@ public enum ScheduleErrors {
      *  Cannot allocate group in resEnv due to group and resEnv belongs to different faculties.
      *  Try on event schedule
      */
-    SCH118;
+    SCH118, 
+    /**
+     * Subject is disabled 
+     */
+    SCH119, 
+    /**
+     * No se puede asignar una materia de tipo externo (o no externo) en una franja horaria academica normal 
+     * (de evento)
+     */
+    SCH120, 
+    /**
+     * No se puede realizar esta asignación 
+     */
+    SCH121, 
+    /**
+     * No se pueden agregar eventos si no se ha la asignación de la oferta académica de la facultad 
+     */
+    SCH122, 
+    /**
+     * No se pueden realizar asignaciones en las cuales el grupo y el recurso no compartan la misma facultad. 
+     */
+    SCH123, 
+    /**
+     * No se pueden crear asignaciones ligadas a eventos que no esten asociados a su departamento
+     */
+    SCH124;
 
 }

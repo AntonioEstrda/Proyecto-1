@@ -21,12 +21,33 @@ public enum EvtErrors {
     EVT102, 
 
     /**
-     *
+     * Name must have a value 
      */
     EVT103, 
-
     /**
-     *
+     * Description must have a value 
      */
-    EVT104; 
+    EVT104, 
+    /**
+     * Event code, must have a value or contains alphanumeric characters only   
+     */
+    EVT105, 
+    /**
+     * Event must have a associated teacher 
+     */
+    EVT106, 
+    /**
+     * Event must being associated to an academic period 
+     * or must be de current academic period 
+     */
+    EVT107,
+    /**
+     * Must have a program
+     */
+    EVT108, 
+    /**
+     * Must have a type 
+     */
+    EVT109;
 }
+
