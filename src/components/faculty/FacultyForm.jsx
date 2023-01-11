@@ -17,7 +17,7 @@ function FacultyForm() {
   return (
     <div className="max-w-md mx-auto">
       <form onSubmit={handleSubmit} className="bg-blue p-10 mb-4  rounded-md">
-        <h1 className="text-2xl font-bold text-bone mb-3">
+        <h1 className="text-2xl font-bold text-paleta2-red-claro mb-3">
           Crear una facultad
         </h1>
         <input
@@ -25,16 +25,16 @@ function FacultyForm() {
           onChange={(e) => setName(e.target.value)}
           value={name}
           autoFocus="on"
-          className="bg-bone p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
         />
         <textarea
           name="location"
           value={location}
           placeholder="Localización de la facultad"
           onChange={(e) => setLocation(e.target.value)}
-          className="bg-bone p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
         ></textarea>
-        <button className="bg-cyan-600 px-8 py-3 text-blue rounded-md">Guardar</button>
+        <button className="bg-paleta2-azulverd px-8 py-3 text-paleta2-claro rounded-md">Guardar</button>
       </form>
     </div>
   );

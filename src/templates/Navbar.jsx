@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 export default function Navbar() {
   return (
-    <nav className="bg-blue text-bone border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-blue">
+    <nav className="bg-blue text-paleta2-claro border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-blue">
       <div className="container flex flex-wrap items-center justify-between mx-auto">
         <Link to="/home" className="flex items-center">
           <img
@@ -9,7 +9,7 @@ export default function Navbar() {
             className="h-7 mr-3 sm:h-16"
             alt="Flowbite Logo"
           />
-          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-bone">
+          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-paleta2-claro">
             Gestor Horarios
           </span>
         </Link>
@@ -18,7 +18,7 @@ export default function Navbar() {
             <li>
               <Link
                 to="/home"
-                className="block py-2 pl-3 pr-4 text-bone bg-blue-700 rounded md:bg-transparent md:text-bone md:p-0 dark:text-white"
+                className="block py-2 pl-3 pr-4 text-paleta2-claro bg-blue-700 rounded md:bg-transparent md:text-paleta2-claro md:p-0 dark:text-white"
                 aria-current="page"
               >
                 Inicio

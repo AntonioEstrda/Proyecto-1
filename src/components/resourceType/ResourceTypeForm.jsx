@@ -18,27 +18,27 @@ export default function ResourceTypeForm() {
 
   return (
     <div className="max-w-md mx-auto">
-      <form onSubmit={handleSubmit} className="bg-slate-800 p-10 mb-4 ">
-        <h1 className="text-2xl font-bold text-white mb-3">
+      <form onSubmit={handleSubmit} className="bg-blue p-10 mb-4 rounded-lg">
+        <h1 className="text-2xl font-bold text-paleta2-red-claro mb-3">
           Crear un Tipo de Recurso
         </h1>
         <input
           placeholder="Nombre del tipo"
           onChange={(e) => setName(e.target.value)}
           autoFocus="on"
-          className="bg-slate-200 p-3 w-full mb-2"
+          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
           value={name}
         />
         <textarea
           name="Parent"
           placeholder="Parent del tipo de recurso"
           onChange={(e) => setParent(e.target.value)}
-          className="bg-slate-200 p-3 w-full mb-0"
+          className="bg-paleta2-claro p-3 w-full mb-0 rounded-md"
           value={parent}
         ></textarea>
         <select
           name="disable"
-          className="bg-slate-200 p-3 w-full mb-2"
+          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
           value={disable}
           onChange={(e) => setDisable(e.target.value)}
         >
@@ -46,7 +46,7 @@ export default function ResourceTypeForm() {
           <option value="true">Inactivo</option>
         </select>
 
-        <button className="bg-indigo-500 px-8 py-3 text-white ">Guardar</button>
+        <button className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro ">Guardar</button>
       </form>
     </div>
   );
