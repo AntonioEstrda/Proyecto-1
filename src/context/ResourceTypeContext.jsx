@@ -28,7 +28,9 @@ export function ResourceTypeContextProvider(props) {
 
   function deleteResourceType(resourceTypeId) {
     setTask(
-        resourcesTypes.filter((resourceType) => resourceType.resourceTypeId !== resourceTypeId)
+      resourcesTypes.filter(
+        (resourceType) => resourceType.resourceTypeId !== resourceTypeId
+      )
     );
   }
 
@@ -41,7 +43,7 @@ export function ResourceTypeContextProvider(props) {
   }, []);
 
   return (
-    <ResourceTypeContextProvider.Provider
+    <ResourceTypeContext.Provider
       value={{
         resourcesTypes,
         deleteResourceType,
@@ -49,6 +51,6 @@ export function ResourceTypeContextProvider(props) {
       }}
     >
       {props.children}
-    </ResourceTypeContextProvider.Provider>
+    </ResourceTypeContext.Provider>
   );
 }
