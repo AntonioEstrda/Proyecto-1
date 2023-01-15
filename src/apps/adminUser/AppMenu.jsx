@@ -1,6 +1,6 @@
-import ScheduleMenu from "../../components/adminHome/ScheduleMenu";
-import DataCMSMenu from "../../components/adminHome/DataCMSMenu";
-import HeaderAdmin from "../../components/adminHome/HeaderAdmin";
+import ScheduleMenu from "../../components/menu/admin/ScheduleMenu";
+import DataCMSMenu from "../../components/menu/admin/DataCMSMenu";
+import HeaderAdmin from "../../components/menu/admin/HeaderAdmin";
 
 function AppMenu() {
   return (
