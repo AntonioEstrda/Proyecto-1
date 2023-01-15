@@ -1,5 +1,5 @@
-import FacultyList from "../components/faculty/FacultyList";
-import FacultyForm from "../components/faculty/FacultyForm";
+import FacultyList from "../../components/faculty/FacultyList";
+import FacultyForm from "../../components/faculty/FacultyForm";
 
 function AppFaculty() {
   return (

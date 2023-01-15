@@ -1,9 +1,9 @@
 import ReactDOM from "react-dom/client";
-import AppFaculty from "./apps/AppFaculty";
-import AppResource from "./apps/AppResource";
-import AppSchedule from "./apps/AppSchedule";
-import AppResourceType from "./apps/AppResourceType";
-import AppMenu from "./apps/AppMenu";
+import AppFaculty from "./apps/adminUser/AppFaculty";
+import AppResource from "./apps/adminUser/AppResource";
+import AppSchedule from "./apps/adminUser/AppSchedule";
+import AppResourceType from "./apps/adminUser/AppResourceType";
+import AppMenu from "./apps/adminUser/AppMenu";
 import "./index.css";
 import { ScheduleContextProvider } from "./context/ScheduleContext";
 import { FacultyContextProvider } from "./context/FacultyContext";

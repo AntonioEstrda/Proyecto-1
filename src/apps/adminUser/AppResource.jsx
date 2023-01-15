@@ -1,5 +1,5 @@
-import ResourceList from "../components/resource/ResourceList";
-import ResourceForm from "../components/resource/ResourceForm";
+import ResourceList from "../../components/resource/ResourceList";
+import ResourceForm from "../../components/resource/ResourceForm";
 
 function AppResource() {
   return (

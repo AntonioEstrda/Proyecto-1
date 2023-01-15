@@ -1,6 +1,6 @@
-import ScheduleParametrizer from "../components/schedule/ScheduleParametrizer";
-import ScheduleGUI from "../components/schedule/ScheduleGUI";
-import ScheduleInfo from "../components/schedule/ScheduleInfo";
+import ScheduleParametrizer from "../../components/schedule/ScheduleParametrizer";
+import ScheduleGUI from "../../components/schedule/ScheduleGUI";
+import ScheduleInfo from "../../components/schedule/ScheduleInfo";
 
 function AppSchedule() {
   return (
