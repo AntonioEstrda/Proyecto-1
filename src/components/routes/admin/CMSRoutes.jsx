@@ -1,4 +1,4 @@
-// import AppAcademicPeriod from "../../../apps/adminUser/AppAcademicPeriod";
+import AppAcademicPeriod from "../../../apps/adminUser/AppAcademicPeriod";
 // import AppAssignmentResource from "../../../apps/adminUser/AppAssignmentResource";
 // import AppDepartment from "../../../apps/adminUser/AppDepartment";
 // import AppEvent from "../../../apps/adminUser/AppEvent";
@@ -15,7 +15,7 @@ import AppResourceType from "../../../apps/adminUser/AppResourceType";
 // import AppTeacher from "../../../apps/adminUser/AppTeacher";
 // import AppTeacherGroup from "../../../apps/adminUser/AppTeacherGroup";
 
-// import { AcademicPeriodContextProvider } from "../../../context/AcademicPeriodContext";
+import { AcademicPeriodContextProvider } from "../../../context/AcademicPeriodContext";
 // import { AssignmentResourceContextProvider } from "../../../context/AssignmentResourceContext";
 // import { DepartmentContextProvider } from "../../../context/DepartmentContext";
 // import { EventContextProvider } from "../../../context/EventContext";
@@ -37,12 +37,12 @@ import { Route } from "react-router-dom";
 function CMSRoutes() {
   return (
     <>
-      {/* <Route path="/periodosacademicos">
+      <Route path="/periodosacademicos">
         <AcademicPeriodContextProvider>
           <AppAcademicPeriod />
         </AcademicPeriodContextProvider>
       </Route>
-      <Route path="/asignacionrecursos">
+      {/* <Route path="/asignacionrecursos">
         <AssignmentResourceContextProvider>
           <AppAssignmentResource />
         </AssignmentResourceContextProvider>
