@@ -15,8 +15,8 @@ export default function ResourceTypeList() {
 
   return (
     <div className="grid grid-cols-4 gap-2">
-      {resourcesTypes.map((resourceType) => (
-        <ResourceTypeCard key={resourceType.resourceTypeId} resourceType={resourceType} />
+      {resourcesTypes.map((resourceTypes) => (
+        <ResourceTypeCard key={resourceTypes.resourceTypeId} resourceType={resourceTypes} />
       ))}
     </div>
   );

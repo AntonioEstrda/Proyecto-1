@@ -6,7 +6,7 @@ import AppFaculty from "../../../apps/adminUser/AppFaculty";
 // import AppFacultyResource from "../../../apps/adminUser/AppFacultyResource";
 // import AppGroup from "../../../apps/adminUser/AppGroup";
 // import AppHourlyAssignment from "../../../apps/adminUser/AppHourlyAssignment";
-// import AppLocation from "../../../apps/adminUser/AppLocation";
+ import AppLocation from "../../../apps/adminUser/AppLocation";
 // import AppProgram from "../../../apps/adminUser/AppProgram";
 import AppResource from "../../../apps/adminUser/AppResource";
 import AppResourceType from "../../../apps/adminUser/AppResourceType";
@@ -23,7 +23,7 @@ import { FacultyContextProvider } from "../../../context/FacultyContext";
 // import { FacultyResourceContextProvider } from "../../../context/FacultyResourceContext";
 // import { GroupContextProvider } from "../../../context/GroupContext";
 // import { HourlyAssignmentContextProvider } from "../../../context/HourlyAssignmentContext";
-// import { LocationContextProvider } from "../../../context/LocationContext";
+ import { LocationContextProvider } from "../../../context/LocationContext";
 // import { ProgramContextProvider } from "../../../context/ProgramContext";
 import { ResourceContextProvider } from "../../../context/ResourceContext";
 import { ResourceTypeContextProvider } from "../../../context/ResourceTypeContext";
@@ -76,13 +76,13 @@ function CMSRoutes() {
         <HourlyAssignmentContextProvider>
           <AppHourlyAssignment />
         </HourlyAssignmentContextProvider>
-      </Route>
+      </Route> */}
       <Route path="/ubicaciones">
         <LocationContextProvider>
           <AppLocation />
         </LocationContextProvider>
       </Route>
-      <Route path="/programas">
+      {/* <Route path="/programas">
         <ProgramContextProvider>
           <AppProgram />
         </ProgramContextProvider>
