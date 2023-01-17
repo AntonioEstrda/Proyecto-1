@@ -3,20 +3,31 @@ import { createContext, useState, useEffect } from "react";
 export const ResourceTypeContext = createContext();
 
 export function ResourceTypeContextProvider(props) {
+  const url = "http://localhost:8080/ResourceType/";
+
+  const [editingresourceType, setEditingResourceType] = useState();
   const [resourcesTypes, setResourcesTypes] = useState([]);
 
-  async function createResourceType(resourceTypes) {
-    await fetch("http://localhost:8080/ResourceType/", {
+  useEffect(() => {
+    fetch(url + "all")
+      .then((response) => response.json())
+      .then((data) => {
+        setResourcesTypes(data);
+      });
+  }, []);
+
+  async function createResourceType(resourceType) {
+    await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       mode: "cors",
       body: JSON.stringify({
-        name: resourceTypes.name,
-        resourceTypeId: resourceTypes.resourceTypeId,
-        parent: resourceTypes.parent,
-        disable: resourceTypes.disable,
+        name: resourceType.name,
+        resourceTypeId: resourceType.resourceTypeId,
+        parent: resourceType.parent,
+        disable: resourceType.disable,
       }),
     })
       .then((response) => response.json())
@@ -26,31 +37,36 @@ export function ResourceTypeContextProvider(props) {
       .catch((e) => console.log(e));
   }
 
-  function deleteResourceType(resourceTypeId) {
-    setTask(
-      resourcesTypes.filter(
-        (resourceType) => resourceType.resourceTypeId !== resourceTypeId
-      )
-    );
-  }
+  async function deleteResourceType(resourceTypeId) {
 
-  useEffect(() => {
-    fetch("http://localhost:8080/ResourceType/all")
-      .then((response) => response.json())
-      .then((data) => {
-        setResourcesTypes(data);
-      });
-  }, []);
+    await fetch(url + "delete/" + resourceTypeId, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+    })
+      .then(() =>
+        setResourcesTypes(
+          resourcesTypes.filter( (resourceType) => resourceType.resourceTypeId !== resourceTypeId) )
+      )
+      .catch((e) => console.log(e));
+}  
+
 
   return (
     <ResourceTypeContext.Provider
       value={{
         resourcesTypes,
+        editingresourceType,
         deleteResourceType,
         createResourceType,
+        setEditingResourceType,
       }}
     >
       {props.children}
     </ResourceTypeContext.Provider>
   );
+
+
 }
