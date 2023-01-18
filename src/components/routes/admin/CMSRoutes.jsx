@@ -108,12 +108,13 @@ function CMSRoutes() {
         <SubjectContextProvider>
           <AppSubject />
         </SubjectContextProvider>
-      </Route>
+      </Route>*/}
       <Route path="/profesores">
         <TeacherContextProvider>
           <AppTeacher />
         </TeacherContextProvider>
       </Route>
+      {/*
       <Route path="/gruposprofesores">
         <TeacherGroupContextProvider>
           <AppTeacherGroup />

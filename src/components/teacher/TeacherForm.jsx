@@ -53,7 +53,10 @@ export default function TeacherForm() {
 
   return (
     <div className="max-w-md mx-auto ">
-      <form onSubmit={handleSubmit} className="bg-paleta2-purpura p-10 mb-4 rounded-lg">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-paleta2-purpura p-10 mb-4 rounded-lg"
+      >
         <h1 className="text-2xl font-bold text-paleta2-azul-claro mb-3">
           Crear Licenciado
         </h1>
@@ -80,12 +83,34 @@ export default function TeacherForm() {
         />
         <div className="flex flex-wrap">
           <div className="flex items-center mr-4">
-            <input id="red-radio" type="radio" value="isDisable" name="colored-radio" className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"></input>
-            <label for="red-radio" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Inactivo</label>
+            <input
+              id="red-radio"
+              type="radio"
+              value="isDisable"
+              name="colored-radio"
+              className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            ></input>
+            <label
+              htmlFor="red-radio"
+              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              Inactivo
+            </label>
           </div>
           <div className="flex items-center mr-4">
-            <input id="green-radio" type="radio" value="isDisable" name="colored-radio" className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"></input>
-            <label for="green-radio" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Activo</label>
+            <input
+              id="green-radio"
+              type="radio"
+              value="isDisable"
+              name="colored-radio"
+              className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            ></input>
+            <label
+              htmlFor="green-radio"
+              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              Activo
+            </label>
           </div>
         </div>
 
