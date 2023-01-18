@@ -29,26 +29,26 @@ export default function ResourceForm() {
 
   return (
     <div className="max-w-md mx-auto">
-      <form onSubmit={handleSubmit} className="bg-slate-900 p-10 mb-4 rounded-lg">
-        <h1 className="text-2xl font-bold text-paleta2-red-claro mb-3">
+      <form onSubmit={handleSubmit} className="bg-paleta2-purpura p-10 mb-4 rounded-lg">
+        <h1 className="text-2xl font-bold text-paleta2-azul-claro mb-3">
           Crear un Recurso</h1>
         <input
           placeholder="Nombre del recurso"
           onChange={(e) => setName(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={name}
         />
         <textarea
           name="description"
           placeholder="Descripción del recurso"
           onChange={(e) => setDescription(e.target.value)}
-          className="bg-paleta2-claro p-3 w-full mb-0 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-0 rounded-md"
           value={description}
         ></textarea>
         <select
           name="resourceType"
-          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           onChange={(e) => setResourceType(e.target.value)}
           value="computacional"
         >
@@ -57,7 +57,7 @@ export default function ResourceForm() {
         </select>
         <select
           name="disable"
-          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={disable}
           onChange={(e) => setDisable(e.target.value)}
         >
@@ -67,25 +67,25 @@ export default function ResourceForm() {
         <input
           placeholder="Código del recurso"
           onChange={(e) => setCode(e.target.value)}
-          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={code}
         />
         <input
           placeholder="Locación"
           onChange={(e) => setLocation(e.target.value)}
-          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={location}
         />
         <input
           placeholder="Capacidad"
           onChange={(e) => setCapacity(e.target.value)}
-          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={capacity}
         />
         <input
           placeholder="Número del recurso"
           onChange={(e) => setNumber(e.target.value)}
-          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={number}
         />
         <button className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro">Guardar</button>

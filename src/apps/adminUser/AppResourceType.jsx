@@ -3,7 +3,7 @@ import ResourceTypeForm from "../../components/resourceType/ResourceTypeForm";
 
 export default function AppResource() {
   return (
-    <main className="bg-paleta2-claro h-full">
+    <main className="bg-fondo2 h-full">
       <div className="container mx-auto p-10">
         <ResourceTypeForm />
         <ResourceTypeList />

@@ -53,34 +53,34 @@ export default function AcademicPeriodForm() {
 
   return (
     <div className="max-w-md mx-auto ">
-      <form onSubmit={handleSubmit} className="bg-blue p-10 mb-4 rounded-lg">
-        <h1 className="text-2xl font-bold text-paleta2-red-claro mb-3">
+      <form onSubmit={handleSubmit} className="bg-paleta2-purpura p-10 mb-4 rounded-lg">
+        <h1 className="text-2xl font-bold text-paleta2-azul-claro mb-3">
           Crear un Periodo Académico
         </h1>
         <input
           placeholder="Nombre periodo académico"
           onChange={(e) => setName(e.target.value)}
           autoFocus="on"
-          className="bg-slate-500 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={name}
         />
-        <label className="text-neutral-200">
+        <label className="text-paleta2-azul-claro">
           Fecha de inicio:
           <input
             type="date"
             name="initDate"
-            className="bg-slate-500 p-3 w-full mb-2 rounded-md"
+            className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
             value={initDate}
             onChange={(e) => setInitDate(e.target.value)}
           />
           <span className="validity"></span>
         </label>
-        <label className="text-neutral-200">
-          Fecha de inicio:
+        <label className="text-paleta2-azul-claro">
+          Fecha final:
           <input
             type="date"
             name="finalDate"
-            className="bg-slate-500 p-3 w-full mb-4 rounded-md"
+            className="bg-paleta2-fondo1 p-3 w-full mb-4 rounded-md"
             value={finalDate}
             onChange={(e) => setFinalDate(e.target.value)}
           />

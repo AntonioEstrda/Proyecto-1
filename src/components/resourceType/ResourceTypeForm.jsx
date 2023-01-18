@@ -18,27 +18,27 @@ export default function ResourceTypeForm() {
 
   return (
     <div className="max-w-md mx-auto">
-      <form onSubmit={handleSubmit} className="bg-blue p-10 mb-4 rounded-lg">
-        <h1 className="text-2xl font-bold text-paleta2-red-claro mb-3">
+      <form onSubmit={handleSubmit} className="bg-paleta2-purpura p-10 mb-4 rounded-lg">
+        <h1 className="text-2xl font-bold text-paleta2-azul-claro mb-3">
           Crear un Tipo de Recurso
         </h1>
         <input
           placeholder="Nombre del tipo"
           onChange={(e) => setName(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={name}
         />
         <textarea
           name="Parent"
           placeholder="Parent del tipo de recurso"
           onChange={(e) => setParent(e.target.value)}
-          className="bg-paleta2-claro p-3 w-full mb-0 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-0 rounded-md"
           value={parent}
         ></textarea>
         <select
           name="disable"
-          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={disable}
           onChange={(e) => setDisable(e.target.value)}
         >
