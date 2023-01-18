@@ -3,24 +3,28 @@ import { createContext, useState, useEffect } from "react";
 export const FacultyContext = createContext();
 
 export function FacultyContextProvider(props) {
-  const [facultys, setFacultys] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const url = "http://localhost:8080/faculty/";
 
-  function deleteFaculty(facultyId) {
+  const [locations, setLocations] = useState([]);
+  const [facultys, setFacultys] = useState([]);
+  useEffect(() => {
+    fetch(url + "all")
+      .then((response) => response.json())
+      .then((data) => {
+        const ctx = data.map((d) => ({
+          ...d,
+          resources: [],
+        }));
+        setFacultys(ctx);
+      });
+  }, []);
+
+  function deleteById(facultyId) {
     setFacultys(facultys.filter((faculty) => faculty.id !== facultyId));
   }
 
-  const addResource = ({ resource, id }) => {
-    const aux = facultys.find((fc) => fc.facultyId === id);
-    aux.resources.push(...resource);
-    const dsd = facultys.filter((res) => res.facultyId !== id);
-    setFacultys([...dsd, aux]);
-  };
-
-  //facultys[index].resources += resource
-
-  async function createFaculty(faculty) {
-    await fetch("http://localhost:8080/faculty/", {
+  async function create(faculty) {
+    await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,28 +40,12 @@ export function FacultyContextProvider(props) {
       .catch((e) => console.log(e));
   }
 
-  useEffect(() => {
-    fetch("http://localhost:8080/faculty/all")
-      .then((response) => response.json())
-      .then((data) => {
-        const ctx = data.map((d) => ({
-          ...d,
-          resources: [],
-        }));
-        setFacultys(ctx);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return null;
-
   return (
     <FacultyContext.Provider
       value={{
         facultys,
-        deleteFaculty,
-        createFaculty,
-        addResource,
+        create,
+        deleteById,
       }}
     >
       {props.children}
