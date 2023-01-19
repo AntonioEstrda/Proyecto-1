@@ -39,13 +39,21 @@ public class ScheduleController {
     @Autowired
     public IScheduleService scheduleService;
 
-    @GetMapping(value = "/allBy")
+    @GetMapping(value = "/AcademicSchedule")
     public ResponseEntity<List<Schedule>> allByProgramIdAndSemester(@RequestParam long programId,
             @RequestParam long semester) {
         Map<Labels, Object> returns = scheduleService.findByProgSem(programId, semester);
         List<Schedule> schedule = (List<Schedule>) returns.get(Labels.objectReturn);
         return (new ResponseEntity(schedule, null, HttpStatus.ACCEPTED));
     }
+    
+    @GetMapping(value = "/EventSchedule")
+    public ResponseEntity<List<Schedule>> findByTypesEventsAndDepartment(@RequestParam("departId") long departId,@RequestParam("type") List<String> type) {
+        Map<Labels, Object> returns = scheduleService.findByTypesEventsAndDepartment(departId, type);
+        List<Schedule> schedule = (List<Schedule>) returns.get(Labels.objectReturn);
+        return (new ResponseEntity(schedule, null, HttpStatus.ACCEPTED));
+    }
+    
 
     @GetMapping(value = "/find/{id}")
     public ResponseEntity<Schedule> get(@PathVariable Long id) {

@@ -4,6 +4,7 @@
  */
 package server.server.Model.Services;
 
+import java.util.List;
 import java.util.Map;
 import server.server.Model.Domain.Schedule;
 import server.server.utilities.Labels;
@@ -23,5 +24,7 @@ public interface IScheduleService {
     public Map<Labels, Object> delete(long SchedId, Long departId);
     
     public Map<Labels, Object> findByProgSem(long prog, long sem);  
+    
+    public Map<Labels, Object> findByTypesEventsAndDepartment(long departId, List<String> types); 
     
 }

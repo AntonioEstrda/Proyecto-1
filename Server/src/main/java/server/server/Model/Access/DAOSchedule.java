@@ -66,19 +66,52 @@ public interface DAOSchedule extends JpaRepository<Schedule, Long> {
 
     @Query(
             value = """
-                    WITH consulta as ( 
-                    	SELECT S.IDSCHEDEULE as Id FROM `schedule` S 
+                    WITH academicSchedule as (
+                    	SELECT DISTINCT S.IDSCHEDEULE FROM `schedule` S 
                             INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
-                            INNER JOIN subject SB ON G.IDSUBJECT = SB.IDSUBJECT 
-                            INNER JOIN program PG ON PG.IDPROGRAM = SB.IDPROGRAM
+                            INNER JOIN subject SB ON G.IDSUBJECT = SB.IDSUBJECT
+                            INNER JOIN program PG ON  SB.IDPROGRAM = PG.IDPROGRAM 
                         WHERE G.ACADEMICPERIDODID = getCrrntAcdPer() 
-                    	AND PG.IDPROGRAM=:programId
-                        AND SB.SEMESTER=:semester
-                    ) SELECT * FROM `schedule` S WHERE S.IDSCHEDEULE in (SELECT distinct id FROM consulta); 
+                            AND S.TYPE = 'ACADEMICO'
+                        	AND PG.IDPROGRAM=:programId
+                        	AND SB.SEMESTER=:semester 
+                    ), prestamoMateria as (
+                    	SELECT DISTINCT S.IDSCHEDEULE FROM `schedule` S 
+                            INNER JOIN  `event` E ON S.eventId = E.id 
+                            INNER JOIN  groupt G ON  S.IDGROUP = G.IDGROUP 
+                            INNER JOIN subject SB ON G.IDSUBJECT = SB.IDSUBJECT
+                            INNER JOIN program PG ON  SB.IDPROGRAM = PG.IDPROGRAM 
+                        WHERE G.ACADEMICPERIDODID = getCrrntAcdPer() 
+                            AND S.TYPE = 'EVENTO'
+                        	AND E.type = 'PRESTAMO_POR_MATERIA'
+                        	AND PG.IDPROGRAM=:programId
+                        	AND SB.SEMESTER=:semester 
+                    ), schedules as(
+                    	SELECT * FROM  academicSchedule
+                    		UNION    
+                        SELECT * FROM  prestamoMateria
+                    )SELECT * FROM `schedule` WHERE IDSCHEDEULE in (SELECT IDSCHEDEULE FROM  schedules);
                     """,
             nativeQuery = true
     )
     public List<Schedule> findByProgramIdAndSemester(@Param("programId") long programId, @Param("semester") long semester);
+    
+    
+    @Query(
+            value="""
+                  WITH EventSchedule as ( 
+                      SELECT S.IDSCHEDEULE FROM  `schedule` S 
+                          INNER JOIN  `event` E ON S.eventId = E.id
+                      WHERE E.academicPeriodId = getCrrntAcdPer() 
+                       AND E.departmentId =:departmentId
+                       AND E.type in (:types)
+                  )SELECT * FROM `schedule` S  
+                  WHERE S.IDSCHEDEULE in (SELECT DISTINCT IDSCHEDEULE FROM EventSchedule);
+                  """,
+            nativeQuery = true
+    )
+    public List<Schedule> findByTypesAndEventsAndDepartment(@Param("departmentId") long departmentId, @Param("types") List<String> types);
+    
 
     @Query(
             value = "SELECT permitEvents(:id) from dual;",

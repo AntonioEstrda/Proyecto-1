@@ -156,7 +156,16 @@ public class ScheduleService implements IScheduleService {
         returns.put(Labels.objectReturn, schedule);
         return returns;
     }
-
+    
+    @Override
+    @Transactional(value = "DataTransactionManager", readOnly = true)
+    public Map<Labels, Object> findByTypesEventsAndDepartment(long departId, List<String> types) {
+        Map<Labels, Object> returns = new HashMap();
+        List<Schedule> schedule = repo.findByTypesAndEventsAndDepartment(departId, types);
+        returns.put(Labels.objectReturn, schedule);
+        return returns;
+    }
+    
     private Map<Labels, Object> validateAcademicScheduleOnAdd(Schedule schedule, Long department) throws JsonProcessingException {
         Map<Labels, Object> returns = new HashMap();
         ArrayList<String> errors = new ArrayList();
@@ -620,5 +629,7 @@ public class ScheduleService implements IScheduleService {
         }
         return errors;
     }
+
+    
 
 }
