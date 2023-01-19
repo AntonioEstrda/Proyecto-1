@@ -46,10 +46,7 @@ export function TeacherContextProvider(props) {
     })
       .then(() =>
         setTeachers(
-          teachers.filter(
-            (teacher) =>
-              teacher.teacherID !== teacherID
-          )
+          teachers.filter((teacher) => teacher.teacherID !== teacherID)
         )
       )
       .catch((e) => console.log(e));
@@ -65,9 +62,8 @@ export function TeacherContextProvider(props) {
       body: JSON.stringify(prevTeacher),
     })
       .then((response) => response.json())
-      .then((data) => {
-        teachers[teachers.indexOf(editingTeacher)] =
-          prevTeacher;
+      .then(() => {
+        teachers[teachers.indexOf(editingTeacher)] = prevTeacher;
         setTeachers(teachers);
       })
       .then(() => setEditingTeacher(null))

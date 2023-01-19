@@ -10,7 +10,7 @@ export default function TeacherForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [numIden, setNumIden] = useState("");
-  const [isDisable, setIsDisable] = useState(false);
+  const [isDisable, setIsDisable] = useState("");
 
   useEffect(() => {
     if (editingTeacher) {
@@ -19,6 +19,8 @@ export default function TeacherForm() {
       setNumIden(editingTeacher.numIden);
       setIsDisable(editingTeacher.isDisable);
       setLimpio(false);
+
+      setFormRadioIsDisable();
     }
   }, [editingTeacher]);
 
@@ -30,8 +32,25 @@ export default function TeacherForm() {
     setFirstName("");
     setLastName("");
     setNumIden("");
-    setIsDisable(false);
+    setIsDisable("");
     setLimpio(true);
+    cleanRadioIsDisable();
+  }
+
+  function setFormRadioIsDisable() {
+    let ele = document.getElementsByName("isDisable_radio");
+    if (editingTeacher.isDisable === "1") {
+      ele[1].removeAttribute("checked");
+      ele[0].setAttribute("checked", "");
+    } else {
+      ele[0].removeAttribute("checked");
+      ele[1].setAttribute("checked", "");
+    }
+  }
+  function cleanRadioIsDisable() {
+    let ele = document.getElementsByName("isDisable_radio");
+    ele[0].removeAttribute("checked");
+    ele[1].removeAttribute("checked");
   }
 
   function crear(e) {
@@ -61,21 +80,21 @@ export default function TeacherForm() {
           Crear Licenciado
         </h1>
         <input
-          placeholder="Nombre periodo académico"
+          placeholder="Nombre"
           onChange={(e) => setFirstName(e.target.value)}
           autoFocus="on"
           className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={firstName}
         />
         <input
-          placeholder="Nombre periodo académico"
+          placeholder="Apellidos"
           onChange={(e) => setLastName(e.target.value)}
           autoFocus="on"
           className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={lastName}
         />
         <input
-          placeholder="Nombre periodo académico"
+          placeholder="Número de identificación"
           onChange={(e) => setNumIden(e.target.value)}
           autoFocus="on"
           className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
@@ -86,8 +105,9 @@ export default function TeacherForm() {
             <input
               id="red-radio"
               type="radio"
-              value="isDisable"
-              name="colored-radio"
+              value="0"
+              onChange={() => setIsDisable("1")}
+              name="isDisable_radio"
               className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             ></input>
             <label
@@ -101,8 +121,9 @@ export default function TeacherForm() {
             <input
               id="green-radio"
               type="radio"
-              value="isDisable"
-              name="colored-radio"
+              value="1"
+              onChange={() => setIsDisable("0")}
+              name="isDisable_radio"
               className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             ></input>
             <label
@@ -114,7 +135,7 @@ export default function TeacherForm() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1">
+        <div className="grid grid-cols-1 mt-2">
           <button className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro ">
             Guardar
           </button>
