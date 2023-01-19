@@ -5,23 +5,15 @@ export const FacultyContext = createContext();
 export function FacultyContextProvider(props) {
   const url = "http://localhost:8080/faculty/";
 
-  const [locations, setLocations] = useState([]);
+  const [editingFaculty, setEditingFaculty] = useState();
   const [facultys, setFacultys] = useState([]);
   useEffect(() => {
     fetch(url + "all")
       .then((response) => response.json())
       .then((data) => {
-        const ctx = data.map((d) => ({
-          ...d,
-          resources: [],
-        }));
-        setFacultys(ctx);
+        setFacultys(data);
       });
   }, []);
-
-  function deleteById(facultyId) {
-    setFacultys(facultys.filter((faculty) => faculty.id !== facultyId));
-  }
 
   async function create(faculty) {
     await fetch(url, {
@@ -31,12 +23,50 @@ export function FacultyContextProvider(props) {
       },
       mode: "cors",
       body: JSON.stringify({
-        facultyName: faculty.name,
-        location: faculty.location,
+        name: faculty.facultyName,
+        location: undefined,
       }),
     })
       .then((response) => response.json())
-      .then((data) => setFacultys((prevState) => prevState.concat([data])))
+      .then((data) => {
+        setFacultys((prevState) => prevState.concat([data]));
+      })
+      .catch((e) => console.log(e));
+  }
+
+  async function deleteById(facultyID) {
+    await fetch(url + "delete/" + facultyID, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+    })
+      .then(() =>
+        setFacultys(
+          facultys.filter((faculty) => faculty.facultyID !== facultyID)
+        )
+      )
+      .catch((e) => console.log(e));
+  }
+
+  async function update(prevFaculty) {
+    await fetch(url + "update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+      body: JSON.stringify(prevFaculty),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        data.initDate = data.initDate.split("T")[0];
+        data.finalDate = data.finalDate.split("T")[0];
+        facultys[facultys.indexOf(editingFaculty)] = prevFaculty;
+        setFacultys(facultys);
+      })
+      .then(() => setEditingFaculty(null))
       .catch((e) => console.log(e));
   }
 
@@ -44,8 +74,11 @@ export function FacultyContextProvider(props) {
     <FacultyContext.Provider
       value={{
         facultys,
+        editingFaculty,
         create,
+        update,
         deleteById,
+        setEditingFaculty,
       }}
     >
       {props.children}

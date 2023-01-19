@@ -1,7 +1,7 @@
 import FacultyList from "../../components/faculty/FacultyList";
 import FacultyForm from "../../components/faculty/FacultyForm";
 
-function AppFaculty() {
+export default function AppFaculty() {
   return (
     <main className="bg-paleta2-claro h-full">
       <div className="container mx-auto p-10">
@@ -11,5 +11,3 @@ function AppFaculty() {
     </main>
   );
 }
-
-export default AppFaculty;
