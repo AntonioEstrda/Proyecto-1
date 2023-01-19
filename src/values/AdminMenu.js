@@ -4,7 +4,7 @@ const map = [
   ["Departamentos", "departamentos"],
   ["Eventos", "eventos"],
   ["Facultades", "facultades"],
-  ["Recursos asociados a facultades", "recursosfacultades"],
+  ["Recursos facultades", "recursosfacultades"],
   ["Grupos", "grupos"],
   ["Asignacion horaria", "asignacioneshorarias"],
   ["Locaciones", "ubicaciones"],
