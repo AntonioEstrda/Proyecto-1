@@ -2,13 +2,13 @@ import { useContext } from "react";
 import FacultyCard from "./FacultyCard";
 import { FacultyContext } from "../../context/FacultyContext";
 
-function FacultyList() {
+export default function FacultyList() {
   const { facultys } = useContext(FacultyContext);
-
+  console.log(facultys);
   if (facultys.length === 0) {
     return (
       <h1 className="text-white text-4xl font-bold text-center">
-        No hay facultades registradas aún
+        No hay Periodos Académicos registrados
       </h1>
     );
   }
@@ -21,5 +21,3 @@ function FacultyList() {
     </div>
   );
 }
-
-export default FacultyList;

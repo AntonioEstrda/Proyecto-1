@@ -1,43 +1,70 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { FacultyContext } from "../../context/FacultyContext";
 
-function FacultyForm() {
-  const [name, setName] = useState("");
-  const [location, setLocation] = useState("");
+export default function FacultyForm() {
+  const { create, editingFaculty, update } = useContext(FacultyContext);
 
-  const { createFaculty } = useContext(FacultyContext);
+  const [limpio, setLimpio] = useState(true);
+  const [facultyName, setFacultyName] = useState("");
+
+  useEffect(() => {
+    if (editingFaculty) {
+      setFacultyName(editingFaculty.facultyName);
+      setLimpio(false);
+    }
+  }, [editingFaculty]);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    createFaculty({ name, location });
-    setName("");
-    setLocation("");
+    limpio ? crear(e) : actualizar(e);
   };
 
+  function limpiarForm() {
+    setFacultyName("");
+    setLimpio(true);
+  }
+
+  function crear(e) {
+    e.preventDefault();
+    create({ facultyName });
+    limpiarForm();
+  }
+  function actualizar(e) {
+    e.preventDefault();
+    update({
+      facultyId: editingFaculty.facultyId,
+      facultyName,
+    });
+    limpiarForm();
+  }
+
   return (
-    <div className="max-w-md mx-auto">
-      <form onSubmit={handleSubmit} className="bg-paleta2-purpura p-10 mb-4  rounded-md">
-        <h1 className="text-2xl font-bold text-paleta2-azul-claro mb-3">
-          Crear una facultad
+    <div className="max-w-md mx-auto ">
+      <form onSubmit={handleSubmit} className="bg-blue p-10 mb-4 rounded-lg">
+        <h1 className="text-2xl font-bold text-paleta2-red-claro mb-3">
+          Crear una Facultad
         </h1>
         <input
           placeholder="Nombre de la facultad"
-          onChange={(e) => setName(e.target.value)}
-          value={name}
+          onChange={(e) => setFacultyName(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
+          className="bg-slate-500 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          value={facultyName}
         />
-        <textarea
-          name="location"
-          value={location}
-          placeholder="Localización de la facultad"
-          onChange={(e) => setLocation(e.target.value)}
-          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
-        ></textarea>
-        <button className="bg-paleta2-azulverd px-8 py-3 text-paleta2-claro rounded-md">Guardar</button>
+        <div className="grid grid-cols-1">
+          <button className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro ">
+            Guardar
+          </button>
+        </div>
       </form>
+
+      <div className="grid grid-cols-1 w-auto px-20 pb-10">
+        <button
+          className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro "
+          onClick={limpiarForm}
+        >
+          Limpiar
+        </button>
+      </div>
     </div>
   );
 }
-
-export default FacultyForm;

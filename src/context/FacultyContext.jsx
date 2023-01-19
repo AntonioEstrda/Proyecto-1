@@ -3,61 +3,82 @@ import { createContext, useState, useEffect } from "react";
 export const FacultyContext = createContext();
 
 export function FacultyContextProvider(props) {
+  const url = "http://localhost:8080/faculty/";
+
+  const [editingFaculty, setEditingFaculty] = useState();
   const [facultys, setFacultys] = useState([]);
-  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch(url + "all")
+      .then((response) => response.json())
+      .then((data) => {
+        setFacultys(data);
+      });
+  }, []);
 
-  function deleteFaculty(facultyId) {
-    setFacultys(facultys.filter((faculty) => faculty.id !== facultyId));
-  }
-
-  const addResource = ({ resource, id }) => {
-    const aux = facultys.find((fc) => fc.facultyId === id);
-    aux.resources.push(...resource);
-    const dsd = facultys.filter((res) => res.facultyId !== id);
-    setFacultys([...dsd, aux]);
-  };
-
-  //facultys[index].resources += resource
-
-  async function createFaculty(faculty) {
-    await fetch("http://localhost:8080/faculty/", {
+  async function create(faculty) {
+    await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       mode: "cors",
       body: JSON.stringify({
-        facultyName: faculty.name,
-        location: faculty.location,
+        name: faculty.facultyName,
+        location: undefined,
       }),
     })
       .then((response) => response.json())
-      .then((data) => setFacultys((prevState) => prevState.concat([data])))
+      .then((data) => {
+        setFacultys((prevState) => prevState.concat([data]));
+      })
       .catch((e) => console.log(e));
   }
 
-  useEffect(() => {
-    fetch("http://localhost:8080/faculty/all")
+  async function deleteById(facultyID) {
+    await fetch(url + "delete/" + facultyID, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+    })
+      .then(() =>
+        setFacultys(
+          facultys.filter((faculty) => faculty.facultyID !== facultyID)
+        )
+      )
+      .catch((e) => console.log(e));
+  }
+
+  async function update(prevFaculty) {
+    await fetch(url + "update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+      body: JSON.stringify(prevFaculty),
+    })
       .then((response) => response.json())
       .then((data) => {
-        const ctx = data.map((d) => ({
-          ...d,
-          resources: [],
-        }));
-        setFacultys(ctx);
+        data.initDate = data.initDate.split("T")[0];
+        data.finalDate = data.finalDate.split("T")[0];
+        facultys[facultys.indexOf(editingFaculty)] = prevFaculty;
+        setFacultys(facultys);
       })
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return null;
+      .then(() => setEditingFaculty(null))
+      .catch((e) => console.log(e));
+  }
 
   return (
     <FacultyContext.Provider
       value={{
         facultys,
-        deleteFaculty,
-        createFaculty,
-        addResource,
+        editingFaculty,
+        create,
+        update,
+        deleteById,
+        setEditingFaculty,
       }}
     >
       {props.children}
