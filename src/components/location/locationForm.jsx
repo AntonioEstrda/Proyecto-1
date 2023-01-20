@@ -58,7 +58,7 @@ export default function LocationForm() {
           placeholder="Nombre "
           onChange={(e) => setName(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={name}
         />
         <input
