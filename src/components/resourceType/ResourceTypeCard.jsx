@@ -1,8 +1,13 @@
 import { useContext } from "react";
 import { ResourceTypeContext } from "../../context/ResourceTypeContext";
 
-export default function ResourceTypeCard({ resourceType}) {
-  const { deleteResourceType } = useContext(ResourceTypeContext);
+export default function ResourceTypeCard({ resourceType }) {
+  const { deleteById, setEditingResourceType } =
+    useContext(ResourceTypeContext);
+
+  function defineEditItem() {
+    setEditingResourceType(resourceType);
+  }
 
   return (
     <div className="bg-paleta2-purpura text-paleta2-azul-claro p-4 rounded-md">
@@ -11,12 +16,20 @@ export default function ResourceTypeCard({ resourceType}) {
       <p className="text-paleta2-azul-claro text-sm">
         {resourceType?.disable ? "Inactivo" : "Activo"}
       </p>
-      <button
-        className="bg-paleta2-morado px-2 py-1 rounded-md mt-4 hover:bg-red-400"
-        onClick={() => deleteResourceType(resourceType?.resourceTypeId)}
-      >
-        Eliminar Tipo
-      </button>
+      <div className="grid grid-cols-2 gap-3">
+        <button
+          className="bg-paleta2-morado px-2 py-1 rounded-md mt-4 hover:bg-red-400"
+          onClick={() => deleteById(resourceType?.resourceTypeId)}
+        >
+          Eliminar
+        </button>
+        <button
+          className="bg-boton2 text-stone-50 px-2 py-1 rounded-md mt-4 hover:bg-red-400"
+          onClick={defineEditItem}
+        >
+          Editar
+        </button>
+      </div>
     </div>
   );
 }

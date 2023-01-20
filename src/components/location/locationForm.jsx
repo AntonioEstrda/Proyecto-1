@@ -34,6 +34,7 @@ export default function LocationForm() {
     create({ name, city, parent });
     limpiarForm();
   }
+
   function actualizar(e) {
     e.preventDefault();
     update({
