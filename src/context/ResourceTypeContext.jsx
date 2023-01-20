@@ -6,13 +6,12 @@ export function ResourceTypeContextProvider(props) {
   const url = "http://localhost:8080/ResourceType/";
 
   const [editingResourceType, setEditingResourceType] = useState();
-  const [resourcesTypes, setResourcesTypes] = useState([]);
-
+  const [resourceTypes, setResourceTypes] = useState([]);
   useEffect(() => {
     fetch(url + "all")
       .then((response) => response.json())
       .then((data) => {
-        setResourcesTypes(data);
+        setResourceTypes(data);
       });
   }, []);
 
@@ -25,15 +24,14 @@ export function ResourceTypeContextProvider(props) {
       mode: "cors",
       body: JSON.stringify({
         name: resourceType.name,
-        resourceTypeId: resourceType.resourceTypeId,
         parent: resourceType.parent,
-        disable: resourceType.disable,
+        isDisable: resourceType.isDisable,
       }),
     })
       .then((response) => response.json())
-      .then((data) =>
-        setResourcesTypes((prevState) => prevState.concat([data]))
-      )
+      .then((data) => {
+        setResourceTypes((prevState) => prevState.concat([data]));
+      })
       .catch((e) => console.log(e));
   }
 
@@ -46,10 +44,8 @@ export function ResourceTypeContextProvider(props) {
       mode: "cors",
     })
       .then(() =>
-        setResourcesTypes(
-          resourcesTypes.filter(
-            (resourceType) => resourceType.resourceTypeId !== resourceTypeId
-          )
+        setResourceTypes(
+          resourceTypes.filter((resourceType) => resourceType.resourceTypeId !== resourceTypeId)
         )
       )
       .catch((e) => console.log(e));
@@ -65,10 +61,9 @@ export function ResourceTypeContextProvider(props) {
       body: JSON.stringify(prevResourceType),
     })
       .then((response) => response.json())
-      .then((data) => {
-        resourcesTypes[resourcesTypes.indexOf(editingResourceType)] =
-          prevResourceType;
-        setResourcesTypes(resourcesTypes);
+      .then(() => {
+        resourceTypes[resourceTypes.indexOf(editingResourceType)] = prevResourceType;
+        setResourceTypes(resourceTypes);
       })
       .then(() => setEditingResourceType(null))
       .catch((e) => console.log(e));
@@ -77,11 +72,11 @@ export function ResourceTypeContextProvider(props) {
   return (
     <ResourceTypeContext.Provider
       value={{
-        resourcesTypes,
+        resourceTypes,
         editingResourceType,
-        deleteById,
         create,
         update,
+        deleteById,
         setEditingResourceType,
       }}
     >
@@ -89,3 +84,4 @@ export function ResourceTypeContextProvider(props) {
     </ResourceTypeContext.Provider>
   );
 }
+
