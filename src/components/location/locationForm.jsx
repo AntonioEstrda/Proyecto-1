@@ -6,14 +6,14 @@ export default function LocationForm() {
 
   const [limpio, setLimpio] = useState(true);
   const [name, setName] = useState("");
-  const [parent, setParent] = useState();
   const [city, setCity] = useState("");
+  const [parent, setParent] = useState("");
 
   useEffect(() => {
     if (editingLocation) {
       setName(editingLocation.name);
-      setParent(editingLocation.parent);
       setCity(editingLocation.city);
+      setParent(editingLocation.parent);
       setLimpio(false);
     }
   }, [editingLocation]);
@@ -24,54 +24,56 @@ export default function LocationForm() {
 
   function limpiarForm() {
     setName("");
-    setParent("");
     setCity("");
+    setParent("");
     setLimpio(true);
   }
 
   function crear(e) {
     e.preventDefault();
-    create({ name, parent, city });
+    create({ name, city, parent });
     limpiarForm();
   }
-
   function actualizar(e) {
     e.preventDefault();
     update({
-      id: editingLocation.locationId,
+      locationId: editingLocation.locationId,
       name,
-      parent,
       city,
+      parent,
     });
     limpiarForm();
   }
 
   return (
-    <div className="max-w-md mx-auto">
-      <form onSubmit={handleSubmit} className="bg-blue p-10 mb-4 rounded-lg">
-        <h1 className="text-2xl font-bold text-paleta2-red-claro mb-3">
+    <div className="max-w-md mx-auto ">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-paleta2-purpura p-10 mb-4 rounded-lg"
+      >
+        <h1 className="text-2xl font-bold text-paleta2-azul-claro mb-3">
           Crear una locación
         </h1>
         <input
-          placeholder="Nombre locación"
+          placeholder="Nombre "
           onChange={(e) => setName(e.target.value)}
           autoFocus="on"
           className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={name}
         />
+        <input
+          placeholder="City"
+          onChange={(e) => setCity(e.target.value)}
+          autoFocus="on"
+          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
+          value={city}
+        />
         <textarea
           name="Parent"
-          placeholder="Parent "
+          placeholder="Parent"
           onChange={(e) => setParent(e.target.value)}
-          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
+          className="bg-paleta2-fondo1 p-3 w-full mb-0 rounded-md"
           value={parent}
-        ></textarea>
-
-        <textarea
-          placeholder="Ciudad "
-          onChange={(e) => setCity(e.target.value)}
-          className="bg-paleta2-claro p-3 w-full mb-2 rounded-md"
-          value={city}
         ></textarea>
 
         <div className="grid grid-cols-1">
@@ -80,6 +82,7 @@ export default function LocationForm() {
           </button>
         </div>
       </form>
+
       <div className="grid grid-cols-1 w-auto px-20 pb-10">
         <button
           className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro "
