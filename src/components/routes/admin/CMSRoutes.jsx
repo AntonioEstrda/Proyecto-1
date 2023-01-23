@@ -1,6 +1,6 @@
 import AppAcademicPeriod from "../../../apps/adminUser/AppAcademicPeriod";
-// import AppAssignmentResource from "../../../apps/adminUser/AppAssignmentResource";
-// import AppDepartment from "../../../apps/adminUser/AppDepartment";
+import AppAssignmentResource from "../../../apps/adminUser/AppAssignmentResource";
+import AppDepartment from "../../../apps/adminUser/AppDepartment";
 // import AppEvent from "../../../apps/adminUser/AppEvent";
 import AppFaculty from "../../../apps/adminUser/AppFaculty";
 // import AppFacultyResource from "../../../apps/adminUser/AppFacultyResource";
@@ -16,8 +16,8 @@ import AppTeacher from "../../../apps/adminUser/AppTeacher";
 // import AppTeacherGroup from "../../../apps/adminUser/AppTeacherGroup";
 
 import { AcademicPeriodContextProvider } from "../../../context/AcademicPeriodContext";
-// import { AssignmentResourceContextProvider } from "../../../context/AssignmentResourceContext";
-// import { DepartmentContextProvider } from "../../../context/DepartmentContext";
+import { AssignmentResourceContextProvider } from "../../../context/AssignmentResourceContext";
+import { DepartmentContextProvider } from "../../../context/DepartmentContext";
 // import { EventContextProvider } from "../../../context/EventContext";
 import { FacultyContextProvider } from "../../../context/FacultyContext";
 // import { FacultyResourceContextProvider } from "../../../context/FacultyResourceContext";
@@ -42,7 +42,7 @@ function CMSRoutes() {
           <AppAcademicPeriod />
         </AcademicPeriodContextProvider>
       </Route>
-      {/* <Route path="/asignacionrecursos">
+      <Route path="/asignacionrecursos">
         <AssignmentResourceContextProvider>
           <AppAssignmentResource />
         </AssignmentResourceContextProvider>
@@ -52,6 +52,7 @@ function CMSRoutes() {
           <AppDepartment />
         </DepartmentContextProvider>
       </Route>
+      {/*
       <Route path="/eventos">
         <EventContextProvider>
           <AppEvent />
