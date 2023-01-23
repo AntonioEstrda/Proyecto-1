@@ -10,10 +10,10 @@ import AppLocation from "../../../apps/adminUser/AppLocation";
 import AppProgram from "../../../apps/adminUser/AppProgram";
 import AppResource from "../../../apps/adminUser/AppResource";
 import AppResourceType from "../../../apps/adminUser/AppResourceType";
-// import AppSchedule from "../../../apps/adminUser/AppSchedule";
-// import AppSubject from "../../../apps/adminUser/AppSubject";
+import AppScheduleCMS from "../../../apps/adminUser/AppScheduleCMS";
+import AppSubject from "../../../apps/adminUser/AppSubject";
 import AppTeacher from "../../../apps/adminUser/AppTeacher";
-// import AppTeacherGroup from "../../../apps/adminUser/AppTeacherGroup";
+import AppTeacherGroup from "../../../apps/adminUser/AppTeacherGroup";
 
 import { AcademicPeriodContextProvider } from "../../../context/AcademicPeriodContext";
 import { AssignmentResourceContextProvider } from "../../../context/AssignmentResourceContext";
@@ -27,10 +27,10 @@ import { LocationContextProvider } from "../../../context/LocationContext";
 import { ProgramContextProvider } from "../../../context/ProgramContext";
 import { ResourceContextProvider } from "../../../context/ResourceContext";
 import { ResourceTypeContextProvider } from "../../../context/ResourceTypeContext";
-// import { ScheduleContextProvider } from "../../../context/ScheduleContext";
-// import { SubjectContextProvider } from "../../../context/SubjectContext";
+import { ScheduleCMSContextProvider } from "../../../context/ScheduleCMSContext";
+import { SubjectContextProvider } from "../../../context/SubjectContext";
 import { TeacherContextProvider } from "../../../context/TeacherContext";
-// import { TeacherGroupContextProvider } from "../../../context/TeacherGroupContext";
+import { TeacherGroupContextProvider } from "../../../context/TeacherGroupContext";
 
 import { Route } from "react-router-dom";
 
@@ -99,27 +99,26 @@ function CMSRoutes() {
           <AppResourceType />
         </ResourceTypeContextProvider>
       </Route>
-      {/* <Route path="/horarios">
-        <ScheduleContextProvider>
-          <AppSchedule />
-        </ScheduleContextProvider>
+      <Route path="/horarios">
+        <ScheduleCMSContextProvider>
+          <AppScheduleCMS />
+        </ScheduleCMSContextProvider>
       </Route>
       <Route path="/materias">
         <SubjectContextProvider>
           <AppSubject />
         </SubjectContextProvider>
-      </Route>*/}
+      </Route>
       <Route path="/profesores">
         <TeacherContextProvider>
           <AppTeacher />
         </TeacherContextProvider>
       </Route>
-      {/*
       <Route path="/gruposprofesores">
         <TeacherGroupContextProvider>
           <AppTeacherGroup />
         </TeacherGroupContextProvider>
-      </Route> */}
+      </Route>
     </>
   );
 }
