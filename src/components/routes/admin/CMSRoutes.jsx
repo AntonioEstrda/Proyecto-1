@@ -7,7 +7,7 @@ import AppFacultyResource from "../../../apps/adminUser/AppFacultyResource";
 import AppGroup from "../../../apps/adminUser/AppGroup";
 import AppHourlyAssignment from "../../../apps/adminUser/AppHourlyAssignment";
 import AppLocation from "../../../apps/adminUser/AppLocation";
-// import AppProgram from "../../../apps/adminUser/AppProgram";
+import AppProgram from "../../../apps/adminUser/AppProgram";
 import AppResource from "../../../apps/adminUser/AppResource";
 import AppResourceType from "../../../apps/adminUser/AppResourceType";
 // import AppSchedule from "../../../apps/adminUser/AppSchedule";
@@ -24,7 +24,7 @@ import { FacultyResourceContextProvider } from "../../../context/FacultyResource
 import { GroupContextProvider } from "../../../context/GroupContext";
 import { HourlyAssignmentContextProvider } from "../../../context/HourlyAssignmentContext";
 import { LocationContextProvider } from "../../../context/LocationContext";
-// import { ProgramContextProvider } from "../../../context/ProgramContext";
+import { ProgramContextProvider } from "../../../context/ProgramContext";
 import { ResourceContextProvider } from "../../../context/ResourceContext";
 import { ResourceTypeContextProvider } from "../../../context/ResourceTypeContext";
 // import { ScheduleContextProvider } from "../../../context/ScheduleContext";
@@ -82,11 +82,11 @@ function CMSRoutes() {
           <AppLocation />
         </LocationContextProvider>
       </Route>
-      {/* <Route path="/programas">
+      <Route path="/programas">
         <ProgramContextProvider>
           <AppProgram />
         </ProgramContextProvider>
-      </Route> */}
+      </Route>
       <Route path="/recursos">
         <FacultyContextProvider>
           <ResourceContextProvider>
