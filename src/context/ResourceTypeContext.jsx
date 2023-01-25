@@ -5,18 +5,17 @@ export const ResourceTypeContext = createContext();
 export function ResourceTypeContextProvider(props) {
   const url = "http://localhost:8080/ResourceType/";
 
-  const [editingresourceType, setEditingResourceType] = useState();
-  const [resourcesTypes, setResourcesTypes] = useState([]);
-
+  const [editingResourceType, setEditingResourceType] = useState();
+  const [resourceTypes, setResourceTypes] = useState([]);
   useEffect(() => {
     fetch(url + "all")
       .then((response) => response.json())
       .then((data) => {
-        setResourcesTypes(data);
+        setResourceTypes(data);
       });
   }, []);
 
-  async function createResourceType(resourceType) {
+  async function create(resourceType) {
     await fetch(url, {
       method: "POST",
       headers: {
@@ -25,20 +24,18 @@ export function ResourceTypeContextProvider(props) {
       mode: "cors",
       body: JSON.stringify({
         name: resourceType.name,
-        resourceTypeId: resourceType.resourceTypeId,
         parent: resourceType.parent,
-        disable: resourceType.disable,
+        isDisable: resourceType.isDisable,
       }),
     })
       .then((response) => response.json())
-      .then((data) =>
-        setResourcesTypes((prevState) => prevState.concat([data]))
-      )
+      .then((data) => {
+        setResourceTypes((prevState) => prevState.concat([data]));
+      })
       .catch((e) => console.log(e));
   }
 
-  async function deleteResourceType(resourceTypeId) {
-
+  async function deleteById(resourceTypeId) {
     await fetch(url + "delete/" + resourceTypeId, {
       method: "DELETE",
       headers: {
@@ -47,26 +44,44 @@ export function ResourceTypeContextProvider(props) {
       mode: "cors",
     })
       .then(() =>
-        setResourcesTypes(
-          resourcesTypes.filter( (resourceType) => resourceType.resourceTypeId !== resourceTypeId) )
+        setResourceTypes(
+          resourceTypes.filter((resourceType) => resourceType.resourceTypeId !== resourceTypeId)
+        )
       )
       .catch((e) => console.log(e));
-}  
+  }
 
+  async function update(prevResourceType) {
+    await fetch(url + "update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      mode: "cors",
+      body: JSON.stringify(prevResourceType),
+    })
+      .then((response) => response.json())
+      .then(() => {
+        resourceTypes[resourceTypes.indexOf(editingResourceType)] = prevResourceType;
+        setResourceTypes(resourceTypes);
+      })
+      .then(() => setEditingResourceType(null))
+      .catch((e) => console.log(e));
+  }
 
   return (
     <ResourceTypeContext.Provider
       value={{
-        resourcesTypes,
-        editingresourceType,
-        deleteResourceType,
-        createResourceType,
+        resourceTypes,
+        editingResourceType,
+        create,
+        update,
+        deleteById,
         setEditingResourceType,
       }}
     >
       {props.children}
     </ResourceTypeContext.Provider>
   );
-
-
 }
+

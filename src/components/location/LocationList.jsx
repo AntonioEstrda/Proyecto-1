@@ -8,7 +8,7 @@ export default function LocationList() {
   if (locations.length === 0) {
     return (
       <h1 className="text-white text-4xl font-bold text-center">
-        No hay locaciones registradas
+        No hay Periodos Académicos registrados
       </h1>
     );
   }

@@ -1,13 +1,13 @@
 import AppAcademicPeriod from "../../../apps/adminUser/AppAcademicPeriod";
-// import AppAssignmentResource from "../../../apps/adminUser/AppAssignmentResource";
-// import AppDepartment from "../../../apps/adminUser/AppDepartment";
-// import AppEvent from "../../../apps/adminUser/AppEvent";
+import AppAssignmentResource from "../../../apps/adminUser/AppAssignmentResource";
+import AppDepartment from "../../../apps/adminUser/AppDepartment";
+import AppEvent from "../../../apps/adminUser/AppEvent";
 import AppFaculty from "../../../apps/adminUser/AppFaculty";
-// import AppFacultyResource from "../../../apps/adminUser/AppFacultyResource";
-// import AppGroup from "../../../apps/adminUser/AppGroup";
-// import AppHourlyAssignment from "../../../apps/adminUser/AppHourlyAssignment";
+import AppFacultyResource from "../../../apps/adminUser/AppFacultyResource";
+import AppGroup from "../../../apps/adminUser/AppGroup";
+import AppHourlyAssignment from "../../../apps/adminUser/AppHourlyAssignment";
 import AppLocation from "../../../apps/adminUser/AppLocation";
-// import AppProgram from "../../../apps/adminUser/AppProgram";
+import AppProgram from "../../../apps/adminUser/AppProgram";
 import AppResource from "../../../apps/adminUser/AppResource";
 import AppResourceType from "../../../apps/adminUser/AppResourceType";
 // import AppSchedule from "../../../apps/adminUser/AppSchedule";
@@ -16,15 +16,15 @@ import AppTeacher from "../../../apps/adminUser/AppTeacher";
 // import AppTeacherGroup from "../../../apps/adminUser/AppTeacherGroup";
 
 import { AcademicPeriodContextProvider } from "../../../context/AcademicPeriodContext";
-// import { AssignmentResourceContextProvider } from "../../../context/AssignmentResourceContext";
-// import { DepartmentContextProvider } from "../../../context/DepartmentContext";
-// import { EventContextProvider } from "../../../context/EventContext";
+import { AssignmentResourceContextProvider } from "../../../context/AssignmentResourceContext";
+import { DepartmentContextProvider } from "../../../context/DepartmentContext";
+import { EventContextProvider } from "../../../context/EventContext";
 import { FacultyContextProvider } from "../../../context/FacultyContext";
-// import { FacultyResourceContextProvider } from "../../../context/FacultyResourceContext";
-// import { GroupContextProvider } from "../../../context/GroupContext";
-// import { HourlyAssignmentContextProvider } from "../../../context/HourlyAssignmentContext";
+import { FacultyResourceContextProvider } from "../../../context/FacultyResourceContext";
+import { GroupContextProvider } from "../../../context/GroupContext";
+import { HourlyAssignmentContextProvider } from "../../../context/HourlyAssignmentContext";
 import { LocationContextProvider } from "../../../context/LocationContext";
-// import { ProgramContextProvider } from "../../../context/ProgramContext";
+import { ProgramContextProvider } from "../../../context/ProgramContext";
 import { ResourceContextProvider } from "../../../context/ResourceContext";
 import { ResourceTypeContextProvider } from "../../../context/ResourceTypeContext";
 // import { ScheduleContextProvider } from "../../../context/ScheduleContext";
@@ -42,7 +42,7 @@ function CMSRoutes() {
           <AppAcademicPeriod />
         </AcademicPeriodContextProvider>
       </Route>
-      {/* <Route path="/asignacionrecursos">
+      <Route path="/asignacionrecursos">
         <AssignmentResourceContextProvider>
           <AppAssignmentResource />
         </AssignmentResourceContextProvider>
@@ -56,13 +56,13 @@ function CMSRoutes() {
         <EventContextProvider>
           <AppEvent />
         </EventContextProvider>
-      </Route> */}
+      </Route>
       <Route path="/facultades">
         <FacultyContextProvider>
           <AppFaculty />
         </FacultyContextProvider>
       </Route>
-      {/* <Route path="/recursosfacultades">
+      <Route path="/recursosfacultades">
         <FacultyResourceContextProvider>
           <AppFacultyResource />
         </FacultyResourceContextProvider>
@@ -76,17 +76,17 @@ function CMSRoutes() {
         <HourlyAssignmentContextProvider>
           <AppHourlyAssignment />
         </HourlyAssignmentContextProvider>
-      </Route> */}
+      </Route>
       <Route path="/ubicaciones">
         <LocationContextProvider>
           <AppLocation />
         </LocationContextProvider>
       </Route>
-      {/* <Route path="/programas">
+      <Route path="/programas">
         <ProgramContextProvider>
           <AppProgram />
         </ProgramContextProvider>
-      </Route> */}
+      </Route>
       <Route path="/recursos">
         <FacultyContextProvider>
           <ResourceContextProvider>

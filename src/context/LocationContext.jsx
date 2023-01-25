@@ -24,12 +24,14 @@ export function LocationContextProvider(props) {
       mode: "cors",
       body: JSON.stringify({
         name: location.name,
-        parent: location.parent,
         city: location.city,
+        parent: location.parent,
       }),
     })
       .then((response) => response.json())
-      .then((data) => setLocations((prevState) => prevState.concat([data])))
+      .then((data) => {
+        setLocations((prevState) => prevState.concat([data]));
+      })
       .catch((e) => console.log(e));
   }
 
@@ -41,30 +43,30 @@ export function LocationContextProvider(props) {
       },
       mode: "cors",
     })
-      .then(() => {
+      .then(() =>
         setLocations(
           locations.filter((location) => location.locationId !== locationId)
-        );
-      })
-      .catch((e) => console.log(e.message));
+        )
+      )
+      .catch((e) => console.log(e));
   }
 
   async function update(prevLocation) {
-    (await fetch(url + "update", {
+    await fetch(url + "update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       mode: "cors",
       body: JSON.stringify(prevLocation),
-    })) /
-      then((response) => response.json())
-        .then(() => {
-          locations[locations.indexOf(editingLocation)] = prevLocation;
-          setLocations(locations);
-        })
-        .then(() => setEditingLocation(null))
-        .catch((e) => console.log(e));
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        locations[locations.indexOf(editingLocation)] = prevLocation;
+        setLocations(locations);
+      })
+      .then(() => setEditingLocation(null))
+      .catch((e) => console.log(e));
   }
 
   return (
@@ -72,9 +74,9 @@ export function LocationContextProvider(props) {
       value={{
         locations,
         editingLocation,
-        deleteById,
         create,
         update,
+        deleteById,
         setEditingLocation,
       }}
     >
