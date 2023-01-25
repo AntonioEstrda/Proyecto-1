@@ -4,7 +4,7 @@ import { FacultyContext } from "../../context/FacultyContext";
 
 export default function FacultyList() {
   const { facultys } = useContext(FacultyContext);
-  console.log(facultys);
+
   if (facultys.length === 0) {
     return (
       <h1 className="text-white text-4xl font-bold text-center">

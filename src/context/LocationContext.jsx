@@ -45,7 +45,6 @@ export function LocationContextProvider(props) {
         setLocations(
           locations.filter((location) => location.locationId !== locationId)
         );
-        //console.log(locations);
       })
       .catch((e) => console.log(e.message));
   }
