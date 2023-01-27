@@ -58,9 +58,11 @@ function CMSRoutes() {
         </EventContextProvider>
       </Route>
       <Route path="/facultades">
-        <FacultyContextProvider>
-          <AppFaculty />
-        </FacultyContextProvider>
+        <LocationContextProvider>
+          <FacultyContextProvider>
+            <AppFaculty />
+          </FacultyContextProvider>
+        </LocationContextProvider>
       </Route>
       <Route path="/recursosfacultades">
         <FacultyResourceContextProvider>

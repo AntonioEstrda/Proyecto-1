@@ -1,12 +1,16 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import { LocationContext } from "../context/LocationContext";
 
 export const FacultyContext = createContext();
 
 export function FacultyContextProvider(props) {
   const url = "http://localhost:8080/faculty/";
 
+  const { locations } = useContext(LocationContext);
+
   const [editingFaculty, setEditingFaculty] = useState();
   const [facultys, setFacultys] = useState([]);
+  const [idLocationSelected, setIdLocationSelected] = useState(0);
   useEffect(() => {
     fetch(url + "all")
       .then((response) => response.json())
@@ -16,26 +20,26 @@ export function FacultyContextProvider(props) {
   }, []);
 
   async function create(faculty) {
+    console.log(faculty);
     await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       mode: "cors",
-      body: JSON.stringify({
-        name: faculty.facultyName,
-        location: undefined,
-      }),
+      body: JSON.stringify(faculty),
     })
       .then((response) => response.json())
       .then((data) => {
         setFacultys((prevState) => prevState.concat([data]));
+        setEditingFaculty(null);
+        setIdLocationSelected(0);
       })
       .catch((e) => console.log(e));
   }
 
-  async function deleteById(facultyID) {
-    await fetch(url + "delete/" + facultyID, {
+  async function deleteById(facultyId) {
+    await fetch(url + "delete/" + facultyId, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -44,13 +48,14 @@ export function FacultyContextProvider(props) {
     })
       .then(() =>
         setFacultys(
-          facultys.filter((faculty) => faculty.facultyID !== facultyID)
+          facultys.filter((faculty) => faculty.facultyId !== facultyId)
         )
       )
       .catch((e) => console.log(e));
   }
 
   async function update(prevFaculty) {
+    console.log(prevFaculty);
     await fetch(url + "update", {
       method: "PUT",
       headers: {
@@ -60,13 +65,12 @@ export function FacultyContextProvider(props) {
       body: JSON.stringify(prevFaculty),
     })
       .then((response) => response.json())
-      .then((data) => {
-        data.initDate = data.initDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
+      .then(() => {
         facultys[facultys.indexOf(editingFaculty)] = prevFaculty;
         setFacultys(facultys);
+        setEditingFaculty(null);
+        setIdLocationSelected(0);
       })
-      .then(() => setEditingFaculty(null))
       .catch((e) => console.log(e));
   }
 
@@ -79,6 +83,9 @@ export function FacultyContextProvider(props) {
         update,
         deleteById,
         setEditingFaculty,
+        idLocationSelected,
+        setIdLocationSelected,
+        locations,
       }}
     >
       {props.children}

@@ -14,7 +14,7 @@ export default function FacultyList() {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-2">
+    <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
       {facultys.map((faculty) => (
         <FacultyCard key={faculty.facultyId} faculty={faculty} />
       ))}

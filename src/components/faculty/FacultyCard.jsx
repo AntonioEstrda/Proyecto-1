@@ -13,15 +13,9 @@ export default function FacultyCard({ faculty }) {
       <h1 className="text-xl font-bold capitalize">{faculty?.facultyName}</h1>
 
       <div className="bg-paleta2-azulverd text-paleta2-naranja p-4 mt-2 rounded-md">
-        <p className="text-l text-paleta2-naranja">
-          Localización: {faculty.location?.name}
-        </p>
-        <p className="text-paleta2-red-claro text-sm">
-          {faculty.location?.parent}
-        </p>
-        <p className="text-paleta2-red-claro text-sm">
-          {faculty.location?.city}
-        </p>
+        <p className="text-lg font-bold text-blue">Localización:</p>
+        {faculty.location?.name}
+        {faculty.location.city ? "-" + faculty.location.city : ""}
       </div>
 
       <div className="grid grid-cols-2 gap-3">
