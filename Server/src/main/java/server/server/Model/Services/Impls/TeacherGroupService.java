@@ -58,6 +58,7 @@ public class TeacherGroupService implements ITeacherGroupService{
                     if((teacherGroup.getGroup().getSubject().getIntensity())<=(((teacherGroupRepo.hourVinculation(teacherGroup.getTeacher().getTeacherID()))-(teacherGroupRepo.academicHoursteacher(teacherGroup.getTeacher().getTeacherID()))))){
                         TeacherGroup entitySaved = teacherGroupRepo.save(teacherGroup);
                         returns.put(Labels.objectReturn, entitySaved);
+                        teacherGroupRepo.disableTeacher(teacherGroup.getTeacher().getTeacherID());
                     }
                     else{
                         errors.add(TeacherGroupErrors.TG107.name());
@@ -112,4 +113,5 @@ public class TeacherGroupService implements ITeacherGroupService{
         returns.put(Labels.objectReturn, old); 
         return returns; 
     }
+    
 }

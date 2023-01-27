@@ -32,4 +32,13 @@ public interface DAOTeacherGroup extends JpaRepository<TeacherGroup, Long>{
             nativeQuery = true
     )
     public int hourVinculation(@Param("teacherId") long teacherId);
+    
+    
+    @Query(
+            value = """
+                    UPDATE `teacher` SET `ISDISABLE`=1 WHERE TEACHERID = :teacherId
+                    """,
+            nativeQuery = true
+    )
+    public int disableTeacher(@Param("teacherId") long teacherId);
 }
