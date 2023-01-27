@@ -55,8 +55,13 @@ public class TeacherGroupService implements ITeacherGroupService{
         } else {
             if (tchService.find(teacherGroup.getTeacher()) != null) {
                 if (gpService.find(teacherGroup.getGroup()) != null) {
-                    TeacherGroup entitySaved = teacherGroupRepo.save(teacherGroup);
-                    returns.put(Labels.objectReturn, entitySaved);
+                    if((teacherGroup.getGroup().getSubject().getIntensity())<=(((teacherGroupRepo.hourVinculation(teacherGroup.getTeacher().getTeacherID()))-(teacherGroupRepo.academicHoursteacher(teacherGroup.getTeacher().getTeacherID()))))){
+                        TeacherGroup entitySaved = teacherGroupRepo.save(teacherGroup);
+                        returns.put(Labels.objectReturn, entitySaved);
+                    }
+                    else{
+                        errors.add(TeacherGroupErrors.TG107.name());
+                }
                 }else{
                     errors.add(GroupErrors.GROUP101.name());
                     errors.add(TeacherGroupErrors.TG101.name());

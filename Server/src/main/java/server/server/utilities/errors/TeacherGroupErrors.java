@@ -37,5 +37,9 @@ public enum TeacherGroupErrors {
     /**
      * Teacher Group not found
      */
-    TG106
+    TG106,
+    /**
+     * The intensity in hours exceeds the teacher's available hours
+     */
+    TG107
 }

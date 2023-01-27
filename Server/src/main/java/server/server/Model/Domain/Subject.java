@@ -52,7 +52,7 @@ public class Subject implements Serializable {
 
     @NotEmpty(message = "SUBJ106")
     @Column(length = 100, name = "INTENSITY")
-    private String intensity;
+    private Long intensity;
 
     @NotNull(message = "SUBJ107")
     @Column(length = 8, name = "Modality")
