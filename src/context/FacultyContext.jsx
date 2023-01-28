@@ -20,7 +20,6 @@ export function FacultyContextProvider(props) {
   }, []);
 
   async function create(faculty) {
-    console.log(faculty);
     await fetch(url, {
       method: "POST",
       headers: {
@@ -55,7 +54,6 @@ export function FacultyContextProvider(props) {
   }
 
   async function update(prevFaculty) {
-    console.log(prevFaculty);
     await fetch(url + "update", {
       method: "PUT",
       headers: {

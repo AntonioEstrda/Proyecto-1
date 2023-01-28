@@ -69,8 +69,8 @@ export default function FacultyForm() {
             value={facultyName}
           />
           <select
-            id="comboDepartamento"
-            name="departmentId"
+            id="locationSelected"
+            name="locationId"
             className="bg-paleta2-azul-claro w-full text-lg text-paleta2-rojo rounded-md p-4 mb-2"
             onChange={(e) => {
               setIdLocationSelected(e.target.value);

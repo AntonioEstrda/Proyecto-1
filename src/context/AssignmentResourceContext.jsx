@@ -15,7 +15,7 @@ export function AssignmentResourceContextProvider(props) {
         setAssignmentResources(data);
       });
   }, []);
-  console.log(assignmentResources);
+
   async function create(assignmentResource) {
     await fetch(url, {
       method: "POST",
