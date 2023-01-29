@@ -5,6 +5,7 @@
 package server.server.Model.Access;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -95,10 +96,9 @@ public interface DAOSchedule extends JpaRepository<Schedule, Long> {
             nativeQuery = true
     )
     public List<Schedule> findByProgramIdAndSemester(@Param("programId") long programId, @Param("semester") long semester);
-    
-    
+
     @Query(
-            value="""
+            value = """
                   WITH EventSchedule as ( 
                       SELECT S.IDSCHEDEULE FROM  `schedule` S 
                           INNER JOIN  `event` E ON S.eventId = E.id
@@ -111,7 +111,6 @@ public interface DAOSchedule extends JpaRepository<Schedule, Long> {
             nativeQuery = true
     )
     public List<Schedule> findByTypesAndEventsAndDepartment(@Param("departmentId") long departmentId, @Param("types") List<String> types);
-    
 
     @Query(
             value = "SELECT permitEvents(:id) from dual;",
@@ -130,5 +129,36 @@ public interface DAOSchedule extends JpaRepository<Schedule, Long> {
             nativeQuery = true
     )
     public int existAssigmentScheudleDpto(@Param("departmentId") Long departmentId, @Param("schId") Long schId);
+
+    @Query(
+            value = """
+                    WITH academicSchedule as (
+                        SELECT DISTINCT S.IDSCHEDEULE FROM `schedule` S 
+                        INNER JOIN groupt G ON S.IDGROUP = G.IDGROUP
+                        INNER JOIN subject SB ON G.IDSUBJECT = SB.IDSUBJECT
+                        INNER JOIN program PG ON  SB.IDPROGRAM = PG.IDPROGRAM 
+                        WHERE G.ACADEMICPERIDODID = getCrrntAcdPer() 
+                        AND S.TYPE = 'ACADEMICO'
+                        AND S.resourceId =:envId 
+                    ), prestamoMateria as (
+                        SELECT DISTINCT S.IDSCHEDEULE FROM `schedule` S 
+                        INNER JOIN  `event` E ON S.eventId = E.id 
+                        INNER JOIN  groupt G ON  S.IDGROUP = G.IDGROUP 
+                        INNER JOIN subject SB ON G.IDSUBJECT = SB.IDSUBJECT
+                        INNER JOIN program PG ON  SB.IDPROGRAM = PG.IDPROGRAM 
+                        WHERE G.ACADEMICPERIDODID = getCrrntAcdPer() 
+                        AND S.TYPE = 'EVENTO'
+                        AND E.type = 'PRESTAMO_POR_MATERIA'
+                        AND S.resourceId =:envId 
+                    ), schedules as(
+                        SELECT * FROM  academicSchedule
+                        UNION    
+                        SELECT * FROM  prestamoMateria
+                    )
+                    SELECT * FROM `schedule` WHERE IDSCHEDEULE in (SELECT IDSCHEDEULE FROM  schedules);
+                    """,
+            nativeQuery = true
+    )
+    public ArrayList<Schedule> findByEnvId(@Param("envId") long envId);
 
 }

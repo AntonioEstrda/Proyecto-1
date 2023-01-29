@@ -46,14 +46,31 @@ public class ScheduleController {
         List<Schedule> schedule = (List<Schedule>) returns.get(Labels.objectReturn);
         return (new ResponseEntity(schedule, null, HttpStatus.ACCEPTED));
     }
-    
+
+    @GetMapping(value = "/AcademicScheduleByEnvId")
+    public ResponseEntity<List<Schedule>> allByEnv(@RequestParam("EnvironmentId") long envId) {
+        Map<Labels, Object> returns = scheduleService.findByEnvId(envId);
+        ArrayList<String> errors = (ArrayList<String>) returns.get(Labels.errors);
+        List<Schedule> schedule = (List<Schedule>) returns.get(Labels.objectReturn);
+        HttpHeaders headers = new HttpHeaders();
+        if (!errors.isEmpty()) {
+            headers.add(Labels.errors.name(), errors.toString());
+            return (new ResponseEntity(null, headers, HttpStatus.BAD_REQUEST));
+        }
+
+        if (schedule.isEmpty()) {
+            return (new ResponseEntity(schedule, null, HttpStatus.NOT_FOUND));
+        }
+
+        return (new ResponseEntity(schedule, null, HttpStatus.ACCEPTED));
+    }
+
     @GetMapping(value = "/EventSchedule")
-    public ResponseEntity<List<Schedule>> findByTypesEventsAndDepartment(@RequestParam("departId") long departId,@RequestParam("type") List<String> type) {
+    public ResponseEntity<List<Schedule>> findByTypesEventsAndDepartment(@RequestParam("departId") long departId, @RequestParam("type") List<String> type) {
         Map<Labels, Object> returns = scheduleService.findByTypesEventsAndDepartment(departId, type);
         List<Schedule> schedule = (List<Schedule>) returns.get(Labels.objectReturn);
         return (new ResponseEntity(schedule, null, HttpStatus.ACCEPTED));
     }
-    
 
     @GetMapping(value = "/find/{id}")
     public ResponseEntity<Schedule> get(@PathVariable Long id) {

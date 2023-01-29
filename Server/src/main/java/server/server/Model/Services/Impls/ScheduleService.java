@@ -82,10 +82,30 @@ public class ScheduleService implements IScheduleService {
     }
 
     @Override
+    @Transactional(value = "DataTransactionManager", readOnly = true)
+    public Map<Labels, Object> findByEnvId(long envId) {
+        Map<Labels, Object> returns = new HashMap();
+        ArrayList<String> errors = new ArrayList();
+        ArrayList<Schedule> schedules = null;
+        Resource findById = resourceService.findById(envId);
+        if (findById == null) {
+            errors.add(ResErrors.RES101.name());
+        } else if (resTypeServ.globalType(findById.getResourceType().getResourceTypeId()) != IResourceTypeService.ENVIRONMENTTYPE) {
+            errors.add(ResErrors.RES112.name());
+        }
+        if (errors.isEmpty()) {
+            schedules = repo.findByEnvId(envId);
+        }
+        returns.put(Labels.errors, errors);
+        returns.put(Labels.objectReturn, schedules);
+        return returns;
+    }
+
+    @Override
     @Transactional(value = "DataTransactionManager")
     public Map<Labels, Object> add(Schedule schedule, Long departId) {
         Map<Labels, Object> returns = new HashMap();
-        if (schedule.getType() == Schedule.scheduleType.ACADEMICO  ) {
+        if (schedule.getType() == Schedule.scheduleType.ACADEMICO) {
             try {
                 returns = validateAcademicScheduleOnAdd(schedule, departId);
             } catch (JsonProcessingException ex) {
@@ -105,8 +125,8 @@ public class ScheduleService implements IScheduleService {
     @Transactional(value = "DataTransactionManager")
     public Map<Labels, Object> update(Schedule schedule, Long departId) {
         Map<Labels, Object> returns = new HashMap();
-        int ban = repo.existAssigmentScheudleDpto(departId, schedule.getId()); 
-        if (ban != 0){
+        int ban = repo.existAssigmentScheudleDpto(departId, schedule.getId());
+        if (ban != 0) {
             if (schedule.getType() == Schedule.scheduleType.ACADEMICO) {
                 try {
                     returns = validateAcademicScheduleOnUpd(schedule, departId);
@@ -120,9 +140,9 @@ public class ScheduleService implements IScheduleService {
                     Logger.getLogger(ScheduleService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }else{
+        } else {
             ArrayList<String> errors = new ArrayList();
-            errors.add(ScheduleErrors.SCH101.name());  
+            errors.add(ScheduleErrors.SCH101.name());
             returns.put(Labels.errors, errors);
             returns.put(Labels.objectReturn, schedule);
         }
@@ -132,15 +152,15 @@ public class ScheduleService implements IScheduleService {
     @Override
     @Transactional(value = "DataTransactionManager")
     public Map<Labels, Object> delete(long id, Long departId) {
-        Schedule schedule = null;  
+        Schedule schedule = null;
         Map<Labels, Object> returns = new HashMap();
         ArrayList<String> errors = new ArrayList();
-        int ban = repo.existAssigmentScheudleDpto(departId, id); 
+        int ban = repo.existAssigmentScheudleDpto(departId, id);
         if (ban == 0) {
             errors.add(ScheduleErrors.SCH101.name());
         }
         if (errors.isEmpty()) {
-            schedule = repo.findById(id).orElse(null); 
+            schedule = repo.findById(id).orElse(null);
             repo.delete(schedule);
         }
         returns.put(Labels.errors, errors);
@@ -156,7 +176,7 @@ public class ScheduleService implements IScheduleService {
         returns.put(Labels.objectReturn, schedule);
         return returns;
     }
-    
+
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
     public Map<Labels, Object> findByTypesEventsAndDepartment(long departId, List<String> types) {
@@ -165,7 +185,7 @@ public class ScheduleService implements IScheduleService {
         returns.put(Labels.objectReturn, schedule);
         return returns;
     }
-    
+
     private Map<Labels, Object> validateAcademicScheduleOnAdd(Schedule schedule, Long department) throws JsonProcessingException {
         Map<Labels, Object> returns = new HashMap();
         ArrayList<String> errors = new ArrayList();
@@ -173,9 +193,9 @@ public class ScheduleService implements IScheduleService {
         if (orElse != null) {
             errors.add(ScheduleErrors.SCH102.name());
         }
-        if(errors.isEmpty()){
+        if (errors.isEmpty()) {
             int aux = repo.validateAssignmentEnvProGro(department, schedule.getGroup().getGroupId(), schedule.getRes().getResourceId());
-            if (aux == 0){
+            if (aux == 0) {
                 errors.add(ScheduleErrors.SCH123.name());
             }
         }
@@ -215,14 +235,14 @@ public class ScheduleService implements IScheduleService {
         if (orElse != null) {
             errors.add(ScheduleErrors.SCH102.name());
         }
-        if(errors.isEmpty()){
-            Map<Labels, Object> aux1 = eventService.findByDepartmentIdAndEventId(departmenId, schedule.getEvent().getId());  
-            Event aux2 = (Event) aux1.get(Labels.objectReturn);  
-            if (aux2 == null){
+        if (errors.isEmpty()) {
+            Map<Labels, Object> aux1 = eventService.findByDepartmentIdAndEventId(departmenId, schedule.getEvent().getId());
+            Event aux2 = (Event) aux1.get(Labels.objectReturn);
+            if (aux2 == null) {
                 errors.add(ScheduleErrors.SCH124.name());
             }
         }
-        
+
         if (errors.isEmpty()) {
             errors.addAll(this.validateEventSchedule(schedule, null, departmenId));
         }
@@ -271,7 +291,7 @@ public class ScheduleService implements IScheduleService {
         ArrayList<String> errors = new ArrayList();
         if (schedule.getEvent() != null) {
             errors.add(ScheduleErrors.SCH107.name());
-        }    
+        }
         if (errors.isEmpty()) {
             errors.addAll(this.validateGroupByAcademicSchd(schedule));
         }
@@ -300,7 +320,9 @@ public class ScheduleService implements IScheduleService {
         }
         if (errors.isEmpty()) {
             int permitEvents = repo.permitEvents(department);
-            if(permitEvents == 0){errors.add(ScheduleErrors.SCH122.name());}
+            if (permitEvents == 0) {
+                errors.add(ScheduleErrors.SCH122.name());
+            }
         }
         if (errors.isEmpty()) {
             errors.addAll(this.validateEventAssignment(schedule));
@@ -629,7 +651,5 @@ public class ScheduleService implements IScheduleService {
         }
         return errors;
     }
-
-    
 
 }

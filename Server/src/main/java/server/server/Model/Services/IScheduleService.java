@@ -22,9 +22,11 @@ public interface IScheduleService {
     public Map<Labels, Object> update(Schedule schedule, Long departId);
 
     public Map<Labels, Object> delete(long SchedId, Long departId);
-    
-    public Map<Labels, Object> findByProgSem(long prog, long sem);  
-    
-    public Map<Labels, Object> findByTypesEventsAndDepartment(long departId, List<String> types); 
-    
+
+    public Map<Labels, Object> findByProgSem(long prog, long sem);
+
+    public Map<Labels, Object> findByTypesEventsAndDepartment(long departId, List<String> types);
+
+    public Map<Labels, Object> findByEnvId(long envId);
+
 }
