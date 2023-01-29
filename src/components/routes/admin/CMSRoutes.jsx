@@ -90,11 +90,15 @@ function CMSRoutes() {
         </ProgramContextProvider>
       </Route>
       <Route path="/recursos">
-        <FacultyContextProvider>
-          <ResourceContextProvider>
-            <AppResource />
-          </ResourceContextProvider>
-        </FacultyContextProvider>
+        <ResourceTypeContextProvider>
+          <LocationContextProvider>
+            <FacultyContextProvider>
+              <ResourceContextProvider>
+                <AppResource />
+              </ResourceContextProvider>
+            </FacultyContextProvider>
+          </LocationContextProvider>
+        </ResourceTypeContextProvider>
       </Route>
       <Route path="/tiposrecursos">
         <ResourceTypeContextProvider>
