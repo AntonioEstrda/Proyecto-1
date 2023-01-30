@@ -3,7 +3,7 @@ import { createContext, useState, useEffect } from "react";
 export const ProgramContext = createContext();
 
 export function ProgramContextProvider(props) {
-  const url = "http://localhost:8080/academicperiod/";
+  const url = "http://localhost:8080/Program/";
 
   const [editingProgram, setEditingProgram] = useState();
   const [programs, setPrograms] = useState([]);
@@ -47,10 +47,7 @@ export function ProgramContextProvider(props) {
     })
       .then(() =>
         setPrograms(
-          programs.filter(
-            (program) =>
-              program.programID !== programID
-          )
+          programs.filter((program) => program.programID !== programID)
         )
       )
       .catch((e) => console.log(e));
@@ -69,8 +66,7 @@ export function ProgramContextProvider(props) {
       .then((data) => {
         data.initDate = data.initDate.split("T")[0];
         data.finalDate = data.finalDate.split("T")[0];
-        programs[programs.indexOf(editingProgram)] =
-          prevProgram;
+        programs[programs.indexOf(editingProgram)] = prevProgram;
         setPrograms(programs);
       })
       .then(() => setEditingProgram(null))

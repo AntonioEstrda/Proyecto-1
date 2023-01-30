@@ -8,18 +8,15 @@ export default function SubjectList() {
   if (subjects.length === 0) {
     return (
       <h1 className="text-white text-4xl font-bold text-center">
-        No hay Periodos Académicos registrados
+        No hay Materias registradas
       </h1>
     );
   }
 
   return (
     <div className="grid grid-cols-4 gap-2">
-      {subjects.map((subjects) => (
-        <SubjectCard
-          key={subjects.subjectID}
-          subject={subjects}
-        />
+      {subjects.map((subject) => (
+        <SubjectCard key={subject.subjectID} subject={subject} />
       ))}
     </div>
   );

@@ -111,9 +111,11 @@ function CMSRoutes() {
         </ScheduleCMSContextProvider>
       </Route>
       <Route path="/materias">
-        <SubjectContextProvider>
-          <AppSubject />
-        </SubjectContextProvider>
+        <ProgramContextProvider>
+          <SubjectContextProvider>
+            <AppSubject />
+          </SubjectContextProvider>
+        </ProgramContextProvider>
       </Route>
       <Route path="/profesores">
         <TeacherContextProvider>
