@@ -2,28 +2,35 @@ import { useContext } from "react";
 import { GroupContext } from "../../context/GroupContext";
 
 export default function GroupCard({ group }) {
-  const { deleteById, setEditingGroup } = useContext(
-    GroupContext
-  );
+  const { deleteById, setEditingGroup } = useContext(GroupContext);
 
   function defineEditItem() {
     setEditingGroup(group);
   }
 
   return (
-    <div className="bg-paleta2-purpura text-paleta2-azul-claro p-4 rounded-md">
-      <h1 className="text-xl font-bold capitalize">{group?.name}</h1>
-      <p className="text-paleta2-azul-claro text-sm">
-        Fecha inicio: {group?.initDate}
-      </p>
-      <p className="text-paleta2-azul-claro text-sm">
-        Fecha final: {group?.finalDate}
-      </p>
+    <div className="bg-gray text-paleta2-azul-claro p-4 rounded-md">
+      <h1 className="text-xl font-bold capitalize">Grupo: {group?.name}</h1>
+
+      <div className="bg-paleta2-purpura text-paleta2-azul-claro p-4 rounded-md">
+        <p className="text-lg font-bold text-blue">Capacidad:</p>
+        {group?.capacity}
+      </div>
+
+      <div className="bg-paleta2-purpura text-paleta2-azul-claro p-4 rounded-md">
+        <p className="text-lg font-bold text-blue">Materia:</p>
+        {group.subject?.name}
+      </div>
+
+      <div className="bg-paleta2-purpura text-paleta2-azul-claro p-4 rounded-md">
+        <p className="text-lg font-bold text-blue">Periodo académico:</p>
+        {group.academicPeriod?.name}
+      </div>
 
       <div className="grid grid-cols-2 gap-3">
         <button
           className="bg-paleta2-morado px-2 py-1 rounded-md mt-4 hover:bg-red-400"
-          onClick={() => deleteById(group?.groupID)}
+          onClick={() => deleteById(group?.groupId)}
         >
           Eliminar
         </button>
