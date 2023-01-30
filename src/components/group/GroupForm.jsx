@@ -2,25 +2,29 @@ import { useState, useContext, useEffect } from "react";
 import { GroupContext } from "../../context/GroupContext";
 
 export default function GroupForm() {
-  const { create, editingGroup, update } = useContext(
-    GroupContext
-  );
+  const {
+    create,
+    editingGroup,
+    update,
+    idSubjectSelected,
+    setIdSubjectSelected,
+    subjects,
+    idAcademicPeriodSelected,
+    setIdAcademicPeriodSelected,
+    academicPeriods,
+  } = useContext(GroupContext);
 
   const [limpio, setLimpio] = useState(true);
   const [name, setName] = useState("");
-  const [initDate, setInitDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-  const [finalDate, setFinalDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const [capacity, setCapacity] = useState("");
 
   useEffect(() => {
     if (editingGroup) {
       setName(editingGroup.name);
-      setInitDate(editingGroup.initDate);
-      setFinalDate(editingGroup.finalDate);
+      setCapacity(editingGroup.capacity);
       setLimpio(false);
+      setIdSubjectSelected(editingGroup.subject.subjectID);
+      setIdAcademicPeriodSelected(editingGroup.academicPeriod.academicPeriodID);
     }
   }, [editingGroup]);
 
@@ -30,77 +34,133 @@ export default function GroupForm() {
 
   function limpiarForm() {
     setName("");
-    setInitDate(new Date().toISOString().split("T")[0]);
-    setFinalDate(new Date().toISOString().split("T")[0]);
+    setCapacity("");
     setLimpio(true);
+    setIdSubjectSelected(0);
+    setIdAcademicPeriodSelected(0);
   }
 
   function crear(e) {
     e.preventDefault();
-    create({ name, initDate, finalDate });
+    create({
+      name,
+      capacity,
+      subject: subjects.find(
+        (subject) => subject.subjectID == idSubjectSelected
+      ),
+      academicPeriod: academicPeriods.find(
+        (academicPeriod) => academicPeriod.academicPeriodID == idAcademicPeriodSelected
+      ),
+    });
     limpiarForm();
   }
   function actualizar(e) {
     e.preventDefault();
     update({
-      groupID: editingGroup.groupID,
+      groupId: editingGroup.groupId,
       name,
-      initDate,
-      finalDate,
+      capacity,
+      subject: subjects.find(
+        (subject) => subject.subjectID == idSubjectSelected
+      ),
+      academicPeriod: academicPeriods.find(
+        (academicPeriod) => academicPeriod.academicPeriodID == idAcademicPeriodSelected
+      ),
     });
     limpiarForm();
   }
 
-  return (
-    <div className="max-w-md mx-auto ">
-      <form onSubmit={handleSubmit} className="bg-paleta2-purpura p-10 mb-4 rounded-lg">
-        <h1 className="text-2xl font-bold text-paleta2-azul-claro mb-3">
-          Crear un Periodo Académico
-        </h1>
-        <input
-          placeholder="Nombre periodo académico"
-          onChange={(e) => setName(e.target.value)}
-          autoFocus="on"
-          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
-          value={name}
-        />
-        <label className="text-paleta2-azul-claro">
-          Fecha de inicio:
+  if (academicPeriods) {
+    return (
+      <div className="max-w-md mx-auto ">
+        <form onSubmit={handleSubmit} className="bg-paleta2-purpura p-10 mb-4 rounded-lg">
+          <h1 className="text-2xl font-bold text-paleta2-azul-claro mb-3">
+            Crear un Grupo
+          </h1>
           <input
-            type="date"
-            name="initDate"
-            className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
-            value={initDate}
-            onChange={(e) => setInitDate(e.target.value)}
+            placeholder="Grupo:"
+            onChange={(e) => setName(e.target.value)}
+            autoFocus="on"
+            className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+            value={name}
           />
-          <span className="validity"></span>
-        </label>
-        <label className="text-paleta2-azul-claro">
-          Fecha final:
+
           <input
-            type="date"
-            name="finalDate"
-            className="bg-paleta2-fondo1 p-3 w-full mb-4 rounded-md"
-            value={finalDate}
-            onChange={(e) => setFinalDate(e.target.value)}
+            placeholder="Capacidad:"
+            onChange={(e) => setCapacity(e.target.value)}
+            autoFocus="on"
+            className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+            value={capacity}
           />
-          <span className="validity"></span>
-        </label>
-        <div className="grid grid-cols-1">
-          <button className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro ">
-            Guardar
+
+          <select
+            id="subjectSelected"
+            name="subjectID"
+            className="bg-paleta2-azul-claro w-full text-lg text-paleta2-rojo rounded-md p-4 mb-2"
+            onChange={(e) => {
+              setIdSubjectSelected(e.target.value);
+            }}
+          >
+            {subjects.map((subject) => {
+              return (
+                <option
+                  key={subject.subjectID}
+                  value={subject.subjectID}
+                  selected={
+                    subject.subjectID === editingGroup?.subject.subjectID
+                      ? true
+                      : false
+                  }
+                >
+                  {subject.name}{" "}
+                </option>
+              );
+            })}
+          </select>
+
+          <select
+            id="academicPeriodSelected"
+            name="academicPeriodID"
+            className="bg-paleta2-azul-claro w-full text-lg text-paleta2-rojo rounded-md p-4 mb-2"
+            onChange={(e) => {
+              setIdAcademicPeriodSelected(e.target.value);
+            }}
+          >
+            {academicPeriods.map((academicPeriod) => {
+              return (
+                <option
+                  key={academicPeriod.academicPeriodID}
+                  value={academicPeriod.academicPeriodID}
+                  selected={
+                    academicPeriod.academicPeriodID === editingGroup?.academicPeriod.academicPeriodID
+                      ? true
+                      : false
+                  }
+                >
+                  {academicPeriod.name}{" "}
+                </option>
+              );
+            })}
+          </select>
+
+          <div className="grid grid-cols-1">
+            <button className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro ">
+              Guardar
+            </button>
+          </div>
+        </form>
+
+        <div className="grid grid-cols-1 w-auto px-20 pb-10">
+          <button
+            className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro "
+            onClick={limpiarForm}
+          >
+            Limpiar
           </button>
         </div>
-      </form>
-
-      <div className="grid grid-cols-1 w-auto px-20 pb-10">
-        <button
-          className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro "
-          onClick={limpiarForm}
-        >
-          Limpiar
-        </button>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return <></>
 }
