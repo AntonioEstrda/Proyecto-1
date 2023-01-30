@@ -1,38 +1,41 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
+import { ProgramContext } from "../context/ProgramContext";
 
 export const SubjectContext = createContext();
 
 export function SubjectContextProvider(props) {
-  const url = "http://localhost:8080/academicperiod/";
+  const url = "http://localhost:8080/subject/";
+
+  const { programs } = useContext(ProgramContext);
 
   const [editingSubject, setEditingSubject] = useState();
   const [subjects, setSubjects] = useState([]);
+  const [idProgramSelected, setIdProgramSelected] = useState(0);
   useEffect(() => {
-    fetch(url + "all")
-      .then((response) => response.json())
-      .then((data) => {
-        setSubjects(data);
-      });
+    programs.forEach((program) => {
+      fetch(url + "all")
+        .then((response) => response.json())
+        .then((data) => {
+          setSubjects(...subjects, data);
+        })
+        .catch((e) => console.log(e));
+    });
   }, []);
 
-  async function create(subject) {
+  async function create(subject, programId) {
     await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       mode: "cors",
-      body: JSON.stringify({
-        name: subject.name,
-        initDate: subject.initDate,
-        finalDate: subject.finalDate,
-      }),
+      body: JSON.stringify(subject),
     })
       .then((response) => response.json())
       .then((data) => {
-        data.initDate = data.initDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
         setSubjects((prevState) => prevState.concat([data]));
+        setEditingSubject(null);
+        setIdProgramSelected(0);
       })
       .catch((e) => console.log(e));
   }
@@ -47,10 +50,7 @@ export function SubjectContextProvider(props) {
     })
       .then(() =>
         setSubjects(
-          subjects.filter(
-            (subject) =>
-              subject.subjectID !== subjectID
-          )
+          subjects.filter((subject) => subject.subjectID !== subjectID)
         )
       )
       .catch((e) => console.log(e));
@@ -66,14 +66,12 @@ export function SubjectContextProvider(props) {
       body: JSON.stringify(prevSubject),
     })
       .then((response) => response.json())
-      .then((data) => {
-        data.initDate = data.initDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
-        subjects[subjects.indexOf(editingSubject)] =
-          prevSubject;
+      .then(() => {
+        subjects[subjects.indexOf(editingSubject)] = prevSubject;
         setSubjects(subjects);
+        setEditingSubject(null);
+        setIdProgramSelected(0);
       })
-      .then(() => setEditingSubject(null))
       .catch((e) => console.log(e));
   }
 
@@ -86,6 +84,9 @@ export function SubjectContextProvider(props) {
         update,
         deleteById,
         setEditingSubject,
+        idProgramSelected,
+        setIdProgramSelected,
+        programs,
       }}
     >
       {props.children}

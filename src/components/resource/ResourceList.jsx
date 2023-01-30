@@ -1,29 +1,23 @@
 import { useContext } from "react";
 import ResourceCard from "./ResourceCard";
-import { FacultyContext } from "../../context/FacultyContext";
+import { ResourceContext } from "../../context/ResourceContext";
 
-function ResourceList() {
-  const { facultys } = useContext(FacultyContext);
+export default function ResourceList() {
+  const { resources } = useContext(ResourceContext);
 
-  if (facultys.length === 0) {
+  if (resources.length === 0) {
     return (
       <h1 className="text-white text-4xl font-bold text-center">
-        No hay Recursos registrados aún
+        No hay Recursos registrados
       </h1>
     );
   }
 
   return (
-    <div className="grid grid-cols-3 gap-2">
-      {facultys.map(({ resources }) => {
-        if (resources.length === 0) return null;
-        return resources.map((resource) => (
-          <ResourceCard key={resource.resourceId} resource={resource} />
-        ));
-      })}
+    <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
+      {resources.map((resource) => (
+        <ResourceCard key={resource.resourceId} resource={resource} />
+      ))}
     </div>
   );
 }
-
-export default ResourceList;
-    

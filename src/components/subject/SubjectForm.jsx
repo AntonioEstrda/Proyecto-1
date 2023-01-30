@@ -2,25 +2,33 @@ import { useState, useContext, useEffect } from "react";
 import { SubjectContext } from "../../context/SubjectContext";
 
 export default function SubjectForm() {
-  const { create, editingSubject, update } = useContext(
-    SubjectContext
-  );
+  const {
+    create,
+    editingSubject,
+    update,
+    idProgramSelected,
+    setIdProgramSelected,
+    programs,
+  } = useContext(SubjectContext);
 
   const [limpio, setLimpio] = useState(true);
   const [name, setName] = useState("");
-  const [initDate, setInitDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-  const [finalDate, setFinalDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const [requisits, setRequisits] = useState("");
+  const [semester, setSemester] = useState("");
+  const [intensity, setIntensity] = useState("");
+  const [modality, setModality] = useState("");
+  const [type, setType] = useState("");
 
   useEffect(() => {
     if (editingSubject) {
       setName(editingSubject.name);
-      setInitDate(editingSubject.initDate);
-      setFinalDate(editingSubject.finalDate);
+      setRequisits(editingSubject.requisits);
+      setSemester(editingSubject.semester);
+      setIntensity(editingSubject.intensity);
+      setModality(editingSubject.modality);
+      setType(editingSubject.type);
       setLimpio(false);
+      setIdProgramSelected(editingSubject.program.programId);
     }
   }, [editingSubject]);
 
@@ -30,62 +38,130 @@ export default function SubjectForm() {
 
   function limpiarForm() {
     setName("");
-    setInitDate(new Date().toISOString().split("T")[0]);
-    setFinalDate(new Date().toISOString().split("T")[0]);
+    setRequisits("");
+    setSemester("");
+    setIntensity("");
+    setModality("");
+    setType("");
     setLimpio(true);
+    setIdProgramSelected(0);
   }
 
   function crear(e) {
     e.preventDefault();
-    create({ name, initDate, finalDate });
+    create({
+      name,
+      requisits,
+      semester,
+      intensity,
+      modality,
+      type,
+      program: programs.find(
+        (program) => program.programId == idProgramSelected
+      ),
+    });
     limpiarForm();
   }
+
   function actualizar(e) {
     e.preventDefault();
     update({
       subjectID: editingSubject.subjectID,
       name,
-      initDate,
-      finalDate,
+      requisits,
+      semester,
+      intensity,
+      modality,
+      type,
+      program: programs.find(
+        (program) => program.programId == idProgramSelected
+      ),
     });
     limpiarForm();
   }
 
   return (
     <div className="max-w-md mx-auto ">
-      <form onSubmit={handleSubmit} className="bg-paleta2-purpura p-10 mb-4 rounded-lg">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-paleta2-purpura p-10 mb-4 rounded-lg"
+      >
         <h1 className="text-2xl font-bold text-paleta2-azul-claro mb-3">
-          Crear un Periodo Académico
+          Crear una Materia
         </h1>
         <input
-          placeholder="Nombre periodo académico"
+          placeholder="Nombre de la materia"
           onChange={(e) => setName(e.target.value)}
           autoFocus="on"
           className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={name}
         />
-        <label className="text-paleta2-azul-claro">
-          Fecha de inicio:
-          <input
-            type="date"
-            name="initDate"
-            className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
-            value={initDate}
-            onChange={(e) => setInitDate(e.target.value)}
-          />
-          <span className="validity"></span>
-        </label>
-        <label className="text-paleta2-azul-claro">
-          Fecha final:
-          <input
-            type="date"
-            name="finalDate"
-            className="bg-paleta2-fondo1 p-3 w-full mb-4 rounded-md"
-            value={finalDate}
-            onChange={(e) => setFinalDate(e.target.value)}
-          />
-          <span className="validity"></span>
-        </label>
+
+        <input
+          placeholder="Requisitos"
+          onChange={(e) => setRequisits(e.target.value)}
+          autoFocus="on"
+          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          value={requisits}
+        />
+
+        <input
+          placeholder="Semestre"
+          onChange={(e) => setSemester(e.target.value)}
+          autoFocus="on"
+          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          value={semester}
+        />
+
+        <input
+          placeholder="Intensidad"
+          onChange={(e) => setIntensity(e.target.value)}
+          autoFocus="on"
+          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          value={intensity}
+        />
+
+        <input
+          placeholder="Modalidad"
+          onChange={(e) => setModality(e.target.value)}
+          autoFocus="on"
+          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          value={modality}
+        />
+
+        <input
+          placeholder="Tipo de materia"
+          onChange={(e) => setType(e.target.value)}
+          autoFocus="on"
+          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          value={type}
+        />
+
+        <select
+          id="programSelected"
+          name="programId"
+          className="bg-paleta2-azul-claro w-full text-lg text-paleta2-rojo rounded-md p-4 mb-2"
+          onChange={(e) => {
+            setIdProgramSelected(e.target.value);
+          }}
+        >
+          {programs.map((program) => {
+            return (
+              <option
+                key={program.programId}
+                value={program.programId}
+                selected={
+                  program.programId === editingSubject?.program.programId
+                    ? true
+                    : false
+                }
+              >
+                {program.name}{" "}
+              </option>
+            );
+          })}
+        </select>
+
         <div className="grid grid-cols-1">
           <button className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro ">
             Guardar
