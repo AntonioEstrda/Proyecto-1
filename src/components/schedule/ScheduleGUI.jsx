@@ -48,8 +48,11 @@ function ScheduleGUI() {
           let key = dia + "-" + (index + 7);
           if (gruposMap.has(key))
             return (
-              <td className="h-10 border-r-2 rounded border-red">
-                {gruposMap.get(key).group.subject.name}
+              <td
+                rowSpan={gruposMap.get(key)[1]}
+                className="h-10 border-2 rounded border-red"
+              >
+                {gruposMap.get(key)[0].group.subject.name}
               </td>
             );
         })}
@@ -61,13 +64,11 @@ function ScheduleGUI() {
   console.log(gruposMap);
 
   ocupacionAmbiente?.forEach((schedule) => {
-    for (
-      let count = +schedule.startime.split(":")[0];
-      count < +schedule.endtime.split(":")[0];
-      count++
-    ) {
-      gruposMap.set(schedule.days + "-" + count, schedule);
-    }
+    let inicio = +schedule.startime.split(":")[0];
+    let duracion =
+      +schedule.endtime.split(":")[0] - +schedule.startime.split(":")[0];
+    gruposMap.set(schedule.days + "-" + inicio, [schedule, duracion]);
+    // }
   });
 
   if (gruposMap)
