@@ -4,6 +4,9 @@ export const ScheduleContext = createContext();
 
 export function ScheduleContextProvider(props) {
   const [grupos, setGrupos] = useState();
+  const [idGroupSelected, setIdGroupSelected] = useState(-1);
+  const [idResourceSelected, setIdResourceSelected] = useState(-1);
+
   useEffect(() => {
     fetch("http://localhost:8080/groupt/all")
       .then((response) => response.json())
@@ -16,7 +19,15 @@ export function ScheduleContextProvider(props) {
   if (!grupos) return null;
 
   return (
-    <ScheduleContext.Provider value={{ grupos }}>
+    <ScheduleContext.Provider
+      value={{
+        grupos,
+        idGroupSelected,
+        setIdGroupSelected,
+        idResourceSelected,
+        setIdResourceSelected,
+      }}
+    >
       {props.children}
     </ScheduleContext.Provider>
   );
