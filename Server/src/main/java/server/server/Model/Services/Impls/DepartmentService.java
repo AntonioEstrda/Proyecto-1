@@ -15,9 +15,11 @@ import server.server.Model.Access.DAODepartment;
 import server.server.Model.Domain.Department;
 import server.server.Model.Services.IDepartmentService;
 import server.server.Model.Services.IFacultyService;
+import server.server.Model.Services.ILocationService;
 import server.server.utilities.Labels;
 import server.server.utilities.errors.DeptErrors;
 import server.server.utilities.errors.FacErrors;
+import server.server.utilities.errors.LocationErrors;
 
 /**
  *
@@ -32,6 +34,9 @@ public class DepartmentService implements IDepartmentService {
 
     @Autowired
     private IFacultyService facService;
+
+    @Autowired
+    private ILocationService locService;
 
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
@@ -50,6 +55,10 @@ public class DepartmentService implements IDepartmentService {
             if (facService.find(department.getFacultad()) != null) {
                 if (deptRepo.findByCode(department.getCode()) != null) {
                     errors.add(DeptErrors.DEPT112.name());
+                }else if (department.getLocation() == null) {
+                    errors.add(DeptErrors.DEPT105.name());
+                }else if (locService.find(department.getLocation().getLocationId()) == null) {
+                    errors.add(LocationErrors.LOC101.name());
                 }else if (errors.isEmpty()) {
                     department = deptRepo.save(department);
                 }

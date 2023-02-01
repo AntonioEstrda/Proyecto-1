@@ -41,9 +41,10 @@ public class Department implements Serializable{
     @Pattern(regexp = "^[a-zA-Z0-9]{2,8}", message="DEPT111")
     private String code; 
     
-    @NotEmpty(message = "DEPT105")
-    @Column(length=100, name="location")
-    private String location; 
+    //@NotEmpty(message = "DEPT105")
+    @ManyToOne
+    @JoinColumn(name="location")
+    private Location location;  
     
     @NotNull(message="DEPT109")
     @ManyToOne

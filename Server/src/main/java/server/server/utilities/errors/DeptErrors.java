@@ -30,7 +30,7 @@ public enum DeptErrors {
     DEPT104,
     
     /**
-     * Location must contain a value
+     * The code must contain a value
      */
     DEPT105,
     
