@@ -20,6 +20,7 @@ export function SubjectContextProvider(props) {
   }, []);
 
   async function create(subject) {
+    console.log(subject);
     await fetch(url, {
       method: "POST",
       headers: {

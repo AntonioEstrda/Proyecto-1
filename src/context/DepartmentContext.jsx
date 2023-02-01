@@ -7,8 +7,8 @@ export const DepartmentContext = createContext();
 export function DepartmentContextProvider(props) {
   const url = "http://localhost:8080/department/";
 
-  const { locations } = useContext(LocationContext);
   const { facultys } = useContext(FacultyContext);
+  const { locations } = useContext(LocationContext);
 
   const [editingDepartment, setEditingDepartment] = useState();
   const [departments, setDepartments] = useState([]);
