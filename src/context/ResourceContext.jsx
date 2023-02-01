@@ -34,14 +34,13 @@ export function ResourceContextProvider(props) {
     });
   }, [facultys]);
 
-  async function create(facultyId, resource) {
+  async function create(resource, facultyId) {
     await fetch(
       url +
         "add?" +
         new URLSearchParams({
           facultyId,
         }),
-      console.log(facultyId), //////
       {
         method: "POST",
         headers: {
@@ -62,13 +61,15 @@ export function ResourceContextProvider(props) {
       .catch((e) => console.log(e));
   }
 
-  async function deleteById(resourceId, facultyId) {
+  async function deleteById(facultyId, resourceId) {
+    console.log(facultyId, resourceId);
     await fetch(
       url +
-        "delete/" +
+        "delete?" +
         new URLSearchParams({
           facultyId,
         }) +
+        "&" +
         new URLSearchParams({
           resourceId,
         }),
@@ -82,18 +83,19 @@ export function ResourceContextProvider(props) {
     )
       .then(() => {
         setResources(
+          resources.filter((faculty) => faculty.facultyId !== facultyId),
           resources.filter((resource) => resource.resourceId !== resourceId)
-          //resources.filter((faculty) => faculty.facultyId !== facultyId)
         );
-        console.log(resourceId); /////////
+        console.log(facultyId, resourceId); /////////
       })
       .catch((e) => console.log(e));
   }
 
   async function update(prevResource, facultyId) {
+    console.log(prevResource, facultyId);
     await fetch(
       url +
-        "update" +
+        "update?" +
         new URLSearchParams({
           facultyId,
         }),
@@ -118,6 +120,7 @@ export function ResourceContextProvider(props) {
       .catch((e) => console.log(e));
   }
 
+  //console.log(facultys);
   return (
     <ResourceContext.Provider
       value={{

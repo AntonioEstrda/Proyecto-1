@@ -79,46 +79,48 @@ export default function ResourceForm() {
 
   function crear(e) {
     e.preventDefault();
-    create({
-      resourceName,
-      resourceDescription,
-      faculty: facultys.find(
-        (faculty) => faculty.facultyId == idFacultySelected
-      ),
-      resourceType: resourceTypes.find(
-        (resourceType) => resourceType.resourceTypeId == idResourceTypeSelected
-      ),
-      resourceCode,
-      resourceNumber,
-      location: locations.find(
-        (location) => location.locationId == idLocationSelected
-      ),
-      resourceCapacity,
-      resourceDisable,
-    });
+    create(
+      {
+        name: resourceName,
+        description: resourceDescription,
+        resourceType: resourceTypes.find(
+          (resourceType) =>
+            resourceType.resourceTypeId == idResourceTypeSelected
+        ),
+        code: resourceCode,
+        number: resourceNumber,
+        location: locations.find(
+          (location) => location.locationId == idLocationSelected
+        ),
+        capacity: resourceCapacity,
+        disable: resourceDisable === "0" ? "FALSE" : "TRUE",
+      },
+      idFacultySelected
+    );
     limpiarForm();
   }
 
   function actualizar(e) {
     e.preventDefault();
-    update({
-      resourceId: editingResource.resourceId,
-      resourceName,
-      resourceDescription,
-      faculty: facultys.find(
-        (faculty) => faculty.facultyId == idFacultySelected
-      ),
-      resourceType: resourceTypes.find(
-        (resourceType) => resourceType.resourceTypeId == idResourceTypeSelected
-      ),
-      resourceCode,
-      resourceNumber,
-      location: locations.find(
-        (location) => location.locationId == idLocationSelected
-      ),
-      resourceCapacity,
-      resourceDisable,
-    });
+    update(
+      {
+        resourceId: editingResource.resourceId,
+        name: resourceName,
+        description: resourceDescription,
+        resourceType: resourceTypes.find(
+          (resourceType) =>
+            resourceType.resourceTypeId == idResourceTypeSelected
+        ),
+        code: resourceCode,
+        number: resourceNumber,
+        location: locations.find(
+          (location) => location.locationId == idLocationSelected
+        ),
+        capacity: resourceCapacity,
+        disable: resourceDisable === "0" ? "FALSE" : "TRUE",
+      },
+      idFacultySelected
+    );
     limpiarForm();
   }
 
