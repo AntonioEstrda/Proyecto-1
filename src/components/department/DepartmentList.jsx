@@ -8,7 +8,7 @@ export default function DepartmentList() {
   if (departments.length === 0) {
     return (
       <h1 className="text-white text-4xl font-bold text-center">
-        No hay Periodos Académicos registrados
+        No hay Departamentos registrados
       </h1>
     );
   }
@@ -17,7 +17,7 @@ export default function DepartmentList() {
     <div className="grid grid-cols-4 gap-2">
       {departments.map((departments) => (
         <DepartmentCard
-          key={departments.departmentID}
+          key={departments.departmentId}
           department={departments}
         />
       ))}

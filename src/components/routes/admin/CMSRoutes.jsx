@@ -48,9 +48,13 @@ function CMSRoutes() {
         </AssignmentResourceContextProvider>
       </Route>
       <Route path="/departamentos">
-        <DepartmentContextProvider>
-          <AppDepartment />
-        </DepartmentContextProvider>
+        <LocationContextProvider>
+          <FacultyContextProvider>
+            <DepartmentContextProvider>
+              <AppDepartment />
+            </DepartmentContextProvider>
+          </FacultyContextProvider>
+        </LocationContextProvider>
       </Route>
       <Route path="/eventos">
         <EventContextProvider>
@@ -89,9 +93,13 @@ function CMSRoutes() {
         </LocationContextProvider>
       </Route>
       <Route path="/programas">
-        <ProgramContextProvider>
-          <AppProgram />
-        </ProgramContextProvider>
+        <DepartmentContextProvider>
+          <LocationContextProvider>
+            <ProgramContextProvider>
+              <AppProgram />
+            </ProgramContextProvider>
+          </LocationContextProvider>
+        </DepartmentContextProvider>
       </Route>
       <Route path="/recursos">
         <ResourceTypeContextProvider>

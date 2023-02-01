@@ -1,12 +1,19 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import { LocationContext } from "../context/LocationContext";
+import { FacultyContext } from "../context/FacultyContext";
 
 export const DepartmentContext = createContext();
 
 export function DepartmentContextProvider(props) {
   const url = "http://localhost:8080/department/";
 
+  const { locations } = useContext(LocationContext);
+  const { facultys } = useContext(FacultyContext);
+
   const [editingDepartment, setEditingDepartment] = useState();
   const [departments, setDepartments] = useState([]);
+  const [idLocationSelected, setIdLocationSelected] = useState(0);
+  const [idFacultySelected, setIdFacultySelected] = useState(0);
   useEffect(() => {
     fetch(url + "all")
       .then((response) => response.json())
@@ -22,23 +29,20 @@ export function DepartmentContextProvider(props) {
         "Content-Type": "application/json",
       },
       mode: "cors",
-      body: JSON.stringify({
-        name: department.name,
-        initDate: department.initDate,
-        finalDate: department.finalDate,
-      }),
+      body: JSON.stringify(department),
     })
       .then((response) => response.json())
       .then((data) => {
-        data.initDate = data.initDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
         setDepartments((prevState) => prevState.concat([data]));
+        setEditingDepartment(null);
+        setIdLocationSelected(0);
+        setIdFacultySelected(0);
       })
       .catch((e) => console.log(e));
   }
 
-  async function deleteById(departmentID) {
-    await fetch(url + "delete/" + departmentID, {
+  async function deleteById(departmentId) {
+    await fetch(url + "delete/" + departmentId, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -48,8 +52,7 @@ export function DepartmentContextProvider(props) {
       .then(() =>
         setDepartments(
           departments.filter(
-            (department) =>
-              department.departmentID !== departmentID
+            (department) => department.departmentId !== departmentId
           )
         )
       )
@@ -67,13 +70,12 @@ export function DepartmentContextProvider(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        data.initDate = data.initDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
-        departments[departments.indexOf(editingDepartment)] =
-          prevDepartment;
+        departments[departments.indexOf(editingDepartment)] = prevDepartment;
         setDepartments(departments);
+        setEditingDepartment(null);
+        setIdLocationSelected(0);
+        setIdFacultySelected(0);
       })
-      .then(() => setEditingDepartment(null))
       .catch((e) => console.log(e));
   }
 
@@ -86,6 +88,12 @@ export function DepartmentContextProvider(props) {
         update,
         deleteById,
         setEditingDepartment,
+        setIdLocationSelected,
+        idLocationSelected,
+        locations,
+        idFacultySelected,
+        setIdFacultySelected,
+        facultys,
       }}
     >
       {props.children}
