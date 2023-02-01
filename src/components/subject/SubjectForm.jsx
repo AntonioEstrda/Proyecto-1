@@ -80,6 +80,11 @@ export default function SubjectForm() {
     limpiarForm();
   }
 
+  const modalidades = [
+    { label: "Anual", value: "Anual" },
+    { label: "Semestral", value: "Semestral" },
+  ];
+
   return (
     <div className="max-w-md mx-auto ">
       <form
@@ -96,7 +101,6 @@ export default function SubjectForm() {
           className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={name}
         />
-
         <input
           placeholder="Requisitos"
           onChange={(e) => setRequisits(e.target.value)}
@@ -104,7 +108,6 @@ export default function SubjectForm() {
           className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={requisits}
         />
-
         <input
           placeholder="Semestre"
           onChange={(e) => setSemester(e.target.value)}
@@ -112,7 +115,6 @@ export default function SubjectForm() {
           className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={semester}
         />
-
         <input
           placeholder="Intensidad"
           onChange={(e) => setIntensity(e.target.value)}
@@ -161,7 +163,6 @@ export default function SubjectForm() {
             );
           })}
         </select>
-
         <div className="grid grid-cols-1">
           <button className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro ">
             Guardar
