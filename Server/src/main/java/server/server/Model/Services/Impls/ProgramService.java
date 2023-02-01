@@ -15,8 +15,10 @@ import server.server.Model.Access.DAOProgram;
 import server.server.Model.Domain.Program;
 import server.server.Model.Services.IDepartmentService;
 import server.server.Model.Services.IProgramService;
+import server.server.Model.Services.ILocationService;
 import server.server.utilities.Labels;
 import server.server.utilities.errors.ProgErrors;
+import server.server.utilities.errors.LocationErrors;
 
 /**
  *
@@ -31,6 +33,10 @@ public class ProgramService implements IProgramService{
     
     @Autowired
     private IDepartmentService deptService;
+
+    @Autowired
+    private ILocationService locService;
+
 
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
@@ -50,12 +56,22 @@ public class ProgramService implements IProgramService{
             if (deptService.find(program.getDepartment()) != null) {
                 if (programRepo.findByCode(program.getCode()) != null) {
                     errors.add(ProgErrors.PRG108.name());
+                }else if (program.getLocation() == null) {
+                    errors.add(ProgErrors.PRG105.name());
+                }else if (locService.find(program.getLocation().getLocationId()) == null) {
+                    errors.add(LocationErrors.LOC101.name());
                 }else if (errors.isEmpty()) {
                     program = programRepo.save(program);
                 }
             } else {
                 errors.add(ProgErrors.PRG101.name());
             }
+
+
+
+
+
+
             
         }
         returns.put(Labels.errors, errors);
