@@ -74,13 +74,15 @@ function CMSRoutes() {
         </FacultyResourceContextProvider>
       </Route>
       <Route path="/grupos">
-        <SubjectContextProvider>
-          <AcademicPeriodContextProvider>
-            <GroupContextProvider>
-              <AppGroup />
-            </GroupContextProvider>
-          </AcademicPeriodContextProvider>
-        </SubjectContextProvider>
+        <ProgramContextProvider>
+          <SubjectContextProvider>
+            <AcademicPeriodContextProvider>
+              <GroupContextProvider>
+                <AppGroup />
+              </GroupContextProvider>
+            </AcademicPeriodContextProvider>
+          </SubjectContextProvider>
+        </ProgramContextProvider>
       </Route>
       <Route path="/asignacioneshorarias">
         <HourlyAssignmentContextProvider>
