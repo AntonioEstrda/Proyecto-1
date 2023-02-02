@@ -95,9 +95,11 @@ function CMSRoutes() {
       <Route path="/programas">
         <LocationContextProvider>
           <DepartmentContextProvider>
-            <ProgramContextProvider>
-              <AppProgram />
-            </ProgramContextProvider>
+            <FacultyContextProvider>
+              <ProgramContextProvider>
+                <AppProgram />
+              </ProgramContextProvider>
+            </FacultyContextProvider>
           </DepartmentContextProvider>
         </LocationContextProvider>
       </Route>
