@@ -51,9 +51,13 @@ function CMSRoutes() {
         <ProgramContextProvider>
           <LocationContextProvider>
             <FacultyContextProvider>
-              <DepartmentContextProvider>
-                <AppDepartment />
-              </DepartmentContextProvider>
+              <ProgramContextProvider>
+                <SubjectContextProvider>
+                  <DepartmentContextProvider>
+                    <AppDepartment />
+                  </DepartmentContextProvider>
+                </SubjectContextProvider>
+              </ProgramContextProvider>
             </FacultyContextProvider>
           </LocationContextProvider>
         </ProgramContextProvider>
@@ -108,9 +112,13 @@ function CMSRoutes() {
         <LocationContextProvider>
           <DepartmentContextProvider>
             <FacultyContextProvider>
-              <ProgramContextProvider>
-                <AppProgram />
-              </ProgramContextProvider>
+              <SubjectContextProvider>
+                <GroupContextProvider>
+                  <ProgramContextProvider>
+                    <AppProgram />
+                  </ProgramContextProvider>
+                </GroupContextProvider>
+              </SubjectContextProvider>
             </FacultyContextProvider>
           </DepartmentContextProvider>
         </LocationContextProvider>
@@ -149,13 +157,25 @@ function CMSRoutes() {
         </TeacherContextProvider>
       </Route>
       <Route path="/gruposprofesores">
-        <GroupContextProvider>
-          <TeacherContextProvider>
-            <TeacherGroupContextProvider>
-              <AppTeacherGroup />
-            </TeacherGroupContextProvider>
-          </TeacherContextProvider>
-        </GroupContextProvider>
+        <TeacherContextProvider>
+          <LocationContextProvider>
+            <FacultyContextProvider>
+              <DepartmentContextProvider>
+                <ProgramContextProvider>
+                  <SubjectContextProvider>
+                    <AcademicPeriodContextProvider>
+                      <GroupContextProvider>
+                        <TeacherGroupContextProvider>
+                          <AppTeacherGroup />
+                        </TeacherGroupContextProvider>
+                      </GroupContextProvider>
+                    </AcademicPeriodContextProvider>
+                  </SubjectContextProvider>
+                </ProgramContextProvider>
+              </DepartmentContextProvider>
+            </FacultyContextProvider>
+          </LocationContextProvider>
+        </TeacherContextProvider>
       </Route>
     </>
   );

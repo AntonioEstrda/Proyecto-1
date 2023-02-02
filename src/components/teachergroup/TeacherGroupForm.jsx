@@ -40,7 +40,7 @@ export default function TeacherGroupForm() {
       teacher: teachers.find(
         (teacher) => teacher.teacherID == idTeacherSelected
       ),
-      group: groups.fnd((group) => group.groupId == idGroupSelected),
+      group: groups.find((group) => group.groupId == idGroupSelected),
     });
     limpiarForm();
   }
@@ -51,7 +51,7 @@ export default function TeacherGroupForm() {
       teacher: teachers.find(
         (teacher) => teacher.teacherID == idTeacherSelected
       ),
-      group: groups.fnd((group) => group.groupId == idGroupSelected),
+      group: groups.find((group) => group.groupId == idGroupSelected),
     });
     limpiarForm();
   }
@@ -80,12 +80,12 @@ export default function TeacherGroupForm() {
                 key={teacher.teacherID}
                 value={teacher.teacherID}
                 selected={
-                  teacher.locationId === editingTeacherGroup?.teacher.teacherID
+                  teacher.teacherID === editingTeacherGroup?.teacher.teacherID
                     ? true
                     : false
                 }
               >
-                {teacher.fisrtName}{" "}
+                {teacher.firstName}{" "}
               </option>
             );
           })}

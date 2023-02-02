@@ -79,7 +79,7 @@ export function TeacherGroupContextProvider(props) {
       })
       .catch((e) => console.log(e));
   }
-
+  //console.log(teachers);
   return (
     <TeacherGroupContext.Provider
       value={{
