@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-01-2023 a las 02:43:09
+-- Tiempo de generación: 03-02-2023 a las 00:22:45
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -44,16 +44,30 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `academicHoursTeacher` (`teacherId` I
 RETURN vHours; 	
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `AssigSbjtGpsHours` (`groupId` INT) RETURNS DOUBLE  BEGIN 
+CREATE DEFINER=`root`@`localhost` FUNCTION `AssigSbjtGpsHours` (`groupId` INT, `call_to_action` VARCHAR(100)) RETURNS INT(11)  BEGIN 
 	DECLARE hoursT double; 
     SET hoursT = 0;  
-	WITH consulta as ( 
-        SELECT GP.IDGROUP, SUM(TIME_TO_SEC(TIMEDIFF(SH.ENDTIME, SH.STARTIME))/3600) as TotalHours FROM `schedule` SH 
-        INNER JOIN  groupt GP ON GP.IDGROUP = SH.IDGROUP
-        WHERE GP.ACADEMICPERIDODID = getCrrntAcdPer()
-        AND SH.TYPE = 'ACADEMICO'
-        GROUP BY  GP.IDGROUP 	
-    ) SELECT TotalHours into hoursT FROM  consulta WHERE IDGROUP = groupId;  
+    IF call_to_action = 'ACADEMICO' THEN  
+        WITH consulta as ( 
+            SELECT GP.IDGROUP, CAST(SUM(TIME_TO_SEC(TIMEDIFF(SH.ENDTIME, SH.STARTIME))/3600) as INT) as TotalHours
+            FROM `schedule` SH 
+            	INNER JOIN  groupt GP ON GP.IDGROUP = SH.IDGROUP
+            WHERE GP.ACADEMICPERIDODID = getCrrntAcdPer()
+            	AND SH.TYPE = 'ACADEMICO'
+            GROUP BY  GP.IDGROUP 	
+        ) SELECT TotalHours into hoursT FROM  consulta WHERE IDGROUP = groupId;  
+	ELSEIF call_to_action = 'PRESTAMO_POR_MATERIA' THEN 
+    	WITH consulta as ( 
+             SELECT GP.IDGROUP, CAST(SUM(TIME_TO_SEC(TIMEDIFF(SH.ENDTIME, SH.STARTIME))/3600) as INT) as TotalHours 
+             FROM `schedule` SH 
+                INNER JOIN `event` EV ON SH.eventId = EV.id 
+                INNER JOIN groupt GP ON  SH.IDGROUP = GP.IDGROUP
+             WHERE EV.academicPeriodId = getCrrntAcdPer()
+             AND SH.TYPE = 'EVENTO'
+             AND EV.type = 'PRESTAMO_POR_MATERIA'
+             GROUP BY  GP.IDGROUP 	
+		) SELECT TotalHours into hoursT FROM  consulta WHERE IDGROUP = groupId;
+    END IF; 
     RETURN hoursT; 
 END$$
 
@@ -369,12 +383,12 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `validateGroupProgram` (`schId` INT, 
     return ban; 
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `validateHourAssignment` (`groupId` INT, `crrtime` INT, `uptTime` INT) RETURNS INT(11) DETERMINISTIC BEGIN 
+CREATE DEFINER=`root`@`localhost` FUNCTION `validateHourAssignment` (`groupId` INT, `crrtime` INT, `uptTime` INT, `call_to_action` VARCHAR(50)) RETURNS INT(11) DETERMINISTIC BEGIN 
 	DECLARE ban int DEFAULT 0; 
     WITH consulta as (
         SELECT * FROM  intensitysubjectgroup WHERE IDGROUP = groupId
     )
-    SELECT CASE WHEN AssigSbjtGpsHours(groupId) + uptTime - crrTime  
+    SELECT CASE WHEN AssigSbjtGpsHours(groupId, call_to_action) + uptTime - crrTime  
     	<=  (SELECT INTENSITY FROM consulta) then 0 else 1 end into ban; 
     return ban; 
 END$$
@@ -700,7 +714,7 @@ CREATE TABLE `overviewintensityassignedhours` (
 ,`IDSUBJECT` int(11)
 ,`IDGROUP` int(11)
 ,`INTENSITY` int(2)
-,`AssignedHours` double
+,`AssignedHours` int(11)
 );
 
 -- --------------------------------------------------------
@@ -827,7 +841,6 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`IDSCHEDEULE`, `IDGROUP`, `eventId`, `resourceId`, `TYPE`, `DAYS`, `STARTIME`, `ENDTIME`, `initialdate`, `finaldate`) VALUES
-(3, 4, NULL, 4, 'ACADEMICO', 'LUNES', '14:00:00', '16:00:00', '2022-05-19', '2022-12-31'),
 (13, 5, NULL, 4, 'ACADEMICO', 'LUNES', '07:00:00', '09:00:00', '2022-05-19', '2022-12-31');
 
 -- --------------------------------------------------------

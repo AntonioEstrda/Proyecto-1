@@ -571,7 +571,7 @@ public class ScheduleService implements IScheduleService {
         return errors;
     }
 
-    private ArrayList<String> validateAcademicScheduleAssig(Schedule newSc, Long oldSc) {
+    private ArrayList<String> validateAcademicScheduleAssig(Schedule newSc, Long oldSc, String call) {
         ArrayList<String> errors = new ArrayList<>();
         int ban;
         Long groupId = newSc.getGroup().getGroupId();
@@ -591,7 +591,7 @@ public class ScheduleService implements IScheduleService {
                     currntm = findById.getStartime().until(findById.getEndtime(), ChronoUnit.HOURS);
                 }
             }
-            ban = repo.validateHourAssignment(groupId, currntm, updtm);
+            ban = repo.validateHourAssignment(groupId, currntm, updtm, call);
             if (ban == 1) {
                 errors.add(ScheduleErrors.SCH115.name());
             }
@@ -623,7 +623,7 @@ public class ScheduleService implements IScheduleService {
             errors.addAll(this.validateAssig(newSc, oldSc));
         }
         if (errors.isEmpty()) {
-            errors.addAll(this.validateAcademicScheduleAssig(newSc, oldSc));
+            errors.addAll(this.validateAcademicScheduleAssig(newSc, oldSc, Schedule.scheduleType.ACADEMICO.name()));
         }
         if (errors.isEmpty()) {
             int validateAssOverFaculty = repo.validateAssOverFaculty(newSc.getRes().getResourceId(), newSc.getGroup().getGroupId());
@@ -646,7 +646,7 @@ public class ScheduleService implements IScheduleService {
                 errors.add(ScheduleErrors.SCH102.name());
             }
             if (errors.isEmpty()) {
-                errors.addAll(this.validateAcademicScheduleAssig(newSc, oldSc));
+                errors.addAll(this.validateAcademicScheduleAssig(newSc, oldSc, Event.EventType.PRESTAMO_POR_MATERIA.name()));
             }
         }
         return errors;

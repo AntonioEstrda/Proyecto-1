@@ -51,11 +51,12 @@ public interface DAOSchedule extends JpaRepository<Schedule, Long> {
 
     @Query(
             value = """
-                    SELECT validateHourAssignment(:groupId, :crrtime, :uptTime) FROM DUAL;  
+                    SELECT validateHourAssignment(:groupId, :crrtime, :uptTime, :call_to_action) FROM DUAL;  
                     """,
             nativeQuery = true
     )
-    public int validateHourAssignment(@Param("groupId") Long groupId, @Param("crrtime") long crrtime, @Param("uptTime") long uptTime);
+    public int validateHourAssignment(@Param("groupId") Long groupId, @Param("crrtime") long crrtime, @Param("uptTime") long uptTime,
+            @Param("call_to_action") String call);
 
     @Query(
             value = """
@@ -125,7 +126,7 @@ public interface DAOSchedule extends JpaRepository<Schedule, Long> {
     public int validateAssignmentEnvProGro(@Param("departmentId") Long departmentId, @Param("groupId") Long groupId, @Param("envId") Long envId);
 
     @Query(
-            value = "SELECT existAssigmentScheudleDpto(:schId,:departmentId); from dual;",
+            value = "SELECT existAssigmentScheudleDpto(:schId,:departmentId) from dual;",
             nativeQuery = true
     )
     public int existAssigmentScheudleDpto(@Param("departmentId") Long departmentId, @Param("schId") Long schId);
