@@ -16,10 +16,7 @@ export default function ProgramList() {
   return (
     <div className="grid grid-cols-4 gap-2">
       {programs.map((programs) => (
-        <ProgramCard
-          key={programs.programID}
-          program={programs}
-        />
+        <ProgramCard key={programs.programId} program={programs} />
       ))}
     </div>
   );

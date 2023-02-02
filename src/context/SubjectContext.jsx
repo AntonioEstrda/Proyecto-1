@@ -73,7 +73,7 @@ export function SubjectContextProvider(props) {
       })
       .catch((e) => console.log(e));
   }
-
+  console.log(programs);
   return (
     <SubjectContext.Provider
       value={{

@@ -1,12 +1,19 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import { LocationContext } from "../context/LocationContext";
+import { DepartmentContext } from "../context/DepartmentContext";
 
 export const ProgramContext = createContext();
 
 export function ProgramContextProvider(props) {
   const url = "http://localhost:8080/Program/";
 
+  const { departments } = useContext(DepartmentContext);
+  const { locations } = useContext(LocationContext);
+
   const [editingProgram, setEditingProgram] = useState();
   const [programs, setPrograms] = useState([]);
+  const [idLocationSelected, setIdLocationSelected] = useState(0);
+  const [idDepartmentSelected, setIdDepartmentSelected] = useState(0);
   useEffect(() => {
     fetch(url + "all")
       .then((response) => response.json())
@@ -16,29 +23,27 @@ export function ProgramContextProvider(props) {
   }, []);
 
   async function create(program) {
+    //console.log(program);
     await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       mode: "cors",
-      body: JSON.stringify({
-        name: program.name,
-        initDate: program.initDate,
-        finalDate: program.finalDate,
-      }),
+      body: JSON.stringify(program),
     })
       .then((response) => response.json())
       .then((data) => {
-        data.initDate = data.initDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
         setPrograms((prevState) => prevState.concat([data]));
+        setEditingProgram(null);
+        setIdLocationSelected(0);
+        setIdDepartmentSelected(0);
       })
       .catch((e) => console.log(e));
   }
 
-  async function deleteById(programID) {
-    await fetch(url + "delete/" + programID, {
+  async function deleteById(ProgramId) {
+    await fetch(url + "delete/" + ProgramId, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +52,7 @@ export function ProgramContextProvider(props) {
     })
       .then(() =>
         setPrograms(
-          programs.filter((program) => program.programID !== programID)
+          programs.filter((program) => program.ProgramId !== ProgramId)
         )
       )
       .catch((e) => console.log(e));
@@ -64,15 +69,16 @@ export function ProgramContextProvider(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        data.initDate = data.initDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
         programs[programs.indexOf(editingProgram)] = prevProgram;
         setPrograms(programs);
+        setEditingProgram(null);
+        setIdLocationSelected(0);
+        setIdDepartmentSelected(0);
       })
-      .then(() => setEditingProgram(null))
       .catch((e) => console.log(e));
   }
 
+  console.log(locations);
   return (
     <ProgramContext.Provider
       value={{
@@ -82,6 +88,12 @@ export function ProgramContextProvider(props) {
         update,
         deleteById,
         setEditingProgram,
+        idDepartmentSelected,
+        idLocationSelected,
+        setIdLocationSelected,
+        setIdDepartmentSelected,
+        locations,
+        departments,
       }}
     >
       {props.children}

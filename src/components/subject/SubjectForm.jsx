@@ -19,8 +19,8 @@ export default function SubjectForm() {
   const [modality, setModality] = useState("");
   const [type, setType] = useState("");
   const [code, setCode] = useState("");
-  const [disable, setDisable] = useState("");
-  const [extern, setExtern] = useState("");
+  const [isDisable, setIsDisable] = useState("");
+  const [isExtern, setIsExtern] = useState("");
 
   useEffect(() => {
     if (editingSubject) {
@@ -31,8 +31,8 @@ export default function SubjectForm() {
       setModality(editingSubject.modality);
       setType(editingSubject.type);
       setCode(editingSubject.code);
-      setDisable(editingSubject.disable);
-      setExtern(editingSubject.extern);
+      setIsDisable(editingSubject.isDisable);
+      setIsExtern(editingSubject.isExtern);
       setLimpio(false);
       setIdProgramSelected(editingSubject.program.programId);
 
@@ -53,8 +53,8 @@ export default function SubjectForm() {
     setModality("");
     setType("");
     setCode("");
-    setDisable("");
-    setExtern("");
+    setIsDisable("");
+    setIsExtern("");
     setLimpio(true);
     setIdProgramSelected(0);
 
@@ -64,7 +64,7 @@ export default function SubjectForm() {
 
   function setFormRadioDisable() {
     let ele = document.getElementsByName("isDisable_radio");
-    if (editingSubject.disable === "1") {
+    if (editingSubject.isDisable === "1") {
       ele[1].removeAttribute("checked");
       ele[0].setAttribute("checked", "");
     } else {
@@ -80,7 +80,7 @@ export default function SubjectForm() {
 
   function setFormRadioExtern() {
     let ele = document.getElementsByName("isExtern_radio");
-    if (editingSubject.extern === "1") {
+    if (editingSubject.isExtern === "1") {
       ele[1].removeAttribute("checked");
       ele[0].setAttribute("checked", "");
     } else {
@@ -107,8 +107,8 @@ export default function SubjectForm() {
         (program) => program.programId == idProgramSelected
       ),
       code,
-      disable,
-      extern,
+      isDisable,
+      isExtern,
     });
     limpiarForm();
   }
@@ -127,8 +127,8 @@ export default function SubjectForm() {
         (program) => program.programId == idProgramSelected
       ),
       code,
-      disable,
-      extern,
+      isDisable,
+      isExtern,
     });
     limpiarForm();
   }
@@ -231,7 +231,7 @@ export default function SubjectForm() {
               id="red-radio"
               type="radio"
               value="0"
-              onChange={() => setDisable("1")}
+              onChange={() => setIsDisable("1")}
               name="isDisable_radio"
               className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             ></input>
@@ -247,7 +247,7 @@ export default function SubjectForm() {
               id="green-radio"
               type="radio"
               value="1"
-              onChange={() => setDisable("0")}
+              onChange={() => setIsDisable("0")}
               name="isDisable_radio"
               className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             ></input>
@@ -267,7 +267,7 @@ export default function SubjectForm() {
               id="red-radio"
               type="radio"
               value="0"
-              onChange={() => setExtern("1")}
+              onChange={() => setIsExtern("1")}
               name="isExtern_radio"
               className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             ></input>
@@ -283,7 +283,7 @@ export default function SubjectForm() {
               id="green-radio"
               type="radio"
               value="1"
-              onChange={() => setExtern("0")}
+              onChange={() => setIsExtern("0")}
               name="isExtern_radio"
               className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             ></input>
