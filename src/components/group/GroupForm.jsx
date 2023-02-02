@@ -21,8 +21,8 @@ export default function GroupForm() {
   useEffect(() => {
     if (editingGroup) {
       setName(editingGroup.name);
-      setCapacity(editingGroup.capacity);
       setLimpio(false);
+      setCapacity(editingGroup.capacity);
       setIdSubjectSelected(editingGroup.subject.subjectID);
       setIdAcademicPeriodSelected(editingGroup.academicPeriod.academicPeriodID);
     }
@@ -54,6 +54,7 @@ export default function GroupForm() {
     });
     limpiarForm();
   }
+
   function actualizar(e) {
     e.preventDefault();
     update({
@@ -81,7 +82,7 @@ export default function GroupForm() {
             placeholder="Grupo:"
             onChange={(e) => setName(e.target.value)}
             autoFocus="on"
-            className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+            className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
             value={name}
           />
 
@@ -89,7 +90,7 @@ export default function GroupForm() {
             placeholder="Capacidad:"
             onChange={(e) => setCapacity(e.target.value)}
             autoFocus="on"
-            className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+            className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
             value={capacity}
           />
 
@@ -162,5 +163,5 @@ export default function GroupForm() {
     );
   }
 
-  return <></>
+  return <></>;
 }

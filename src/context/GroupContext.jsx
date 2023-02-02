@@ -14,22 +14,17 @@ export function GroupContextProvider(props) {
   const [editingGroup, setEditingGroup] = useState();
   const [groups, setGroups] = useState([]);
   const [idSubjectSelected, setIdSubjectSelected] = useState(0);
-  const [idAcademicPeriodSelected, setAcademicPeriodSelected] = useState(0);
+  const [idAcademicPeriodSelected, setIdAcademicPeriodSelected] = useState(0);
   useEffect(() => {
-    subjects.forEach((subject) => {
-      fetch(
-        url +
-        "all"
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setGroups(...groups, data);
-        })
-        .catch((e) => console.log(e));
-    });
+    fetch(url + "all")
+      .then((response) => response.json())
+      .then((data) => {
+        setGroups(data);
+      });
   }, []);
 
   async function create(group) {
+    console.log(group)
     await fetch(url, {
       method: "POST",
       headers: {
@@ -43,7 +38,7 @@ export function GroupContextProvider(props) {
         setGroups((prevState) => prevState.concat([data]));
         setEditingGroup(null);
         setIdSubjectSelected(0);
-        setAcademicPeriodSelected(0);
+        setIdAcademicPeriodSelected(0);
       })
       .catch((e) => console.log(e));
   }
@@ -79,11 +74,11 @@ export function GroupContextProvider(props) {
         setGroups(groups);
         setEditingGroup(null);
         setIdSubjectSelected(0);
-        setAcademicPeriodSelected(0);
+        setIdAcademicPeriodSelected(0);
       })
       .catch((e) => console.log(e));
   }
-
+  //console.log(groups);
   return (
     <GroupContext.Provider
       value={{
@@ -93,11 +88,11 @@ export function GroupContextProvider(props) {
         update,
         deleteById,
         setEditingGroup,
-        idSubjectSelected,
         setIdSubjectSelected,
-        subjects,
-        setAcademicPeriodSelected,
+        setIdAcademicPeriodSelected,
+        idSubjectSelected,
         idAcademicPeriodSelected,
+        subjects,
         academicPeriods,
       }}
     >
