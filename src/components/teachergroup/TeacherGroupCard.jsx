@@ -2,9 +2,8 @@ import { useContext } from "react";
 import { TeacherGroupContext } from "../../context/TeacherGroupContext";
 
 export default function TeacherGroupCard({ teacherGroup }) {
-  const { deleteById, setEditingTeacherGroup } = useContext(
-    TeacherGroupContext
-  );
+  const { deleteById, setEditingTeacherGroup } =
+    useContext(TeacherGroupContext);
 
   function defineEditItem() {
     setEditingTeacherGroup(teacherGroup);
@@ -12,13 +11,16 @@ export default function TeacherGroupCard({ teacherGroup }) {
 
   return (
     <div className="bg-paleta2-purpura text-paleta2-azul-claro p-4 rounded-md">
-      <h1 className="text-xl font-bold capitalize">{teacherGroup?.name}</h1>
-      <p className="text-paleta2-azul-claro text-sm">
-        Fecha inicio: {teacherGroup?.initDate}
-      </p>
-      <p className="text-paleta2-azul-claro text-sm">
-        Fecha final: {teacherGroup?.finalDate}
-      </p>
+      <div className="bg-paleta2-azulverd text-paleta2-naranja p-4 mt-2 rounded-md">
+        <p className="text-lg font-bold text-blue">Profesor:</p>
+        {teacherGroup.teacher?.firstName}
+        {teacherGroup.teacher?.lastName}
+      </div>
+
+      <div className="bg-paleta2-azulverd text-paleta2-naranja p-4 mt-2 rounded-md">
+        <p className="text-lg font-bold text-blue">Grupo:</p>
+        {teacherGroup.group?.name}
+      </div>
 
       <div className="grid grid-cols-2 gap-3">
         <button

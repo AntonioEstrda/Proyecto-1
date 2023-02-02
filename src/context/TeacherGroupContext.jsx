@@ -1,12 +1,19 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import { TeacherContext } from "../context/TeacherContext";
+import { GroupContext } from "../context/GroupContext";
 
 export const TeacherGroupContext = createContext();
 
 export function TeacherGroupContextProvider(props) {
-  const url = "http://localhost:8080/academicperiod/";
+  const url = "http://localhost:8080/teacher_group/";
+
+  const { teachers } = useContext(TeacherContext);
+  const { groups } = useContext(GroupContext);
 
   const [editingTeacherGroup, setEditingTeacherGroup] = useState();
   const [teacherGroups, setTeacherGroups] = useState([]);
+  const [idTeacherSelected, setIdTeacherSelected] = useState(0);
+  const [idGroupSelected, setIdGroupSelected] = useState(0);
   useEffect(() => {
     fetch(url + "all")
       .then((response) => response.json())
@@ -22,17 +29,14 @@ export function TeacherGroupContextProvider(props) {
         "Content-Type": "application/json",
       },
       mode: "cors",
-      body: JSON.stringify({
-        name: teacherGroup.name,
-        initDate: teacherGroup.initDate,
-        finalDate: teacherGroup.finalDate,
-      }),
+      body: JSON.stringify(teacherGroup),
     })
       .then((response) => response.json())
       .then((data) => {
-        data.initDate = data.initDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
         setTeacherGroups((prevState) => prevState.concat([data]));
+        setEditingTeacherGroup(null);
+        setIdTeacherSelected(0);
+        setIdGroupSelected(0);
       })
       .catch((e) => console.log(e));
   }
@@ -48,8 +52,7 @@ export function TeacherGroupContextProvider(props) {
       .then(() =>
         setTeacherGroups(
           teacherGroups.filter(
-            (teacherGroup) =>
-              teacherGroup.teacherGroupID !== teacherGroupID
+            (teacherGroup) => teacherGroup.teacherGroupID !== teacherGroupID
           )
         )
       )
@@ -67,13 +70,13 @@ export function TeacherGroupContextProvider(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        data.initDate = data.initDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
         teacherGroups[teacherGroups.indexOf(editingTeacherGroup)] =
           prevTeacherGroup;
         setTeacherGroups(teacherGroups);
+        setEditingTeacherGroup(null);
+        setIdTeacherSelected(0);
+        setIdGroupSelected(0);
       })
-      .then(() => setEditingTeacherGroup(null))
       .catch((e) => console.log(e));
   }
 
@@ -86,6 +89,12 @@ export function TeacherGroupContextProvider(props) {
         update,
         deleteById,
         setEditingTeacherGroup,
+        idTeacherSelected,
+        idGroupSelected,
+        setIdTeacherSelected,
+        setIdGroupSelected,
+        teachers,
+        groups,
       }}
     >
       {props.children}

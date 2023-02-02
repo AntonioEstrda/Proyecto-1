@@ -48,13 +48,15 @@ function CMSRoutes() {
         </AssignmentResourceContextProvider>
       </Route>
       <Route path="/departamentos">
-        <LocationContextProvider>
-          <FacultyContextProvider>
-            <DepartmentContextProvider>
-              <AppDepartment />
-            </DepartmentContextProvider>
-          </FacultyContextProvider>
-        </LocationContextProvider>
+        <ProgramContextProvider>
+          <LocationContextProvider>
+            <FacultyContextProvider>
+              <DepartmentContextProvider>
+                <AppDepartment />
+              </DepartmentContextProvider>
+            </FacultyContextProvider>
+          </LocationContextProvider>
+        </ProgramContextProvider>
       </Route>
       <Route path="/eventos">
         <EventContextProvider>
@@ -62,11 +64,13 @@ function CMSRoutes() {
         </EventContextProvider>
       </Route>
       <Route path="/facultades">
-        <LocationContextProvider>
-          <FacultyContextProvider>
-            <AppFaculty />
-          </FacultyContextProvider>
-        </LocationContextProvider>
+        <DepartmentContextProvider>
+          <LocationContextProvider>
+            <FacultyContextProvider>
+              <AppFaculty />
+            </FacultyContextProvider>
+          </LocationContextProvider>
+        </DepartmentContextProvider>
       </Route>
       <Route path="/recursosfacultades">
         <FacultyResourceContextProvider>
@@ -137,9 +141,13 @@ function CMSRoutes() {
         </TeacherContextProvider>
       </Route>
       <Route path="/gruposprofesores">
-        <TeacherGroupContextProvider>
-          <AppTeacherGroup />
-        </TeacherGroupContextProvider>
+        <GroupContextProvider>
+          <TeacherContextProvider>
+            <TeacherGroupContextProvider>
+              <AppTeacherGroup />
+            </TeacherGroupContextProvider>
+          </TeacherContextProvider>
+        </GroupContextProvider>
       </Route>
     </>
   );
