@@ -48,38 +48,102 @@ function CMSRoutes() {
         </AssignmentResourceContextProvider>
       </Route>
       <Route path="/departamentos">
-        <ProgramContextProvider>
+        <TeacherContextProvider>
           <LocationContextProvider>
             <FacultyContextProvider>
-              <ProgramContextProvider>
-                <SubjectContextProvider>
-                  <DepartmentContextProvider>
-                    <AppDepartment />
-                  </DepartmentContextProvider>
-                </SubjectContextProvider>
-              </ProgramContextProvider>
+              <DepartmentContextProvider>
+                <ProgramContextProvider>
+                  <SubjectContextProvider>
+                    <AcademicPeriodContextProvider>
+                      <GroupContextProvider>
+                        <FacultyContextProvider>
+                          <DepartmentContextProvider>
+                            <AppDepartment />
+                          </DepartmentContextProvider>
+                        </FacultyContextProvider>
+                      </GroupContextProvider>
+                    </AcademicPeriodContextProvider>
+                  </SubjectContextProvider>
+                </ProgramContextProvider>
+              </DepartmentContextProvider>
             </FacultyContextProvider>
           </LocationContextProvider>
-        </ProgramContextProvider>
+        </TeacherContextProvider>
       </Route>
       <Route path="/eventos">
-        <EventContextProvider>
-          <AppEvent />
-        </EventContextProvider>
+        <ResourceTypeContextProvider>
+          <TeacherContextProvider>
+            <LocationContextProvider>
+              <FacultyContextProvider>
+                <DepartmentContextProvider>
+                  <ProgramContextProvider>
+                    <SubjectContextProvider>
+                      <AcademicPeriodContextProvider>
+                        <GroupContextProvider>
+                          <FacultyContextProvider>
+                            <ResourceContextProvider>
+                              <EventContextProvider>
+                                <AppEvent />
+                              </EventContextProvider>
+                            </ResourceContextProvider>
+                          </FacultyContextProvider>
+                        </GroupContextProvider>
+                      </AcademicPeriodContextProvider>
+                    </SubjectContextProvider>
+                  </ProgramContextProvider>
+                </DepartmentContextProvider>
+              </FacultyContextProvider>
+            </LocationContextProvider>
+          </TeacherContextProvider>
+        </ResourceTypeContextProvider>
       </Route>
       <Route path="/facultades">
-        <DepartmentContextProvider>
+        <TeacherContextProvider>
           <LocationContextProvider>
             <FacultyContextProvider>
-              <AppFaculty />
+              <DepartmentContextProvider>
+                <ProgramContextProvider>
+                  <SubjectContextProvider>
+                    <AcademicPeriodContextProvider>
+                      <GroupContextProvider>
+                        <FacultyContextProvider>
+                          <AppFaculty />
+                        </FacultyContextProvider>
+                      </GroupContextProvider>
+                    </AcademicPeriodContextProvider>
+                  </SubjectContextProvider>
+                </ProgramContextProvider>
+              </DepartmentContextProvider>
             </FacultyContextProvider>
           </LocationContextProvider>
-        </DepartmentContextProvider>
+        </TeacherContextProvider>
       </Route>
       <Route path="/recursosfacultades">
-        <FacultyResourceContextProvider>
-          <AppFacultyResource />
-        </FacultyResourceContextProvider>
+        <ResourceTypeContextProvider>
+          <TeacherContextProvider>
+            <LocationContextProvider>
+              <FacultyContextProvider>
+                <DepartmentContextProvider>
+                  <ProgramContextProvider>
+                    <SubjectContextProvider>
+                      <AcademicPeriodContextProvider>
+                        <GroupContextProvider>
+                          <FacultyContextProvider>
+                            <ResourceContextProvider>
+                              <FacultyResourceContextProvider>
+                                <AppFacultyResource />
+                              </FacultyResourceContextProvider>
+                            </ResourceContextProvider>
+                          </FacultyContextProvider>
+                        </GroupContextProvider>
+                      </AcademicPeriodContextProvider>
+                    </SubjectContextProvider>
+                  </ProgramContextProvider>
+                </DepartmentContextProvider>
+              </FacultyContextProvider>
+            </LocationContextProvider>
+          </TeacherContextProvider>
+        </ResourceTypeContextProvider>
       </Route>
       <Route path="/grupos">
         <LocationContextProvider>
@@ -109,29 +173,51 @@ function CMSRoutes() {
         </LocationContextProvider>
       </Route>
       <Route path="/programas">
-        <LocationContextProvider>
-          <DepartmentContextProvider>
+        <TeacherContextProvider>
+          <LocationContextProvider>
             <FacultyContextProvider>
-              <SubjectContextProvider>
-                <GroupContextProvider>
-                  <ProgramContextProvider>
-                    <AppProgram />
-                  </ProgramContextProvider>
-                </GroupContextProvider>
-              </SubjectContextProvider>
+              <DepartmentContextProvider>
+                <ProgramContextProvider>
+                  <SubjectContextProvider>
+                    <AcademicPeriodContextProvider>
+                      <GroupContextProvider>
+                        <FacultyContextProvider>
+                          <ProgramContextProvider>
+                            <AppProgram />
+                          </ProgramContextProvider>
+                        </FacultyContextProvider>
+                      </GroupContextProvider>
+                    </AcademicPeriodContextProvider>
+                  </SubjectContextProvider>
+                </ProgramContextProvider>
+              </DepartmentContextProvider>
             </FacultyContextProvider>
-          </DepartmentContextProvider>
-        </LocationContextProvider>
+          </LocationContextProvider>
+        </TeacherContextProvider>
       </Route>
       <Route path="/recursos">
         <ResourceTypeContextProvider>
-          <LocationContextProvider>
-            <FacultyContextProvider>
-              <ResourceContextProvider>
-                <AppResource />
-              </ResourceContextProvider>
-            </FacultyContextProvider>
-          </LocationContextProvider>
+          <TeacherContextProvider>
+            <LocationContextProvider>
+              <FacultyContextProvider>
+                <DepartmentContextProvider>
+                  <ProgramContextProvider>
+                    <SubjectContextProvider>
+                      <AcademicPeriodContextProvider>
+                        <GroupContextProvider>
+                          <FacultyContextProvider>
+                            <ResourceContextProvider>
+                              <AppResource />
+                            </ResourceContextProvider>
+                          </FacultyContextProvider>
+                        </GroupContextProvider>
+                      </AcademicPeriodContextProvider>
+                    </SubjectContextProvider>
+                  </ProgramContextProvider>
+                </DepartmentContextProvider>
+              </FacultyContextProvider>
+            </LocationContextProvider>
+          </TeacherContextProvider>
         </ResourceTypeContextProvider>
       </Route>
       <Route path="/tiposrecursos">
@@ -145,11 +231,19 @@ function CMSRoutes() {
         </ScheduleCMSContextProvider>
       </Route>
       <Route path="/materias">
-        <ProgramContextProvider>
-          <SubjectContextProvider>
-            <AppSubject />
-          </SubjectContextProvider>
-        </ProgramContextProvider>
+        <TeacherContextProvider>
+          <LocationContextProvider>
+            <FacultyContextProvider>
+              <DepartmentContextProvider>
+                <ProgramContextProvider>
+                  <SubjectContextProvider>
+                    <AppSubject />
+                  </SubjectContextProvider>
+                </ProgramContextProvider>
+              </DepartmentContextProvider>
+            </FacultyContextProvider>
+          </LocationContextProvider>
+        </TeacherContextProvider>
       </Route>
       <Route path="/profesores">
         <TeacherContextProvider>

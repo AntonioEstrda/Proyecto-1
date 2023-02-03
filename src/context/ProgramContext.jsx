@@ -78,7 +78,7 @@ export function ProgramContextProvider(props) {
       .catch((e) => console.log(e));
   }
 
-  console.log(locations);
+  //console.log(locations);
   return (
     <ProgramContext.Provider
       value={{

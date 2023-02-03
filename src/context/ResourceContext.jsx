@@ -62,7 +62,7 @@ export function ResourceContextProvider(props) {
   }
 
   async function deleteById(facultyId, resourceId) {
-    console.log(facultyId, resourceId);
+    //console.log(facultyId, resourceId);
     await fetch(
       url +
         "delete?" +
@@ -86,7 +86,7 @@ export function ResourceContextProvider(props) {
           resources.filter((faculty) => faculty.facultyId !== facultyId),
           resources.filter((resource) => resource.resourceId !== resourceId)
         );
-        console.log(facultyId, resourceId); /////////
+        //console.log(facultyId, resourceId); /////////
       })
       .catch((e) => console.log(e));
   }

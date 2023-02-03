@@ -24,7 +24,7 @@ export function GroupContextProvider(props) {
   }, []);
 
   async function create(group) {
-    console.log(group)
+    //console.log(group)
     await fetch(url, {
       method: "POST",
       headers: {
@@ -52,9 +52,7 @@ export function GroupContextProvider(props) {
       mode: "cors",
     })
       .then(() =>
-        setGroups(
-          groups.filter((group) => group.groupId !== groupId)
-        )
+        setGroups(groups.filter((group) => group.groupId !== groupId))
       )
       .catch((e) => console.log(e));
   }
