@@ -471,7 +471,16 @@ CREATE TABLE `academicperiod` (
 
 INSERT INTO `academicperiod` (`ACADEMICPERIDODID`, `NAME`, `INITDATE`, `FINALDATE`, `isDisable`) VALUES
 (2, 'Periodo 2022-2', '2022-05-19', '2022-12-31', 0),
-(7, 'Periodo 2022-1', '2022-01-01', '2022-05-18', 1);
+(7, 'Periodo 2022-1', '2022-01-01', '2022-05-18', 1),
+(3, 'Periodo 2023-1', '2023-03-01', '2023-06-30', 1),
+(4, 'Periodo 2021-1', '2021-03-01', '2021-06-30', 1),
+(5, 'Periodo 2021-2', '2021-09-01', '2021-12-19', 1),
+(6, 'Periodo 2020-1', '2020-03-01', '2020-06-30', 1),
+(8, 'Periodo 2020-2', '2020-09-01', '2020-12-19', 1),
+(9, 'Periodo 2019-1', '2019-03-01', '2019-06-30', 1),
+(10, 'Periodo 2019-2', '2019-09-01', '2019-12-19', 1),
+(11, 'Periodo 2018-1', '2018-03-01', '2018-06-30', 1),
+(12, 'Periodo 2018-2', '2019-09-01', '2019-12-19', 1);
 
 -- --------------------------------------------------------
 
@@ -546,7 +555,17 @@ CREATE TABLE `department` (
 --
 
 INSERT INTO `department` (`DEPARTMENTID`, `FACULTYID`, `NAME`, `code`, `location`) VALUES
-(1, 16, 'Sistemas', 'DEPT1', 2);
+(1, 16, 'Sistemas', 'DEPT1', 2),
+(41, 51, 'Español y literatura', 'DEPT2', 66),
+(42, 52, 'Física', 'DEPT3', 61),
+(43, 53, 'Medicina', 'DEPT4', 63),
+(44, 54, 'Administración', 'DEPT5', 61),
+(45, 55, 'Derecho', 'DEPT6', 66),
+(46, 52, 'Matemática', 'DEPT7', 61),
+(47, 16, 'Electrónica', 'DEPT8', 2),
+(48, 16, 'Telemática', 'DEPT9', 2),
+(49, 16, 'Automática Industrial', 'DEPT10', 2),
+(50, 7,	'Agroindustrial', 'DEPT11', 2);
 
 -- --------------------------------------------------------
 
@@ -585,7 +604,13 @@ INSERT INTO `faculty` (`FACULTYID`, `NAME`, `locId`) VALUES
 (7, 'Agrarias', 2),
 (16, 'FIET', 2),
 (26, 'Artes', 2),
-(27, 'Nueva sede', 2);
+(27, 'Nueva sede', 2),
+(51, 'Ciencias Humanas (antiguo ed)', 66),
+(52, 'FACNED', 61),
+(53, 'Ciencias de la salud', 63),
+(54, 'Ciencias Contables', 61),
+(55, 'Ciencias Políticas', 66),
+(56, 'Ingeniería civil', 61);
 
 -- --------------------------------------------------------
 
@@ -637,7 +662,17 @@ CREATE TABLE `groupt` (
 INSERT INTO `groupt` (`IDGROUP`, `IDSUBJECT`, `ACADEMICPERIDODID`, `CAPACITY`, `NAME`) VALUES
 (4, 6, 2, 20, 'A'),
 (5, 6, 2, 20, 'B'),
-(6, 7, 2, 30, 'A');
+(6, 7, 2, 30, 'A'),
+(11, 21, 3, 20, 'A'),
+(12, 22, 3, 25, 'A'),
+(13, 21, 3, 20,	'B'),
+(14, 22, 3, 25,	'B'),
+(15, 23, 3, 30,	'A'),
+(16, 23, 3, 30,	'B'),
+(17, 26, 3, 20,	'A'),
+(18, 26, 3, 20,	'B'),
+(19, 27, 3, 35,	'A'),
+(20, 29, 3, 30,	'A');
 
 -- --------------------------------------------------------
 
@@ -699,7 +734,13 @@ CREATE TABLE `location` (
 INSERT INTO `location` (`id`, `Name`, `city`, `parentId`) VALUES
 (2, 'Sede principal', '', NULL),
 (3, 'Edificio 2', '', 2),
-(4, 'El Carmen', '', NULL);
+(4, 'El Carmen', '', NULL),
+(61, 'Campus Tulcán', '', NULL),
+(62, 'Claustro de Santo Domingo', '', NULL),
+(63, 'Sector La Estancia', '', NULL),
+(64, 'Las Guacas', '', NULL),
+(65, 'Casa Rosada', '', NULL),
+(66, 'Sector Histórico', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -737,7 +778,16 @@ CREATE TABLE `program` (
 --
 
 INSERT INTO `program` (`IDPROGRAM`, `DEPARTMENTID`, `NAME`, `code`, `location`, `color`) VALUES
-(7, 1, 'Sistemas', 'PRG1', 3, '');
+(7, 1, 'Sistemas', 'PRG1', 3, ''),
+(31, 41, 'Licenciatura en Español y Literatura', 'PRG2', 62, ''),	
+(32, 41, 'Licenciatura en básica con énfasis en Español', 'PRG3', 62, ''),	
+(33, 42, 'Ingeniería física', 'PRG4', 61, ''),	
+(34, 43, 'Medicina', 'PRG5', 63, ''),	
+(35, 44, 'Contaduría', 'PRG6', 61, ''),	
+(36, 46, 'Licenciatura en Matemáticas', 'PRG7',	61, ''),	
+(37, 50, 'Ingeniería forestal',	'PRG8',	64, ''),	
+(38, 49, 'Ingeniería automática', 'PRG9', 61, ''),	
+(39, 47, 'Ingeniería electrónica', 'PRG10', 61, '');
 
 -- --------------------------------------------------------
 
@@ -869,7 +919,17 @@ CREATE TABLE `subject` (
 
 INSERT INTO `subject` (`IDSUBJECT`, `IDPROGRAM`, `NAME`, `code`, `REQUISITS`, `SEMESTER`, `INTENSITY`, `Modality`, `ISDISABLE`, `type`, `isExtern`) VALUES
 (6, 7, 'Redes', 'SIS101', '{\"7\":null}', 8, 2, 'Semestral', 0, 'TEORICA', 0),
-(7, 7, 'IA', 'SIS104', '{\"7\":null}', 8, 8, 'Semestral', 0, 'TEORICA', 0);
+(7, 7, 'IA', 'SIS104', '{\"7\":null}', 8, 8, 'Semestral', 0, 'TEORICA', 0),
+(21, 33, 'Mecánica', 'FIS101', '{\"7\":null}', 2, 4, 'Semestral', 0, 'TEORICA', 0),
+(22, 33, 'Electromagnetismo', 'FIS102',	'{\"7\":null}', 3, 4, 'Semestral', 0, 'TEORICA', 0),
+(23, 36, 'Cálculo I', 'MAT101',	'{\"7\":null}', 1, 4, 'Semestral', 0, 'TEORICA', 0),
+(24, 36, 'Cálculo II', 'MAT102', '{\"7\":null}', 2, 4, 'Semestral', 0, 'TEORICA', 0),
+(25, 31, 'Lectura y escritura', 'ESP101', '{\"7\":null}', 1, 2, 'Semestral', 0, 'TEORICA', 0),
+(26, 36, 'Álgebra', 'MAT103', '{\"7\":null}', 2, 4, 'Semestral', 0, 'TEORICA', 0),
+(27, 7,	'Introducción a la ingeniería de sistemas', 'SIS-01', '{\"7\":null}', 1, 4, 'Semestral', 0, 'TEORICA', 0),
+(28, 7,	'Informática I', 'SIS102', '{\"7\":null}', 1, 4, 'Semestral', 0, 'TEORICA', 0),
+(29, 7, 'Programación OO', 'SIS103', '{\"7\":null}', 2, 4, 'Semestral', 0, 'TEORICA', 0),
+(30, 7,	'Laboratorio POO', 'SIS104', '{\"7\":null}', 2, 2, 'Semestral', 0, 'TEORICA', 0);
 
 -- --------------------------------------------------------
 
