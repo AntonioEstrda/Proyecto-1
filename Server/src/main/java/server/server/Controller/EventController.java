@@ -7,6 +7,7 @@ package server.server.Controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -138,7 +139,9 @@ public class EventController {
         return responseEntity;
     }
 
-    public ResponseEntity<List<Event>> getByDepartmentOrProgram(@RequestParam("departmentId") List<Long> departmentId) {
+    @ResponseBody
+    @GetMapping(value = "/findByDepartmentOrProgram")
+    public ResponseEntity<List<Event>> findByDepartmentOrProgram(@RequestParam("departmentId") List<Long> departmentId) {
         ResponseEntity<List<Event>> responseEntity = new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
         Map<Labels, Object> returns = evtService.findByDeparmentId(departmentId);
         List<Event> events = null;
@@ -147,6 +150,24 @@ public class EventController {
         }
         if (events != null && !events.isEmpty()) {
             responseEntity = new ResponseEntity<>(events, null, HttpStatus.FOUND);
+        }
+        return responseEntity;
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/findByDepartmentAndTypes")
+    public ResponseEntity<List<Event>> findByDepartmentAndTypes(@RequestParam("departmentId") long departmentId,
+            @RequestParam("type") Optional<List<String>> types) {
+        ResponseEntity responseEntity = new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
+
+        List<String> types2 = null;
+        if (types.isPresent() && types.isEmpty()) {
+            types2 = types.get();
+        }
+        Map<Labels, Object> returns = evtService.findAllByDepartmentAndEvenType(departmentId, types2);
+        List<Event> evts = (List<Event>) returns.get(Labels.objectReturn);
+        if (evts != null && !evts.isEmpty()) {
+            responseEntity = new ResponseEntity<>(evts, null, HttpStatus.OK);
         }
         return responseEntity;
     }
