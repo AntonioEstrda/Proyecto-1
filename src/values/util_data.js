@@ -1,4 +1,4 @@
-const map = [
+const mosaicoMenu = [
   ["Periodo Academico", "periodosacademicos"],
   ["Asignacion de Recursos", "asignacionrecursos"],
   ["Departamentos", "departamentos"],
@@ -17,4 +17,27 @@ const map = [
   ["Grupos profesores", "gruposprofesores"],
 ];
 
-export default map;
+const diasSchedule = [
+  "LUNES",
+  "MARTES",
+  "MIERCOLES",
+  "JUEVES",
+  "VIERNES",
+  "SABADO",
+];
+const horasSchedule = [
+  "7 AM",
+  "8 AM",
+  "9 AM",
+  "10 AM",
+  "11 AM",
+  "12 M",
+  "1 PM",
+  "2 PM",
+  "3 PM",
+  "4 PM",
+  "5 PM",
+  "6 PM",
+];
+
+export { mosaicoMenu, diasSchedule, horasSchedule };

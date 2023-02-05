@@ -26,7 +26,7 @@ function ScheduleMenu() {
                   />
                 </svg>
                 <span className="text-lg text-paleta2-purpura font-medium">
-                  Importar horario
+                  Importar Oferta Academica
                 </span>
               </button>
             </Link>

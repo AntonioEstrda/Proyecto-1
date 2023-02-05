@@ -41,7 +41,6 @@ export function ResourceContextProvider(props) {
         new URLSearchParams({
           facultyId,
         }),
-      console.log(facultyId), //////
       {
         method: "POST",
         headers: {
@@ -83,9 +82,7 @@ export function ResourceContextProvider(props) {
       .then(() => {
         setResources(
           resources.filter((resource) => resource.resourceId !== resourceId)
-          //resources.filter((faculty) => faculty.facultyId !== facultyId)
         );
-        console.log(resourceId); /////////
       })
       .catch((e) => console.log(e));
   }
