@@ -23,7 +23,7 @@ export default function ResourceForm() {
   const [resourceCode, setResourceCode] = useState("");
   const [resourceNumber, setResourceNumber] = useState("");
   const [resourceCapacity, setResourceCapacity] = useState("");
-  const [resourceDisable, setResourceDisable] = useState("");
+  const [isDisable, setResourceDisable] = useState("");
 
   useEffect(() => {
     if (editingResource) {
@@ -32,7 +32,7 @@ export default function ResourceForm() {
       setResourceCode(editingResource.resourceCode);
       setResourceNumber(editingResource.resourceNumber);
       setResourceCapacity(editingResource.resourceCapacity);
-      setResourceDisable(editingResource.resourceDisable);
+      setResourceDisable(editingResource.isDisable);
       setLimpio(false);
       setIdResourceTypeSelected(editingResource.resourceType.resourceTypeId);
       setIdLocationSelected(editingResource.location.locationId);
@@ -63,7 +63,7 @@ export default function ResourceForm() {
 
   function setFormRadioIsDisable() {
     let ele = document.getElementsByName("isDisable_radio");
-    if (editingResource.resourceDisable === "1") {
+    if (editingResource.isDisable === "1") {
       ele[1].removeAttribute("checked");
       ele[0].setAttribute("checked", "");
     } else {
@@ -79,46 +79,48 @@ export default function ResourceForm() {
 
   function crear(e) {
     e.preventDefault();
-    create({
-      resourceName,
-      resourceDescription,
-      faculty: facultys.find(
-        (faculty) => faculty.facultyId == idFacultySelected
-      ),
-      resourceType: resourceTypes.find(
-        (resourceType) => resourceType.resourceTypeId == idResourceTypeSelected
-      ),
-      resourceCode,
-      resourceNumber,
-      location: locations.find(
-        (location) => location.locationId == idLocationSelected
-      ),
-      resourceCapacity,
-      resourceDisable,
-    });
+    create(
+      {
+        name: resourceName,
+        description: resourceDescription,
+        resourceType: resourceTypes.find(
+          (resourceType) =>
+            resourceType.resourceTypeId == idResourceTypeSelected
+        ),
+        code: resourceCode,
+        number: resourceNumber,
+        location: locations.find(
+          (location) => location.locationId == idLocationSelected
+        ),
+        capacity: resourceCapacity,
+        isDisable: isDisable === "0" ? "FALSE" : "TRUE",
+      },
+      idFacultySelected
+    );
     limpiarForm();
   }
 
   function actualizar(e) {
     e.preventDefault();
-    update({
-      resourceId: editingResource.resourceId,
-      resourceName,
-      resourceDescription,
-      faculty: facultys.find(
-        (faculty) => faculty.facultyId == idFacultySelected
-      ),
-      resourceType: resourceTypes.find(
-        (resourceType) => resourceType.resourceTypeId == idResourceTypeSelected
-      ),
-      resourceCode,
-      resourceNumber,
-      location: locations.find(
-        (location) => location.locationId == idLocationSelected
-      ),
-      resourceCapacity,
-      resourceDisable,
-    });
+    update(
+      {
+        resourceId: editingResource.resourceId,
+        name: resourceName,
+        description: resourceDescription,
+        resourceType: resourceTypes.find(
+          (resourceType) =>
+            resourceType.resourceTypeId == idResourceTypeSelected
+        ),
+        code: resourceCode,
+        number: resourceNumber,
+        location: locations.find(
+          (location) => location.locationId == idLocationSelected
+        ),
+        capacity: resourceCapacity,
+        isDisable: isDisable === "0" ? "FALSE" : "TRUE",
+      },
+      idFacultySelected
+    );
     limpiarForm();
   }
 

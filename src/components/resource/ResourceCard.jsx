@@ -14,11 +14,6 @@ export default function ResourceCard({ resource }) {
       <h1 className="text-xl font-bold capitalize">{resource?.description}</h1>
 
       <div className="bg-paleta2-azulverd text-paleta2-naranja p-4 mt-2 rounded-md">
-        <p className="text-lg font-bold text-blue">Facultad:</p>
-        {resource.faculty?.FacultyName}
-      </div>
-
-      <div className="bg-paleta2-azulverd text-paleta2-naranja p-4 mt-2 rounded-md">
         <p className="text-lg font-bold text-blue">Tipo de Recurso:</p>
         {resource.resourceType?.name}
         {resource.resourceType?.disable
@@ -34,13 +29,17 @@ export default function ResourceCard({ resource }) {
       </div>
       <h1 className="text-xl font-bold capitalize">{resource?.capacity}</h1>
       <h1 className="text-xl font-bold capitalize">{resource?.disable}</h1>
+
       <div className="grid grid-cols-2 gap-3">
         <button
           className="bg-paleta2-rojo px-2 py-1 rounded-md mt-4 hover:bg-red-400"
-          onClick={() => deleteById(resource?.resourceId)}
+          onClick={() =>
+            deleteById(resource.faculty?.facultyId, resource?.resourceId)
+          }
         >
           Eliminar
         </button>
+
         <button
           className="bg-amber-700 text-stone-50 px-2 py-1 rounded-md mt-4 hover:bg-red-400"
           onClick={defineEditItem}

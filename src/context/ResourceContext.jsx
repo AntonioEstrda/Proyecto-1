@@ -34,7 +34,7 @@ export function ResourceContextProvider(props) {
     });
   }, [facultys]);
 
-  async function create(facultyId, resource) {
+  async function create(resource, facultyId) {
     await fetch(
       url +
         "add?" +
@@ -61,13 +61,15 @@ export function ResourceContextProvider(props) {
       .catch((e) => console.log(e));
   }
 
-  async function deleteById(resourceId, facultyId) {
+  async function deleteById(facultyId, resourceId) {
+    //console.log(facultyId, resourceId);
     await fetch(
       url +
-        "delete/" +
+        "delete?" +
         new URLSearchParams({
           facultyId,
         }) +
+        "&" +
         new URLSearchParams({
           resourceId,
         }),
@@ -79,18 +81,25 @@ export function ResourceContextProvider(props) {
         mode: "cors",
       }
     )
-      .then(() => {
-        setResources(
-          resources.filter((resource) => resource.resourceId !== resourceId)
-        );
-      })
+      .then(
+        () => {
+          setResources(
+            resources.filter((faculty) => faculty.facultyId !== facultyId),
+            resources.filter((resource) => resource.resourceId !== resourceId)
+          );
+          console.log(facultyId, resourceId); /////////
+        },
+        idFacultySelected,
+        resourceId
+      )
       .catch((e) => console.log(e));
   }
 
   async function update(prevResource, facultyId) {
+    console.log(prevResource, facultyId);
     await fetch(
       url +
-        "update" +
+        "update?" +
         new URLSearchParams({
           facultyId,
         }),
@@ -111,10 +120,11 @@ export function ResourceContextProvider(props) {
         setIdResourceTypeSelected(0);
         setIdLocationSelected(0);
         setIdFacultySelected(0);
-      })
+      }, idFacultySelected)
       .catch((e) => console.log(e));
   }
 
+  //console.log(facultys);
   return (
     <ResourceContext.Provider
       value={{

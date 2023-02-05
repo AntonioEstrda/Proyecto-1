@@ -12,17 +12,15 @@ export function SubjectContextProvider(props) {
   const [subjects, setSubjects] = useState([]);
   const [idProgramSelected, setIdProgramSelected] = useState(0);
   useEffect(() => {
-    programs.forEach((program) => {
-      fetch(url + "all")
-        .then((response) => response.json())
-        .then((data) => {
-          setSubjects(...subjects, data);
-        })
-        .catch((e) => console.log(e));
-    });
+    fetch(url + "all")
+      .then((response) => response.json())
+      .then((data) => {
+        setSubjects(data);
+      });
   }, []);
 
-  async function create(subject, programId) {
+  async function create(subject) {
+    console.log(subject);
     await fetch(url, {
       method: "POST",
       headers: {
@@ -57,6 +55,7 @@ export function SubjectContextProvider(props) {
   }
 
   async function update(prevSubject) {
+    console.log(prevSubject);
     await fetch(url + "update", {
       method: "PUT",
       headers: {
@@ -74,7 +73,7 @@ export function SubjectContextProvider(props) {
       })
       .catch((e) => console.log(e));
   }
-
+  //console.log(programs);
   return (
     <SubjectContext.Provider
       value={{
