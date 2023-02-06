@@ -818,7 +818,22 @@ INSERT INTO `resourcet` (`RESOURCEID`, `RESOURCETYPEID`, `NAME`, `DESCRIPTION`, 
 (6, 5, 'Salon', 'Salon', 1, 'SISCOM', 3, 45, 102),
 (7, 10, 'Tablero', 'Tablero', 0, 'AGR', NULL, NULL, 456),
 (8, 7, 'SALON', 'SALON', 0, 'SIS', NULL, 40, 303),
-(9, 5, 'Salon', 'Salon', 1, 'SISCOM', 3, 45, 105);
+(9, 5, 'Salon', 'Salon', 1, 'SISCOM', 3, 45, 105),
+(71, 7, 'SALON', 'SALON',  0, 'S-FACA101', 64, 45, 101),
+(72, 7, 'SALON', 'SALON', 0, 'S-FIET101', 61, 45, 225),
+(73, 7, 'SALON', 'SALON', 0, 'S-FIET102', 61, 45, 226),
+(74, 7, 'SALON', 'SALON', 0, 'S-FCHS101', 66, 45, 103),
+(75, 7, 'SALON', 'SALON', 0, 'S-FCHS102', 66, 45, 104),
+(76, 7, 'SALON', 'SALON', 0, 'S-FCHS102', 66, 45, 105),
+(77, 7, 'SALON', 'SALON', 0, 'S-MED106', 63, 45, 201),
+(78, 7, 'SALON', 'SALON', 0, 'S-MED107', 63, 45, 202),
+(79, 7, 'SALON', 'SALON', 0, 'S-MED108', 63, 45, 203),
+(80, 7, 'SALON', 'SALON', 0, 'S-MAT101', 61, 45, 231),
+(81, 7, 'SALON', 'SALON', 0, 'S-MAT102', 61, 45, 229),
+(82, 7, 'SALON', 'SALON', 0, 'S-MAT103', 61, 45, 225),
+(83, 7, 'SALON', 'SALON', 0, 'S-DER101', 62, 45, 112),
+(84, 7, 'SALON', 'SALON', 0, 'S-DER102', 62, 45, 113),
+(85, 7, 'SALON', 'SALON', 0, 'S-DER103', 62, 45, 114);
 
 --
 -- Disparadores `resourcet`
