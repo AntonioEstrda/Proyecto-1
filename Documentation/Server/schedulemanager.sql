@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-02-2023 a las 03:20:08
+-- Tiempo de generación: 06-02-2023 a las 03:48:41
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -975,6 +975,19 @@ INSERT INTO `teacher` (`TEACHERID`, `FISRTSNAME`, `LASTNAME`, `NUMIDEN`, `ISDISA
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `teacherdepartmentfacul`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `teacherdepartmentfacul` (
+`FACULTYID` int(11)
+,`DEPARTMENTID` int(11)
+,`TEACHERID` int(11)
+,`username` varchar(250)
+);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `teacher_group`
 --
 
@@ -1079,6 +1092,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `overviewintensityassignedhours`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `overviewintensityassignedhours`  AS SELECT `isg`.`FACULTYID` AS `FACULTYID`, `isg`.`DEPARTMENTID` AS `DEPARTMENTID`, `isg`.`IDPROGRAM` AS `IDPROGRAM`, `isg`.`IDSUBJECT` AS `IDSUBJECT`, `isg`.`IDGROUP` AS `IDGROUP`, `isg`.`INTENSITY` AS `INTENSITY`, CASE WHEN `sb`.`isExtern` = 1 THEN `AssigSbjtGpsHours`(`isg`.`IDGROUP`,'PRESTAMO_POR_MATERIA') ELSE `AssigSbjtGpsHours`(`isg`.`IDGROUP`,'ACADEMICO') END AS `AssignedHours` FROM (`intensitysubjectgroup` `isg` join `subject` `sb` on(`sb`.`IDSUBJECT` = `isg`.`IDSUBJECT`)) WHERE `sb`.`ISDISABLE` = 00  ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `teacherdepartmentfacul`
+--
+DROP TABLE IF EXISTS `teacherdepartmentfacul`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `teacherdepartmentfacul`  AS SELECT DISTINCT `dp`.`FACULTYID` AS `FACULTYID`, `vc`.`DEPARTMENTID` AS `DEPARTMENTID`, `vc`.`TEACHERID` AS `TEACHERID`, `us`.`username` AS `username` FROM ((((`user` `us` join `teacher` `ti` on(`us`.`TeacherId` = `ti`.`TEACHERID`)) join `vinculations` `vc` on(`vc`.`TEACHERID` = `ti`.`TEACHERID`)) join `department` `dp` on(`vc`.`DEPARTMENTID` = `dp`.`DEPARTMENTID`)) join `faculty` `fa` on(`dp`.`FACULTYID` = `fa`.`FACULTYID`))  ;
 
 -- --------------------------------------------------------
 
