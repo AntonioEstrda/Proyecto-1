@@ -9,5 +9,9 @@ package server.server.utilities;
  * @author anmon
  */
 public enum Labels {
-    objectReturn, errors; 
+    objectReturn, errors, message;
+    
+    public enum RolEnum{
+        ADMIN;  
+    }
 }

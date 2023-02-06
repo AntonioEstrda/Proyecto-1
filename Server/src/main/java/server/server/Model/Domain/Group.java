@@ -23,34 +23,34 @@ import lombok.Data;
  * @author Fernando
  */
 @Entity
-@Table(name="groupt")
+@Table(name = "groupt")
 @Data
 public class Group implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="IDGROUP")
-    private long groupId; 
-    
+    @Column(name = "IDGROUP")
+    private long groupId;
+
     @NotEmpty(message = "GROUP103")
-    @Column(length=100, name="NAME")
-    @Pattern(regexp = "^[a-zA-Z0-9]{1,2}", message="GROUP107")
+    @Column(length = 100, name = "NAME")
+    @Pattern(regexp = "^[a-zA-Z0-9]{1,2}", message = "GROUP107")
     private String name;
-    
+
     @NotNull(message = "GROUP104")
-    @Column(name="CAPACITY")
+    @Column(name = "CAPACITY")
     private long capacity;
-    
+
     @NotNull(message = "GROUP105")
     @ManyToOne
-    @JoinColumn(name="IDSUBJECT")
+    @JoinColumn(name = "IDSUBJECT")
     private Subject subject;
-    
-    
+
     @NotNull(message = "GROUP106")
     @ManyToOne
-    @JoinColumn(name="ACADEMICPERIDODID")
+    @JoinColumn(name = "ACADEMICPERIDODID")
     private AcademicPeriod academicPeriod;
-    
+
 }

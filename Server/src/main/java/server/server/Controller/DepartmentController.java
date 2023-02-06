@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +34,9 @@ import server.server.utilities.Labels;
  */
 @RestController
 @RequestMapping("/department")
+@PreAuthorize("hasRole('ADMIN')")
 public class DepartmentController {
-    
+
     @Autowired
     public IDepartmentService deptService;
 
@@ -59,7 +61,7 @@ public class DepartmentController {
             ArrayList<String> setErrors = Utility.setErrors(errors);
             headers.add(Labels.errors.name(), setErrors.toString());
             return new ResponseEntity<>(department, headers, HttpStatus.NOT_MODIFIED);
-        }else{
+        } else {
             Map<Labels, Object> returns = deptService.save(department);
             ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
             Department dept = (Department) returns.get(Labels.objectReturn);
@@ -81,7 +83,7 @@ public class DepartmentController {
             ArrayList<String> setErrors = Utility.setErrors(errors);
             headers.add(Labels.errors.name(), setErrors.toString());
             return new ResponseEntity<>(department, headers, HttpStatus.NOT_MODIFIED);
-        } else{
+        } else {
             Map<Labels, Object> update = deptService.update(department);
             ArrayList<String> errors2 = (ArrayList<String>) update.get(Labels.errors);
             Department dept = (Department) update.get(Labels.objectReturn);
@@ -91,7 +93,7 @@ public class DepartmentController {
             }
             return new ResponseEntity<>(department, null, HttpStatus.ACCEPTED);
         }
-        
+
     }
 
     @DeleteMapping
@@ -109,5 +111,4 @@ public class DepartmentController {
             return (new ResponseEntity<>(dept, headers, HttpStatus.NOT_MODIFIED));
         }
     }
-    
 }

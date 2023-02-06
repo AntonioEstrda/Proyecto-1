@@ -8,18 +8,21 @@ package server.server.utilities.errors;
  *
  * @author anmon
  */
-public enum StdErrors {
+public enum UserErrors {
     /**
-     * Can not delete registry due to dependencies
+     * User 
      */
-    STD101,
+    USR101, 
     /**
-     * Malformed auth token
+     * User previous existence 
      */
-    STD102,
+    USR102, 
     /**
-     * Session expired
+     * Mail field cannot be empty or Malformed Mail  
      */
-    STD103;
-
+    USR103, 
+    /**
+     * Password field cannot be empty or Malformed Password  
+     */
+    USR104;  
 }

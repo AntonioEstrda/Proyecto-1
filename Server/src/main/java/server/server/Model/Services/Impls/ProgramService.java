@@ -6,6 +6,7 @@ package server.server.Model.Services.Impls;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,17 +27,16 @@ import server.server.utilities.errors.LocationErrors;
  */
 @Service
 @EnableTransactionManagement
-public class ProgramService implements IProgramService{
-    
-    @Autowired 
-    private DAOProgram programRepo; 
-    
+public class ProgramService implements IProgramService {
+
+    @Autowired
+    private DAOProgram programRepo;
+
     @Autowired
     private IDepartmentService deptService;
 
     @Autowired
     private ILocationService locService;
-
 
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
@@ -56,23 +56,17 @@ public class ProgramService implements IProgramService{
             if (deptService.find(program.getDepartment()) != null) {
                 if (programRepo.findByCode(program.getCode()) != null) {
                     errors.add(ProgErrors.PRG108.name());
-                }else if (program.getLocation() == null) {
+                } else if (program.getLocation() == null) {
                     errors.add(ProgErrors.PRG105.name());
-                }else if (locService.find(program.getLocation().getLocationId()) == null) {
+                } else if (locService.find(program.getLocation().getLocationId()) == null) {
                     errors.add(LocationErrors.LOC101.name());
-                }else if (errors.isEmpty()) {
+                } else if (errors.isEmpty()) {
                     program = programRepo.save(program);
                 }
             } else {
                 errors.add(ProgErrors.PRG101.name());
             }
 
-
-
-
-
-
-            
         }
         returns.put(Labels.errors, errors);
         returns.put(Labels.objectReturn, program);
@@ -89,10 +83,10 @@ public class ProgramService implements IProgramService{
     @Transactional(value = "DataTransactionManager")
     public Map<Labels, Object> update(Program program) {
         Map<Labels, Object> returns = new HashMap();
-        ArrayList<String> errors = new ArrayList(); 
+        ArrayList<String> errors = new ArrayList();
         Program old = this.find(program);
         if (old == null) {
-            errors.add(ProgErrors.PRG101.name());  
+            errors.add(ProgErrors.PRG101.name());
         } else {
             old = programRepo.save(program);
         }
@@ -102,10 +96,10 @@ public class ProgramService implements IProgramService{
             errors.add(ProgErrors.PRG108.name());
         }
         if (errors.isEmpty()) {
-            program = programRepo.save(program);
+            old = programRepo.save(program);
         }
-        returns.put(Labels.errors, errors);  
-        returns.put(Labels.objectReturn, old);   
+        returns.put(Labels.errors, errors);
+        returns.put(Labels.objectReturn, old);
         return returns;
     }
 
@@ -113,25 +107,34 @@ public class ProgramService implements IProgramService{
     @Transactional(value = "DataTransactionManager")
     public Map<Labels, Object> delete(Long ProgramId) {
         Map<Labels, Object> returns = new HashMap();
-        ArrayList<String> errors = new ArrayList(); 
+        ArrayList<String> errors = new ArrayList();
         Program old = programRepo.findById(ProgramId).orElse(null);
-        if(old != null){
+        if (old != null) {
             programRepo.delete(old);
-        }else{
-            errors.add(ProgErrors.PRG101.name());  
+        } else {
+            errors.add(ProgErrors.PRG101.name());
         }
-        returns.put(Labels.errors, errors); 
-        returns.put(Labels.objectReturn, old); 
-        return returns; 
+        returns.put(Labels.errors, errors);
+        returns.put(Labels.objectReturn, old);
+        return returns;
     }
-    
+
     @Override
     public Program findById(long program) {
         return programRepo.findById(program).orElse(null);
     }
-    
+
     @Override
     public Program findByCode(String code) {
         return programRepo.findByCode(code);
     }
+
+    @Override
+    public Map<Labels, Object> getAll(long departmentId) {
+        Map<Labels, Object> returns = new HashMap();
+        List<Program> old = programRepo.findAllByDepartmentId(departmentId);
+        returns.put(Labels.objectReturn, old);
+        return returns;
+    }
+    
 }

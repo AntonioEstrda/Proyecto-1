@@ -24,10 +24,10 @@ import server.server.utilities.errors.StdErrors;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice()
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-    
+
     @ExceptionHandler(value = {javax.validation.ConstraintViolationException.class})
-    public ResponseEntity handleConstraint(javax.validation.ConstraintViolationException ex){
-        ArrayList<String> errors = new ArrayList();  
+    public ResponseEntity handleConstraint(javax.validation.ConstraintViolationException ex) {
+        ArrayList<String> errors = new ArrayList();
         HttpHeaders headers = new HttpHeaders();
         for (final ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(violation.getMessage());
@@ -35,14 +35,33 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         headers.add(Labels.errors.name(), errors.toString());
         return new ResponseEntity<>(null, headers, HttpStatus.NOT_MODIFIED);
     }
-    
+
     @ExceptionHandler(value = {java.sql.SQLIntegrityConstraintViolationException.class})
-    public ResponseEntity handleConstraint(java.sql.SQLIntegrityConstraintViolationException ex){
-        ArrayList<String> errors = new ArrayList();  
+    public ResponseEntity handleConstraint(java.sql.SQLIntegrityConstraintViolationException ex) {
+        ArrayList<String> errors = new ArrayList();
         HttpHeaders headers = new HttpHeaders();
-        errors.add(StdErrors.STD101.name()); 
+        errors.add(StdErrors.STD101.name());
         headers.add(Labels.errors.name(), errors.toString());
         return new ResponseEntity<>(null, headers, HttpStatus.NOT_MODIFIED);
     }
-    
+
+    @ExceptionHandler(value = {io.jsonwebtoken.MalformedJwtException.class,
+        io.jsonwebtoken.security.SignatureException.class})
+    public ResponseEntity handleConstraint(Exception ex) {
+        ArrayList<String> errors = new ArrayList();
+        HttpHeaders headers = new HttpHeaders();
+        errors.add(StdErrors.STD102.name());
+        headers.add(Labels.errors.name(), errors.toString());
+        return new ResponseEntity<>(null, headers, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {io.jsonwebtoken.ExpiredJwtException.class})
+    public ResponseEntity handleConstraintExpiredJwtException(Exception ex) {
+        ArrayList<String> errors = new ArrayList();
+        HttpHeaders headers = new HttpHeaders();
+        errors.add(StdErrors.STD103.name());
+        headers.add(Labels.errors.name(), errors.toString());
+        headers.add(Labels.message.name(), "Authentication Timeout");
+        return new ResponseEntity<>(null, headers, 419);
+    }
 }

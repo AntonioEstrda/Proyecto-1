@@ -5,6 +5,7 @@
 package server.server.Controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +23,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.Program;
 import server.server.Model.Services.IProgramService;
+import server.server.Model.Services.Impls.CustomUserDetails;
+import server.server.Model.Services.Impls.UserDetailCustomService;
+import server.server.auth.IAuthenticationFacade;
 import server.server.utilities.Labels;
 
 /**
@@ -38,9 +45,31 @@ public class ProgramController {
     @Autowired
     public IProgramService programService;
 
+    @Autowired
+    private IAuthenticationFacade authenticationFacade;
+
+    @Autowired
+    private UserDetailCustomService userService;
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/all")
     public ArrayList<Program> all() {
         return programService.getAll();
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
+    @GetMapping(value = "/allByDepartmentId")
+    public ResponseEntity<List<Program>> all(@RequestParam("departmentId") long departmentId) {
+        ResponseEntity<List<Program>> response; 
+        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
+        if (!validateUserDepartment(departmentId, user)) {
+            response =  new ResponseEntity<>(new ArrayList(), null, HttpStatus.UNAUTHORIZED);
+        }else {
+        Map<Labels, Object> returns = programService.getAll(departmentId);
+        List<Program> get = (List<Program>) returns.get(Labels.objectReturn);
+        response =  new ResponseEntity<>(get, null, HttpStatus.OK);
+        }
+        return response; 
     }
 
     @GetMapping(value = "/{id}")
@@ -56,8 +85,7 @@ public class ProgramController {
     public ResponseEntity<Program> add(@RequestBody @Valid Program program, Errors errors) {
         HttpHeaders headers = new HttpHeaders();
         if (errors.hasErrors()) {
-            ArrayList<String> setErrors = Utility.setErrors(errors);
-            headers.add("Errors", Utility.setErrors(errors).toString());
+            headers.add(Labels.errors.name(), Utility.setErrors(errors).toString());
             return new ResponseEntity<>(program, headers, HttpStatus.NOT_MODIFIED);
         } else {
             Map<Labels, Object> returns = programService.save(program);
@@ -107,5 +135,16 @@ public class ProgramController {
             headers.add(Labels.errors.name(), errors.toString());
             return (new ResponseEntity<>(prg, headers, HttpStatus.NOT_MODIFIED));
         }
+    }
+
+    private boolean validateUserDepartment(long departmentid, CustomUserDetails user) {
+        boolean ban = user.getAuthorities().contains(new SimpleGrantedAuthority(Labels.RolEnum.ADMIN.name()));
+        if (!ban) {
+            Long findAsscDepartment = userService.findAsscDepartment(user.getUsername());
+            if (findAsscDepartment == departmentid) {
+                ban = true;
+            }
+        }
+        return ban;
     }
 }
