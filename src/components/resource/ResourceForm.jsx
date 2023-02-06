@@ -23,7 +23,7 @@ export default function ResourceForm() {
   const [resourceCode, setResourceCode] = useState("");
   const [resourceNumber, setResourceNumber] = useState("");
   const [resourceCapacity, setResourceCapacity] = useState("");
-  const [resourceDisable, setResourceDisable] = useState("");
+  const [isDisable, setResourceDisable] = useState("");
 
   useEffect(() => {
     if (editingResource) {
@@ -32,7 +32,7 @@ export default function ResourceForm() {
       setResourceCode(editingResource.resourceCode);
       setResourceNumber(editingResource.resourceNumber);
       setResourceCapacity(editingResource.resourceCapacity);
-      setResourceDisable(editingResource.resourceDisable);
+      setResourceDisable(editingResource.isDisable);
       setLimpio(false);
       setIdResourceTypeSelected(editingResource.resourceType.resourceTypeId);
       setIdLocationSelected(editingResource.location.locationId);
@@ -63,7 +63,7 @@ export default function ResourceForm() {
 
   function setFormRadioIsDisable() {
     let ele = document.getElementsByName("isDisable_radio");
-    if (editingResource.resourceDisable === "1") {
+    if (editingResource.isDisable === "1") {
       ele[1].removeAttribute("checked");
       ele[0].setAttribute("checked", "");
     } else {
@@ -93,7 +93,7 @@ export default function ResourceForm() {
           (location) => location.locationId == idLocationSelected
         ),
         capacity: resourceCapacity,
-        disable: resourceDisable === "0" ? "FALSE" : "TRUE",
+        isDisable: isDisable === "0" ? "FALSE" : "TRUE",
       },
       idFacultySelected
     );
@@ -117,7 +117,7 @@ export default function ResourceForm() {
           (location) => location.locationId == idLocationSelected
         ),
         capacity: resourceCapacity,
-        disable: resourceDisable === "0" ? "FALSE" : "TRUE",
+        isDisable: isDisable === "0" ? "FALSE" : "TRUE",
       },
       idFacultySelected
     );

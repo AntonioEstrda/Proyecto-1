@@ -53,7 +53,14 @@ export default function FacultyForm() {
     });
     limpiarForm();
   }
-
+  
+  const locationSelectOptions = (location) => {
+    return (
+      <option key={location.locationId} value={location.locationId}>
+        {location.name} {location.city ? "-" + location.city : ""}
+      </option>
+    );
+  };
   if (locations) {
     return (
       <div className="max-w-md mx-auto ">
@@ -75,22 +82,10 @@ export default function FacultyForm() {
             onChange={(e) => {
               setIdLocationSelected(e.target.value);
             }}
+            defaultValue={editingFaculty?.location?.locationId}
+            value={editingFaculty?.location?.locationId}
           >
-            {locations.map((location) => {
-              return (
-                <option
-                  key={location.locationId}
-                  value={location.locationId}
-                  selected={
-                    location.locationId === editingFaculty?.location.locationId
-                      ? true
-                      : false
-                  }
-                >
-                  {location.name} {location.city ? "-" + location.city : ""}
-                </option>
-              );
-            })}
+            {locations.map(locationSelectOptions)}
           </select>
           <div className="grid grid-cols-1">
             <button className="bg-paleta2-azulverd rounded-md px-8 py-3 text-paleta2-claro ">

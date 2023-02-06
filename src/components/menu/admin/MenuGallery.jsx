@@ -1,10 +1,10 @@
-import adminMenu from "../../../values/AdminMenu";
+import { mosaicoMenu } from "../../../values/util_data";
 import MenuCard from "../MenuCard";
 
 function RenderMenu() {
   return (
     <>
-      {adminMenu.map((value, index) => (
+      {mosaicoMenu.map((value, index) => (
         <MenuCard key={"menuCard_" + index} link={value[1]} label={value[0]} />
       ))}
     </>

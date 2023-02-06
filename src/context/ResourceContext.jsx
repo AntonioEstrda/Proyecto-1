@@ -81,13 +81,17 @@ export function ResourceContextProvider(props) {
         mode: "cors",
       }
     )
-      .then(() => {
-        setResources(
-          resources.filter((faculty) => faculty.facultyId !== facultyId),
-          resources.filter((resource) => resource.resourceId !== resourceId)
-        );
-        //console.log(facultyId, resourceId); /////////
-      })
+      .then(
+        () => {
+          setResources(
+            resources.filter((faculty) => faculty.facultyId !== facultyId),
+            resources.filter((resource) => resource.resourceId !== resourceId)
+          );
+          console.log(facultyId, resourceId); /////////
+        },
+        idFacultySelected,
+        resourceId
+      )
       .catch((e) => console.log(e));
   }
 
@@ -116,7 +120,7 @@ export function ResourceContextProvider(props) {
         setIdResourceTypeSelected(0);
         setIdLocationSelected(0);
         setIdFacultySelected(0);
-      })
+      }, idFacultySelected)
       .catch((e) => console.log(e));
   }
 

@@ -8,6 +8,8 @@ function ScheduleParametrizer() {
     setIdGroupSelected,
     idResourceSelected,
     setIdResourceSelected,
+    setRecurso,
+    setAlert,
   } = useContext(ScheduleContext);
 
   const tipoSalonesValidos = ["SALA", "AUDITORIO", "SALON"];
@@ -30,6 +32,7 @@ function ScheduleParametrizer() {
   }, [idGroupSelected]);
 
   useEffect(() => {
+    if (idProgramSelected === -1) return;
     fetch(
       "http://localhost:8080/Resource/all?" +
         new URLSearchParams({
@@ -37,25 +40,35 @@ function ScheduleParametrizer() {
             ?.facultyId,
         })
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) return response.json();
+        return Promise.reject(response);
+      })
       .then((data) => {
+        data.length === 0 ? setAlert("[NO_RES]") : setAlert();
         setResources(data);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        if (e.status === 404) setAlert("empty");
+        if (e.status === 400) setAlert(e.headers.get("errors"));
+      });
   }, [idProgramSelected]);
 
   const programMap = new Map();
   grupos.forEach((grupo) => {
-    if (!programMap.has(grupo.subject?.program?.programId)) {
-      programMap.set(grupo.subject.program.programId, grupo.subject.program);
+    if (!programMap.has(grupo?.subject?.program?.programId)) {
+      programMap.set(
+        grupo?.subject?.program?.programId,
+        grupo?.subject?.program
+      );
     }
   });
   const programList = Array.from(programMap.values());
 
   const programSelectOptions = (program) => {
     return (
-      <option key={program.programId} value={program.programId}>
-        {program.name} {program.code ? "- " + program.code : ""}
+      <option key={program?.programId} value={program?.programId}>
+        {program?.name} {program?.code ? "- " + program?.code : ""}
       </option>
     );
   };
@@ -88,14 +101,14 @@ function ScheduleParametrizer() {
   }
 
   grupos.forEach((grupo) => {
-    if (grupo.subject?.program?.programId == idProgramSelected) {
-      subjectMap.set(grupo.subject.subjectID, grupo.subject);
+    if (grupo?.subject?.program?.programId == idProgramSelected) {
+      subjectMap.set(grupo?.subject?.subjectID, grupo?.subject);
     }
   });
   const subjectSelectOptions = (subject) => {
     return (
-      <option key={subject.subjectID} value={subject.subjectID}>
-        {subject.name} {subject.code ? "- " + subject.code : ""}
+      <option key={subject?.subjectID} value={subject?.subjectID}>
+        {subject?.name} {subject?.code ? "- " + subject?.code : ""}
       </option>
     );
   };
@@ -107,6 +120,8 @@ function ScheduleParametrizer() {
           <div className=" ">
             <div className="font-bold text-xl mb-2">Programa:</div>
             <select
+              defaultValue={idProgramSelected}
+              value={idProgramSelected}
               id="programSelected"
               name="programId"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-paleta2-purpura dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -165,6 +180,8 @@ function ScheduleParametrizer() {
           <div className=" ">
             <div className="font-bold text-xl mb-2">Programa:</div>
             <select
+              defaultValue={idProgramSelected}
+              value={idProgramSelected}
               id="programSelected"
               name="programId"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-paleta2-purpura dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -190,6 +207,8 @@ function ScheduleParametrizer() {
           <div className="pt-3">
             <div className="font-bold text-xl mb-2">Materia:</div>
             <select
+              defaultValue={idSubjectSelected}
+              value={idSubjectSelected}
               id="subjectSelected"
               name="subjectId"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-paleta2-purpura dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -236,6 +255,8 @@ function ScheduleParametrizer() {
           <div className=" ">
             <div className="font-bold text-xl mb-2">Programa:</div>
             <select
+              defaultValue={idProgramSelected}
+              value={idProgramSelected}
               id="programSelected"
               name="programId"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-paleta2-purpura dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -261,6 +282,8 @@ function ScheduleParametrizer() {
           <div className="pt-3">
             <div className="font-bold text-xl mb-2">Materia:</div>
             <select
+              defaultValue={idSubjectSelected}
+              value={idSubjectSelected}
               id="subjectSelected"
               name="subjectId"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-paleta2-purpura dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -274,6 +297,8 @@ function ScheduleParametrizer() {
           <div className="pt-3">
             <div className="font-bold text-xl mb-2">Grupos:</div>
             <select
+              defaultValue={idGroupSelected}
+              value={idGroupSelected}
               id="groupSelected"
               name="groupId"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-paleta2-purpura dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -297,6 +322,11 @@ function ScheduleParametrizer() {
               name="resourceId"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-paleta2-purpura dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               onChange={(e) => {
+                setRecurso(
+                  resources.find(
+                    (resources) => resources.resourceId == e.target.value
+                  )
+                );
                 setIdResourceSelected(e.target.value);
               }}
             >
@@ -316,6 +346,8 @@ function ScheduleParametrizer() {
         <div className=" ">
           <div className="font-bold text-xl mb-2">Programa:</div>
           <select
+            defaultValue={idProgramSelected}
+            value={idProgramSelected}
             id="programSelected"
             name="programId"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-paleta2-purpura dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -341,6 +373,8 @@ function ScheduleParametrizer() {
         <div className="pt-3">
           <div className="font-bold text-xl mb-2">Materia:</div>
           <select
+            defaultValue={idSubjectSelected}
+            value={idSubjectSelected}
             id="subjectSelected"
             name="subjectId"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-paleta2-purpura dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -354,6 +388,8 @@ function ScheduleParametrizer() {
         <div className="pt-3">
           <div className="font-bold text-xl mb-2">Grupos:</div>
           <select
+            defaultValue={idGroupSelected}
+            value={idGroupSelected}
             id="groupSelected"
             name="groupId"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-paleta2-purpura dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -373,10 +409,17 @@ function ScheduleParametrizer() {
             :
           </div>
           <select
+            defaultValue={idResourceSelected}
+            value={idResourceSelected}
             id="resourceSelected"
             name="resourceId"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-paleta2-purpura dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             onChange={(e) => {
+              setRecurso(
+                resources.find(
+                  (resources) => resources.resourceId == e.target.value
+                )
+              );
               setIdResourceSelected(e.target.value);
             }}
           >

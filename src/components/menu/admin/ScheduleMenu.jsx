@@ -4,7 +4,7 @@ function ScheduleMenu() {
   return (
     <div className="m-4 mt-7 bg-paleta2-purpura rounded-2xl py-1">
       <div className="text-2xl font-bold dark:text-paleta2-azul-claro m-5">
-        Gestionar horario
+        Oferta Académica
       </div>
       <div className="grid divide-y divide-x divide-dashed hover:divide-solid rounded-md justify-evenly bg-gray-50 dark:bg-paleta2-fondo1 m-5 grid-cols-2">
         <div className="col-span-1 p-3">
@@ -26,7 +26,7 @@ function ScheduleMenu() {
                   />
                 </svg>
                 <span className="text-lg text-paleta2-purpura font-medium">
-                  Importar horario
+                  Importar Excel (In progress)
                 </span>
               </button>
             </Link>
@@ -51,7 +51,7 @@ function ScheduleMenu() {
                   />
                 </svg>
                 <span className="text-lg text-paleta2-purpura font-medium">
-                  Horarios cargados
+                  Gestion Oferta Academica
                 </span>
               </button>
             </Link>
