@@ -33,6 +33,8 @@ import { TeacherContextProvider } from "../../../context/TeacherContext";
 import { TeacherGroupContextProvider } from "../../../context/TeacherGroupContext";
 
 import { Route } from "react-router-dom";
+import AppLogin from "../../../apps/adminUser/AppLogin";
+import { LoginContextProvider } from "../../../context/LoginContext";
 
 function CMSRoutes() {
   return (
@@ -269,6 +271,13 @@ function CMSRoutes() {
               </DepartmentContextProvider>
             </FacultyContextProvider>
           </LocationContextProvider>
+        </TeacherContextProvider>
+      </Route>
+      <Route path="/login">
+        <TeacherContextProvider>
+          <LoginContextProvider>
+            <AppLogin />
+          </LoginContextProvider>
         </TeacherContextProvider>
       </Route>
     </>
