@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-02-2023 a las 00:22:45
+-- Tiempo de generación: 06-02-2023 a las 03:20:08
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -471,11 +471,11 @@ CREATE TABLE `academicperiod` (
 
 INSERT INTO `academicperiod` (`ACADEMICPERIDODID`, `NAME`, `INITDATE`, `FINALDATE`, `isDisable`) VALUES
 (2, 'Periodo 2022-2', '2022-05-19', '2022-12-31', 0),
-(7, 'Periodo 2022-1', '2022-01-01', '2022-05-18', 1),
 (3, 'Periodo 2023-1', '2023-03-01', '2023-06-30', 1),
 (4, 'Periodo 2021-1', '2021-03-01', '2021-06-30', 1),
 (5, 'Periodo 2021-2', '2021-09-01', '2021-12-19', 1),
 (6, 'Periodo 2020-1', '2020-03-01', '2020-06-30', 1),
+(7, 'Periodo 2022-1', '2022-01-01', '2022-05-18', 1),
 (8, 'Periodo 2020-2', '2020-09-01', '2020-12-19', 1),
 (9, 'Periodo 2019-1', '2019-03-01', '2019-06-30', 1),
 (10, 'Periodo 2019-2', '2019-09-01', '2019-12-19', 1),
@@ -565,7 +565,7 @@ INSERT INTO `department` (`DEPARTMENTID`, `FACULTYID`, `NAME`, `code`, `location
 (47, 16, 'Electrónica', 'DEPT8', 2),
 (48, 16, 'Telemática', 'DEPT9', 2),
 (49, 16, 'Automática Industrial', 'DEPT10', 2),
-(50, 7,	'Agroindustrial', 'DEPT11', 2);
+(50, 7, 'Agroindustrial', 'DEPT11', 2);
 
 -- --------------------------------------------------------
 
@@ -665,14 +665,14 @@ INSERT INTO `groupt` (`IDGROUP`, `IDSUBJECT`, `ACADEMICPERIDODID`, `CAPACITY`, `
 (6, 7, 2, 30, 'A'),
 (11, 21, 3, 20, 'A'),
 (12, 22, 3, 25, 'A'),
-(13, 21, 3, 20,	'B'),
-(14, 22, 3, 25,	'B'),
-(15, 23, 3, 30,	'A'),
-(16, 23, 3, 30,	'B'),
-(17, 26, 3, 20,	'A'),
-(18, 26, 3, 20,	'B'),
-(19, 27, 3, 35,	'A'),
-(20, 29, 3, 30,	'A');
+(13, 21, 3, 20, 'B'),
+(14, 22, 3, 25, 'B'),
+(15, 23, 3, 30, 'A'),
+(16, 23, 3, 30, 'B'),
+(17, 26, 3, 20, 'A'),
+(18, 26, 3, 20, 'B'),
+(19, 27, 3, 35, 'A'),
+(20, 29, 3, 30, 'A');
 
 -- --------------------------------------------------------
 
@@ -779,14 +779,14 @@ CREATE TABLE `program` (
 
 INSERT INTO `program` (`IDPROGRAM`, `DEPARTMENTID`, `NAME`, `code`, `location`, `color`) VALUES
 (7, 1, 'Sistemas', 'PRG1', 3, ''),
-(31, 41, 'Licenciatura en Español y Literatura', 'PRG2', 62, ''),	
-(32, 41, 'Licenciatura en básica con énfasis en Español', 'PRG3', 62, ''),	
-(33, 42, 'Ingeniería física', 'PRG4', 61, ''),	
-(34, 43, 'Medicina', 'PRG5', 63, ''),	
-(35, 44, 'Contaduría', 'PRG6', 61, ''),	
-(36, 46, 'Licenciatura en Matemáticas', 'PRG7',	61, ''),	
-(37, 50, 'Ingeniería forestal',	'PRG8',	64, ''),	
-(38, 49, 'Ingeniería automática', 'PRG9', 61, ''),	
+(31, 41, 'Licenciatura en Español y Literatura', 'PRG2', 62, ''),
+(32, 41, 'Licenciatura en básica con énfasis en Español', 'PRG3', 62, ''),
+(33, 42, 'Ingeniería física', 'PRG4', 61, ''),
+(34, 43, 'Medicina', 'PRG5', 63, ''),
+(35, 44, 'Contaduría', 'PRG6', 61, ''),
+(36, 46, 'Licenciatura en Matemáticas', 'PRG7', 61, ''),
+(37, 50, 'Ingeniería forestal', 'PRG8', 64, ''),
+(38, 49, 'Ingeniería automática', 'PRG9', 61, ''),
 (39, 47, 'Ingeniería electrónica', 'PRG10', 61, '');
 
 -- --------------------------------------------------------
@@ -870,6 +870,25 @@ INSERT INTO `resourcetype` (`RESSOURCETYPEID`, `RES_RESSOURCETYPEID`, `NAME`, `I
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `rol`
+--
+
+CREATE TABLE `rol` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `rol`
+--
+
+INSERT INTO `rol` (`id`, `name`) VALUES
+(1, 'ADMIN'),
+(2, 'SCHEDULEMANAGER');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `schedule`
 --
 
@@ -921,15 +940,15 @@ INSERT INTO `subject` (`IDSUBJECT`, `IDPROGRAM`, `NAME`, `code`, `REQUISITS`, `S
 (6, 7, 'Redes', 'SIS101', '{\"7\":null}', 8, 2, 'Semestral', 0, 'TEORICA', 0),
 (7, 7, 'IA', 'SIS104', '{\"7\":null}', 8, 8, 'Semestral', 0, 'TEORICA', 0),
 (21, 33, 'Mecánica', 'FIS101', '{\"7\":null}', 2, 4, 'Semestral', 0, 'TEORICA', 0),
-(22, 33, 'Electromagnetismo', 'FIS102',	'{\"7\":null}', 3, 4, 'Semestral', 0, 'TEORICA', 0),
-(23, 36, 'Cálculo I', 'MAT101',	'{\"7\":null}', 1, 4, 'Semestral', 0, 'TEORICA', 0),
+(22, 33, 'Electromagnetismo', 'FIS102', '{\"7\":null}', 3, 4, 'Semestral', 0, 'TEORICA', 0),
+(23, 36, 'Cálculo I', 'MAT101', '{\"7\":null}', 1, 4, 'Semestral', 0, 'TEORICA', 0),
 (24, 36, 'Cálculo II', 'MAT102', '{\"7\":null}', 2, 4, 'Semestral', 0, 'TEORICA', 0),
 (25, 31, 'Lectura y escritura', 'ESP101', '{\"7\":null}', 1, 2, 'Semestral', 0, 'TEORICA', 0),
 (26, 36, 'Álgebra', 'MAT103', '{\"7\":null}', 2, 4, 'Semestral', 0, 'TEORICA', 0),
-(27, 7,	'Introducción a la ingeniería de sistemas', 'SIS-01', '{\"7\":null}', 1, 4, 'Semestral', 0, 'TEORICA', 0),
-(28, 7,	'Informática I', 'SIS102', '{\"7\":null}', 1, 4, 'Semestral', 0, 'TEORICA', 0),
+(27, 7, 'Introducción a la ingeniería de sistemas', 'SIS-01', '{\"7\":null}', 1, 4, 'Semestral', 0, 'TEORICA', 0),
+(28, 7, 'Informática I', 'SIS102', '{\"7\":null}', 1, 4, 'Semestral', 0, 'TEORICA', 0),
 (29, 7, 'Programación OO', 'SIS103', '{\"7\":null}', 2, 4, 'Semestral', 0, 'TEORICA', 0),
-(30, 7,	'Laboratorio POO', 'SIS104', '{\"7\":null}', 2, 2, 'Semestral', 0, 'TEORICA', 0);
+(30, 7, 'Laboratorio POO', 'SIS104', '{\"7\":null}', 2, 2, 'Semestral', 0, 'TEORICA', 0);
 
 -- --------------------------------------------------------
 
@@ -976,6 +995,45 @@ INSERT INTO `teacher_group` (`TEAC_GRP_ID`, `TEACHERID`, `IDGROUP`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `username` varchar(250) NOT NULL,
+  `password` varchar(250) NOT NULL,
+  `TeacherId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `password`, `TeacherId`) VALUES
+(2, 'usuariotest@unicauca.edu.co', '$2a$10$iF.Q7qduG5KTOgqvNt0Bu.6L1wxBJicMjsdYKplEOYeP46.q9w9DS', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `userrol`
+--
+
+CREATE TABLE `userrol` (
+  `id` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `rolId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `userrol`
+--
+
+INSERT INTO `userrol` (`id`, `userId`, `rolId`) VALUES
+(1, 2, 2);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `vinculations`
 -- (Véase abajo para la vista actual)
 --
@@ -983,6 +1041,7 @@ CREATE TABLE `vinculations` (
 `TEACHERID` int(11)
 ,`HOURS` int(2)
 ,`VINCULATIONTYPE` enum('NOMBRADOTIEMPOCOMPLETO','NOMBRADOMEDIOTIEMPO','OCASIONALTIEMPOCOMPLETO','OCASIONALMEDIOTIEMPO','HORACATEDRA','BECARIO')
+,`DEPARTMENTID` int(11)
 );
 
 -- --------------------------------------------------------
@@ -1019,7 +1078,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `overviewintensityassignedhours`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `overviewintensityassignedhours`  AS SELECT `isg`.`FACULTYID` AS `FACULTYID`, `isg`.`DEPARTMENTID` AS `DEPARTMENTID`, `isg`.`IDPROGRAM` AS `IDPROGRAM`, `isg`.`IDSUBJECT` AS `IDSUBJECT`, `isg`.`IDGROUP` AS `IDGROUP`, `isg`.`INTENSITY` AS `INTENSITY`, `AssigSbjtGpsHours`(`isg`.`IDGROUP`) AS `AssignedHours` FROM (`intensitysubjectgroup` `isg` join `subject` `sb` on(`sb`.`IDSUBJECT` = `isg`.`IDSUBJECT`)) WHERE `sb`.`isExtern` = 0 AND `sb`.`ISDISABLE` = 00  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `overviewintensityassignedhours`  AS SELECT `isg`.`FACULTYID` AS `FACULTYID`, `isg`.`DEPARTMENTID` AS `DEPARTMENTID`, `isg`.`IDPROGRAM` AS `IDPROGRAM`, `isg`.`IDSUBJECT` AS `IDSUBJECT`, `isg`.`IDGROUP` AS `IDGROUP`, `isg`.`INTENSITY` AS `INTENSITY`, CASE WHEN `sb`.`isExtern` = 1 THEN `AssigSbjtGpsHours`(`isg`.`IDGROUP`,'PRESTAMO_POR_MATERIA') ELSE `AssigSbjtGpsHours`(`isg`.`IDGROUP`,'ACADEMICO') END AS `AssignedHours` FROM (`intensitysubjectgroup` `isg` join `subject` `sb` on(`sb`.`IDSUBJECT` = `isg`.`IDSUBJECT`)) WHERE `sb`.`ISDISABLE` = 00  ;
 
 -- --------------------------------------------------------
 
@@ -1028,7 +1087,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vinculations`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vinculations`  AS SELECT `tc`.`TEACHERID` AS `TEACHERID`, `ha`.`HOURS` AS `HOURS`, `ha`.`VINCULATIONTYPE` AS `VINCULATIONTYPE` FROM (`teacher` `tc` join `hourlyassignment` `ha` on(`tc`.`TEACHERID` = `ha`.`TEACHERID`)) WHERE `tc`.`ISDISABLE` = 0 AND `ha`.`isDisable` = 00  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vinculations`  AS SELECT `tc`.`TEACHERID` AS `TEACHERID`, `ha`.`HOURS` AS `HOURS`, `ha`.`VINCULATIONTYPE` AS `VINCULATIONTYPE`, `dp`.`DEPARTMENTID` AS `DEPARTMENTID` FROM ((`teacher` `tc` join `hourlyassignment` `ha` on(`tc`.`TEACHERID` = `ha`.`TEACHERID`)) join `department` `dp` on(`ha`.`DEPARTMENTID` = `dp`.`DEPARTMENTID`)) WHERE `tc`.`ISDISABLE` = 0 AND `ha`.`isDisable` = 00  ;
 
 --
 -- Índices para tablas volcadas
@@ -1138,6 +1197,12 @@ ALTER TABLE `resourcetype`
   ADD KEY `IS_PARENT_FK` (`RES_RESSOURCETYPEID`);
 
 --
+-- Indices de la tabla `rol`
+--
+ALTER TABLE `rol`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `schedule`
 --
 ALTER TABLE `schedule`
@@ -1172,6 +1237,23 @@ ALTER TABLE `teacher_group`
   ADD KEY `TEACHER_GROUP_FK` (`TEACHERID`);
 
 --
+-- Indices de la tabla `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_pk_id` (`id`),
+  ADD UNIQUE KEY `unique_pk_username` (`username`),
+  ADD KEY `fk_teacher_user` (`TeacherId`);
+
+--
+-- Indices de la tabla `userrol`
+--
+ALTER TABLE `userrol`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_user_userrol` (`userId`),
+  ADD KEY `fk_rol_userrol` (`rolId`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -1179,7 +1261,7 @@ ALTER TABLE `teacher_group`
 -- AUTO_INCREMENT de la tabla `academicperiod`
 --
 ALTER TABLE `academicperiod`
-  MODIFY `ACADEMICPERIDODID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ACADEMICPERIDODID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `assignmentresource`
@@ -1191,7 +1273,7 @@ ALTER TABLE `assignmentresource`
 -- AUTO_INCREMENT de la tabla `department`
 --
 ALTER TABLE `department`
-  MODIFY `DEPARTMENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `DEPARTMENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT de la tabla `event`
@@ -1203,7 +1285,7 @@ ALTER TABLE `event`
 -- AUTO_INCREMENT de la tabla `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `FACULTYID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `FACULTYID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT de la tabla `faculty_resource`
@@ -1215,7 +1297,7 @@ ALTER TABLE `faculty_resource`
 -- AUTO_INCREMENT de la tabla `groupt`
 --
 ALTER TABLE `groupt`
-  MODIFY `IDGROUP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `IDGROUP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `hourlyassignment`
@@ -1227,13 +1309,13 @@ ALTER TABLE `hourlyassignment`
 -- AUTO_INCREMENT de la tabla `location`
 --
 ALTER TABLE `location`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT de la tabla `program`
 --
 ALTER TABLE `program`
-  MODIFY `IDPROGRAM` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `IDPROGRAM` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT de la tabla `resourcet`
@@ -1248,6 +1330,12 @@ ALTER TABLE `resourcetype`
   MODIFY `RESSOURCETYPEID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT de la tabla `rol`
+--
+ALTER TABLE `rol`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `schedule`
 --
 ALTER TABLE `schedule`
@@ -1257,7 +1345,7 @@ ALTER TABLE `schedule`
 -- AUTO_INCREMENT de la tabla `subject`
 --
 ALTER TABLE `subject`
-  MODIFY `IDSUBJECT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `IDSUBJECT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `teacher`
@@ -1270,6 +1358,18 @@ ALTER TABLE `teacher`
 --
 ALTER TABLE `teacher_group`
   MODIFY `TEAC_GRP_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `userrol`
+--
+ALTER TABLE `userrol`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -1364,6 +1464,19 @@ ALTER TABLE `subject`
 ALTER TABLE `teacher_group`
   ADD CONSTRAINT `fk_teacher_group_group` FOREIGN KEY (`IDGROUP`) REFERENCES `groupt` (`IDGROUP`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_teacher_group_teacher` FOREIGN KEY (`TEACHERID`) REFERENCES `teacher` (`TEACHERID`);
+
+--
+-- Filtros para la tabla `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `fk_teacher_user` FOREIGN KEY (`TeacherId`) REFERENCES `teacher` (`TEACHERID`);
+
+--
+-- Filtros para la tabla `userrol`
+--
+ALTER TABLE `userrol`
+  ADD CONSTRAINT `fk_rol_userrol` FOREIGN KEY (`rolId`) REFERENCES `rol` (`id`),
+  ADD CONSTRAINT `fk_user_userrol` FOREIGN KEY (`userId`) REFERENCES `user` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
