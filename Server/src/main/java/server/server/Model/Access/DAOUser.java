@@ -24,13 +24,20 @@ public interface DAOUser extends JpaRepository<User, Long> {
 
     @Query(
             value = """
-                    SELECT VC.DEPARTMENTID FROM  `user` US  
-                    	INNER JOIN teacher TI ON US.TeacherId = TI.TEACHERID 
-                    	INNER JOIN vinculations VC ON VC.TEACHERID = TI.TEACHERID
-                    WHERE US.username =:usernameEx;
+                    SELECT CD.DEPARTMENTID FROM teacherDepartmentFacul CD
+                    WHERE CD.username =:usernameEx;
                     """,
             nativeQuery = true
     )
     public Long findByDepartmentId(@Param("usernameEx") String username);
+    
+    @Query(
+            value = """
+                    SELECT CD.FACULTYID FROM teacherDepartmentFacul CD
+                    WHERE CD.username =:usernameEx;
+                    """,
+            nativeQuery = true
+    )
+    public Long findFacultyIdAssc(@Param("usernameEx") String username);
 
 }

@@ -109,5 +109,10 @@ public class SubjectService implements ISubjectService{
         return subjRepo.findById(subject).orElse(null);
     }
 
+    @Override
+    public Long findDepartmentAssc(long subjectId) {
+        return subjRepo.findDepartmentAss(subjectId); 
+    }
+
     
 }

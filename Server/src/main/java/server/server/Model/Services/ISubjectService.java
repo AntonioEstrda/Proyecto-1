@@ -52,4 +52,6 @@ public interface ISubjectService {
     
     public Subject findById(long subject);
     
+    public Long findDepartmentAssc(long subjectId);  
+    
 }

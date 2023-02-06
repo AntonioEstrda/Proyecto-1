@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.Subject;
+import server.server.Model.Services.IProgramService;
 import server.server.Model.Services.ISubjectService;
 import server.server.utilities.Labels;
 
@@ -36,7 +37,10 @@ import server.server.utilities.Labels;
 public class SubjectController {
     
     @Autowired
-    public ISubjectService subjectService; 
+    private  ISubjectService subjectService; 
+    
+    @Autowired 
+    private IProgramService programServ;  
     
     @GetMapping(value = "/all") 
     public ArrayList<Subject> all(){
@@ -55,9 +59,9 @@ public class SubjectController {
         consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Subject> add(@RequestBody @Valid Subject subject, Errors errors) {     
        HttpHeaders headers = new HttpHeaders();
+       
        if (errors.hasErrors()) {
-            ArrayList<String> setErrors = Utility.setErrors(errors);
-            headers.add("Errors", Utility.setErrors(errors).toString());
+            headers.add(Labels.errors.name(), Utility.setErrors(errors).toString());
             return new ResponseEntity<>(subject, headers, HttpStatus.NOT_MODIFIED);
         } else {
             Map<Labels, Object> returns = subjectService.save(subject);
@@ -77,6 +81,11 @@ public class SubjectController {
     @RequestMapping("/update")
     public ResponseEntity<Subject> update(@RequestBody Subject subject, Errors errors) {
         HttpHeaders headers = new HttpHeaders();
+        
+       Long findDepartmentAssc = subjectService.findDepartmentAssc(subject.getSubjectID());  
+       // Cusstouser  
+       //Validate private 
+        
         if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
             headers.add(Labels.errors.name(), setErrors.toString());
