@@ -5,9 +5,11 @@
 package server.server.Model.Services.Impls;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -150,6 +152,22 @@ public class EventService implements IEventService {
     public Map<Labels, Object> findByDepartmentIdAndEventId(long dpo, long eve) {
         Map<Labels, Object> returns = new HashMap();
         Event ev  = repo.findByDepartmentidAndId(dpo, eve);
+        returns.put(Labels.objectReturn, ev);
+        return returns;
+    }
+
+    @Override
+    public Map<Labels, Object> findAllByDepartmentAndEvenType(long departmentId, List<String> types) {
+        Map<Labels, Object> returns = new HashMap();
+        
+        if(types == null){
+            types =  Arrays.asList(Event.EventType.values())
+                    .stream()
+                    .map(x -> x.name())
+                    .collect(Collectors.toList()); 
+        }
+        
+        List<Event> ev  = repo.findAllByDepartmentAndEvenType(departmentId, types);
         returns.put(Labels.objectReturn, ev);
         return returns;
     }

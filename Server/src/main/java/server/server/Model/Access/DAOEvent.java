@@ -64,4 +64,19 @@ public interface DAOEvent extends JpaRepository<Event, Long> {
             , nativeQuery = true
     )
     public Event findByDepartmentidAndId(@Param("dptId") long dptId, @Param("evtId") long evtId); 
+
+    
+    @Query(
+            value="""
+                  WITH evts as (
+                        SELECT EV.id FROM `event` EV 
+                               INNER JOIN department DP ON EV.departmentId = DP.DEPARTMENTID 
+                        WHERE EV.academicPeriodId = getCrrntAcdPer() 
+                        AND DP.DEPARTMENTID =:departmentId 
+                        AND EV.type in (:types)
+                  )SELECT * FROM `event` EVT WHERE EVT.id in (SELECT DISTINCT EV.id FROM evts EV) ;
+                  """, nativeQuery = true
+    )
+    public List<Event> findAllByDepartmentAndEvenType(@Param("departmentId") long departmentId, 
+                                                        @Param("types") List<String> types);
 }

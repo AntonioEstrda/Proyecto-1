@@ -70,6 +70,6 @@ public class Event implements Serializable {
     private Department department;
     
     public enum EventType{
-        PRESTAMO_ACADEMICO,GENERAL,PRESTAMO_POR_MATERIA,ACADEMICO;  
+        PRESTAMO_ACADEMICO,GENERAL,PRESTAMO_POR_MATERIA,ACADEMICO; 
     }
 }

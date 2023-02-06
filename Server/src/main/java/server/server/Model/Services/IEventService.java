@@ -26,7 +26,9 @@ public interface IEventService {
     public Map<Labels, Object> findbyCode(String code);
 
     public Map<Labels, Object> findByDeparmentId(List<Long> departmentId);
-    
-    public Map<Labels, Object> findByDepartmentIdAndEventId(long dpo, long eve);  
+
+    public Map<Labels, Object> findByDepartmentIdAndEventId(long dpo, long eve);
+
+    public Map<Labels, Object> findAllByDepartmentAndEvenType(long departmentId, List<String> types);
 
 }
