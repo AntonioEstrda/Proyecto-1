@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +40,7 @@ public class LocationController {
     @Autowired
     public ILocationService locService;
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @GetMapping(value = "/all",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ArrayList<Location>> all() {
@@ -48,6 +50,7 @@ public class LocationController {
         return responseEntity;
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @GetMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity<Location> get(@PathVariable Long id) {
@@ -56,6 +59,7 @@ public class LocationController {
         return responseEntity;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -80,6 +84,7 @@ public class LocationController {
         return responseEntity;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping("/update")
@@ -102,6 +107,7 @@ public class LocationController {
         return responseEntity;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping
     @RequestMapping("/delete/{id}")
     public ResponseEntity<Location> delete(@PathVariable Long id) {

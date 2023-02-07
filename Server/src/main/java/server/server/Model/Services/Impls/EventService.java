@@ -19,6 +19,7 @@ import server.server.Model.Domain.AcademicPeriod;
 import server.server.Model.Domain.Event;
 import server.server.Model.Domain.Teacher;
 import server.server.Model.Services.IAcademicPeriodService;
+import server.server.Model.Services.IDepartmentService;
 import server.server.Model.Services.IEventService;
 import server.server.Model.Services.ITeacherService;
 import server.server.utilities.Labels;
@@ -36,10 +37,14 @@ public class EventService implements IEventService {
     @Autowired
     private DAOEvent repo;
 
+    @Autowired
     private IAcademicPeriodService apService;
 
     @Autowired
     private ITeacherService teacherServ;
+
+    @Autowired
+    private IDepartmentService deptService;
 
     @Override
     @Transactional(value = "DataTransactionManager")
@@ -99,7 +104,7 @@ public class EventService implements IEventService {
 
         if (ev == null) {
             errors.add(EvtErrors.EVT101.name());
-        }else {
+        } else {
             ev = repo.findbyCode(event.getCode());
             if (ev != null && ev.getId() != event.getId()) {
                 errors.add(EvtErrors.EVT102.name());
@@ -143,7 +148,7 @@ public class EventService implements IEventService {
     @Transactional(value = "DataTransactionManager", readOnly = true)
     public Map<Labels, Object> findByDeparmentId(List<Long> departmentId) {
         Map<Labels, Object> returns = new HashMap();
-        List<Event> ev  = repo.findByDeparmentId(departmentId);
+        List<Event> ev = repo.findByDeparmentId(departmentId);
         returns.put(Labels.objectReturn, ev);
         return returns;
     }
@@ -151,7 +156,7 @@ public class EventService implements IEventService {
     @Override
     public Map<Labels, Object> findByDepartmentIdAndEventId(long dpo, long eve) {
         Map<Labels, Object> returns = new HashMap();
-        Event ev  = repo.findByDepartmentidAndId(dpo, eve);
+        Event ev = repo.findByDepartmentidAndId(dpo, eve);
         returns.put(Labels.objectReturn, ev);
         return returns;
     }
@@ -159,17 +164,27 @@ public class EventService implements IEventService {
     @Override
     public Map<Labels, Object> findAllByDepartmentAndEvenType(long departmentId, List<String> types) {
         Map<Labels, Object> returns = new HashMap();
-        
-        if(types == null){
-            types =  Arrays.asList(Event.EventType.values())
+
+        if (types == null) {
+            types = Arrays.asList(Event.EventType.values())
                     .stream()
                     .map(x -> x.name())
-                    .collect(Collectors.toList()); 
+                    .collect(Collectors.toList());
         }
-        
-        List<Event> ev  = repo.findAllByDepartmentAndEvenType(departmentId, types);
+
+        List<Event> ev = repo.findAllByDepartmentAndEvenType(departmentId, types);
         returns.put(Labels.objectReturn, ev);
         return returns;
+    }
+
+    @Override
+    public boolean validateUserEvent(long event, CustomUserDetails user) {
+        Event findById = repo.findById(event).orElse(null);
+        boolean ban = false;
+        if (findById != null) {
+            ban = deptService.validateUserDepartment(findById.getDepartment().getDepartmentId(), user);
+        }
+        return ban;
     }
 
 }

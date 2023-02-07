@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,11 +27,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.Program;
+import server.server.Model.Services.IDepartmentService;
 import server.server.Model.Services.IProgramService;
 import server.server.Model.Services.Impls.CustomUserDetails;
-import server.server.Model.Services.Impls.UserDetailCustomService;
 import server.server.auth.IAuthenticationFacade;
 import server.server.utilities.Labels;
+import server.server.utilities.errors.UserErrors;
 
 /**
  *
@@ -46,10 +46,10 @@ public class ProgramController {
     public IProgramService programService;
 
     @Autowired
-    private IAuthenticationFacade authenticationFacade;
+    private IDepartmentService depService;
 
     @Autowired
-    private UserDetailCustomService userService;
+    private IAuthenticationFacade authenticationFacade;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/all")
@@ -60,18 +60,24 @@ public class ProgramController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @GetMapping(value = "/allByDepartmentId")
     public ResponseEntity<List<Program>> all(@RequestParam("departmentId") long departmentId) {
-        ResponseEntity<List<Program>> response; 
+        ResponseEntity<List<Program>> response;
+        HttpHeaders headers = new HttpHeaders();
+        ArrayList<String> errors2 = new ArrayList();
         CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-        if (!validateUserDepartment(departmentId, user)) {
-            response =  new ResponseEntity<>(new ArrayList(), null, HttpStatus.UNAUTHORIZED);
-        }else {
-        Map<Labels, Object> returns = programService.getAll(departmentId);
-        List<Program> get = (List<Program>) returns.get(Labels.objectReturn);
-        response =  new ResponseEntity<>(get, null, HttpStatus.OK);
+
+        if (!depService.validateUserDepartment(departmentId, user)) {
+            errors2.add(UserErrors.USR105.name());
+            headers.add(Labels.errors.toString(), errors2.toString());
+            response = new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
+        } else {
+            Map<Labels, Object> returns = programService.getAll(departmentId);
+            List<Program> get = (List<Program>) returns.get(Labels.objectReturn);
+            response = new ResponseEntity<>(get, null, HttpStatus.OK);
         }
-        return response; 
+        return response;
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @GetMapping(value = "/{id}")
     @ResponseBody
     public Program get(@PathVariable Long id) {
@@ -80,16 +86,26 @@ public class ProgramController {
         return programService.find(env);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Program> add(@RequestBody @Valid Program program, Errors errors) {
+
         HttpHeaders headers = new HttpHeaders();
-        if (errors.hasErrors()) {
+        ResponseEntity<Program> response;
+        ArrayList<String> errors2 = new ArrayList();
+        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
+
+        if (!depService.validateUserDepartment(program.getDepartment().getDepartmentId(), user)) {
+            errors2.add(UserErrors.USR105.name());
+            headers.add(Labels.errors.toString(), errors2.toString());
+            response = new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
+        } else if (errors.hasErrors()) {
             headers.add(Labels.errors.name(), Utility.setErrors(errors).toString());
             return new ResponseEntity<>(program, headers, HttpStatus.NOT_MODIFIED);
         } else {
             Map<Labels, Object> returns = programService.save(program);
-            ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
+            errors2 = (ArrayList<String>) returns.get(Labels.errors);
             Program prg = (Program) returns.get(Labels.objectReturn);
             if (!errors2.isEmpty() || prg == null) {
                 headers.add(Labels.errors.name(), errors2.toString());
@@ -99,52 +115,63 @@ public class ProgramController {
 
             }
         }
+        return response;
     }
 
     @PutMapping
     @RequestMapping("/update")
     public ResponseEntity<Program> update(@RequestBody Program program, Errors errors) {
         HttpHeaders headers = new HttpHeaders();
+        ResponseEntity<Program> response;
+        ArrayList<String> errors2 = new ArrayList();
+        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
+        if (!programService.validateUserProgram(program.getProgramId(), user)) {
+            errors2.add(UserErrors.USR105.name());
+            headers.add(Labels.errors.toString(), errors2.toString());
+            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
+        }
+
         if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
             headers.add(Labels.errors.name(), setErrors.toString());
-            return new ResponseEntity<>(program, headers, HttpStatus.NOT_MODIFIED);
+            response = new ResponseEntity<>(program, headers, HttpStatus.NOT_MODIFIED);
         } else {
             Map<Labels, Object> update = programService.update(program);
-            ArrayList<String> errors2 = (ArrayList<String>) update.get(Labels.errors);
+            errors2 = (ArrayList<String>) update.get(Labels.errors);
             Program prg = (Program) update.get(Labels.objectReturn);
             if (!errors2.isEmpty() || prg == null) {
                 headers.add(Labels.errors.name(), errors2.toString());
                 return new ResponseEntity<>(program, headers, HttpStatus.NOT_MODIFIED);
             }
-            return new ResponseEntity<>(program, null, HttpStatus.ACCEPTED);
+            response = new ResponseEntity<>(program, null, HttpStatus.ACCEPTED);
         }
+        return response;
     }
 
     @DeleteMapping
     @RequestMapping("/delete/{ProgramId}")
     public ResponseEntity<Program> delete(@PathVariable Long ProgramId
     ) {
+        HttpHeaders headers = new HttpHeaders();
+        ResponseEntity<Program> response;
+        ArrayList<String> errors2 = new ArrayList();
+        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
+        if (!programService.validateUserProgram(ProgramId, user)) {
+            errors2.add(UserErrors.USR105.name());
+            headers.add(Labels.errors.toString(), errors2.toString());
+            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
+        }
+
         Map<Labels, Object> delete = programService.delete(ProgramId);
         ArrayList<String> errors = (ArrayList<String>) delete.get(Labels.errors);
         Program prg = (Program) delete.get(Labels.objectReturn);
         if (prg != null) {
-            return new ResponseEntity<>(prg, null, HttpStatus.ACCEPTED);
+            response = new ResponseEntity<>(prg, null, HttpStatus.ACCEPTED);
         } else {
-            HttpHeaders headers = new HttpHeaders();
+            headers = new HttpHeaders();
             headers.add(Labels.errors.name(), errors.toString());
-            return (new ResponseEntity<>(prg, headers, HttpStatus.NOT_MODIFIED));
+            response = (new ResponseEntity<>(prg, headers, HttpStatus.NOT_MODIFIED));
         }
-    }
-
-    private boolean validateUserDepartment(long departmentid, CustomUserDetails user) {
-        boolean ban = user.getAuthorities().contains(new SimpleGrantedAuthority(Labels.RolEnum.ADMIN.name()));
-        if (!ban) {
-            Long findAsscDepartment = userService.findAsscDepartment(user.getUsername());
-            if (findAsscDepartment == departmentid) {
-                ban = true;
-            }
-        }
-        return ban;
+        return response;
     }
 }

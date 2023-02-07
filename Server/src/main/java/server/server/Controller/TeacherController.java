@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.Teacher;
 import server.server.Model.Services.ITeacherService;
+import server.server.Model.Services.Impls.CustomUserDetails;
+import server.server.auth.IAuthenticationFacade;
 import server.server.utilities.Labels;
+import server.server.utilities.errors.UserErrors;
 
 /**
  *
@@ -33,29 +37,35 @@ import server.server.utilities.Labels;
 @RestController
 @RequestMapping("/teacher")
 public class TeacherController {
-    
+
     @Autowired
-    public ITeacherService teacherService; 
-    
-    @GetMapping(value = "/all") 
-    public ArrayList<Teacher> all(){
-        return teacherService.getAll();  
-    }         
-   
+    public ITeacherService teacherService;
+
+    @Autowired
+    private IAuthenticationFacade authenticationFacade;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(value = "/all")
+    public ArrayList<Teacher> all() {
+        return teacherService.getAll();
+    }
+
     @GetMapping(value = "/{TeacherId}")
     @ResponseBody
-    public Teacher getTeacher(@PathVariable  Long TeacherId) {
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
+    public Teacher getTeacher(@PathVariable Long TeacherId) {
         Teacher teacher = new Teacher();
         teacher.setTeacherID(TeacherId);
         return teacherService.find(teacher);
     }
-    
+
     @PostMapping(
-        consumes = {"application/json"})
-    public ResponseEntity<Teacher> add(@RequestBody Teacher teacher, Errors errors) {     
-       HttpHeaders headers = new HttpHeaders();
+            consumes = {"application/json"})
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
+    public ResponseEntity<Teacher> add(@RequestBody Teacher teacher, Errors errors) {
+        HttpHeaders headers = new HttpHeaders();
+
         if (errors.hasErrors()) {
-            ArrayList<String> setErrors = Utility.setErrors(errors);
             headers.add("Errors", Utility.setErrors(errors).toString());
             return new ResponseEntity<>(teacher, headers, HttpStatus.NOT_MODIFIED);
         } else {
@@ -71,19 +81,22 @@ public class TeacherController {
             }
         }
     }
-    
+
     @PutMapping
     @RequestMapping("/update")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     public ResponseEntity<Teacher> update(@RequestBody @Valid Teacher teacher, Errors errors) {
-        
+
         HttpHeaders headers = new HttpHeaders();
+        ArrayList<String> errors2 = new ArrayList();
+
         if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
             headers.add(Labels.errors.name(), setErrors.toString());
             return new ResponseEntity<>(teacher, headers, HttpStatus.NOT_MODIFIED);
         } else {
             Map<Labels, Object> update = teacherService.update(teacher);
-            ArrayList<String> errors2 = (ArrayList<String>) update.get(Labels.errors);
+            errors2 = (ArrayList<String>) update.get(Labels.errors);
             Teacher ac = (Teacher) update.get(Labels.objectReturn);
             if (!errors2.isEmpty() || ac == null) {
                 headers.add(Labels.errors.name(), errors2.toString());
@@ -91,11 +104,13 @@ public class TeacherController {
             }
             return new ResponseEntity<>(teacher, null, HttpStatus.ACCEPTED);
         }
-        
+
     }
-    
+
     @DeleteMapping
     @RequestMapping("/delete/{teacherId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
+
     public ResponseEntity<Teacher> delete(@PathVariable Long teacherId) {
 
         Map<Labels, Object> delete = teacherService.delete(teacherId);
@@ -108,5 +123,5 @@ public class TeacherController {
             headers.add(Labels.errors.name(), errors.toString());
             return (new ResponseEntity<>(ac, headers, HttpStatus.NOT_MODIFIED));
         }
-    }    
+    }
 }

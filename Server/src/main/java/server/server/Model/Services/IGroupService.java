@@ -6,7 +6,9 @@ package server.server.Model.Services;
 
 import java.util.ArrayList;
 import java.util.Map;
+import org.springframework.http.ResponseEntity;
 import server.server.Model.Domain.Group;
+import server.server.Model.Services.Impls.CustomUserDetails;
 import server.server.utilities.Labels;
 
 /**
@@ -14,48 +16,57 @@ import server.server.utilities.Labels;
  * @author Fernando
  */
 public interface IGroupService {
+
     /**
      * Find an group
-     * @param group
-     * @return Group 
-     */
-    public Group find(Group group); 
-    
-    /**
-     * save a group 
+     *
      * @param group
      * @return Group
      */
+    public Group find(Group group);
 
-    public Group findById(long group);
     /**
-     * Saves a new one  or updates a faculty register in the repository 
-     * 
-     * @param group Group instance 
-     * @return String - contains information about saving process (status, an errors if those exist) 
+     * save a group
+     *
+     * @param group
+     * @return Group
      */
-    
-    public Map<Labels, Object> save(Group group); 
+    public Group findById(long group);
 
     /**
-     * list all groups 
+     * Saves a new one or updates a faculty register in the repository
+     *
+     * @param group Group instance
+     * @return String - contains information about saving process (status, an
+     * errors if those exist)
+     */
+    public Map<Labels, Object> save(Group group);
+
+    /**
+     * list all groups
+     *
      * @return ArrayList
      */
-    public ArrayList<Group> getAll();  
-    
-    
+    public ArrayList<Group> getAll();
+
     /**
      * Updates an group
+     *
      * @param group
      * @return Group
      */
-    public Map<Labels, Object> update(Group group);  
-    
-    
+    public Map<Labels, Object> update(Group group);
+
     /**
      * Deactivates an Group
+     *
      * @param groupId
      * @return Group
      */
     public Map<Labels, Object> delete(Long groupId);
+
+    public Map<Labels, Object> getAllBySubjectId(long subjectId);
+
+    public boolean validateUserGroup(long groupId, CustomUserDetails user);
+
 }

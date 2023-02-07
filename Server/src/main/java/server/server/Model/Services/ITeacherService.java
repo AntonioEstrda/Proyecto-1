@@ -14,17 +14,19 @@ import server.server.utilities.Labels;
  * @author Fernando
  */
 public interface ITeacherService {
-    
-    public Teacher find(Teacher teacher); 
-    
-    public Map<Labels, Object> save(Teacher teacher); 
-    
-    public ArrayList<Teacher> getAll();  
-    
-    public Map<Labels, Object> update(Teacher teacher);  
-    
+
+    public Teacher find(Teacher teacher);
+
+    public Map<Labels, Object> save(Teacher teacher);
+
+    public ArrayList<Teacher> getAll();
+
+    public Map<Labels, Object> update(Teacher teacher);
+
     public Map<Labels, Object> delete(Long teacherId);
-    
+
     public Teacher findByNumIden(String numIden);
-    
+
+    public long findAssDepartment(long teacher);
+
 }

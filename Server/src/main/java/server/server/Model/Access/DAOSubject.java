@@ -4,6 +4,7 @@
  */
 package server.server.Model.Access;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,14 +14,15 @@ import server.server.Model.Domain.Subject;
  *
  * @author Fernando
  */
-public interface DAOSubject extends JpaRepository<Subject, Long>{
-    
-   @Query(
-          value= """
-                   SELECT DISTINCT DC.DEPARTMENTID FROM  overviewintensityassignedhours DC
-                   WHERE DC.IDSUBJECT =:SubjectID  
-                 """, 
-           nativeQuery=true
-   )
-   public Long findDepartmentAss(@Param("SubjectID") long subjectId); 
+public interface DAOSubject extends JpaRepository<Subject, Long> {
+
+    @Query(
+            value = """
+                    SELECT * FROM subject SB 
+                    WHERE SB.IDPROGRAM =:programId 
+                    """,
+            nativeQuery = true
+    )
+    public List<Subject> findByIdProgramId(@Param("programId") long programId);
+
 }

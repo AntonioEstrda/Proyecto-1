@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,9 @@ public class DepartmentService implements IDepartmentService {
     @Autowired
     private ILocationService locService;
 
+    @Autowired
+    private UserDetailCustomService userService;
+
     @Override
     @Transactional(value = "DataTransactionManager", readOnly = true)
     public Department find(Department department) {
@@ -50,16 +54,16 @@ public class DepartmentService implements IDepartmentService {
         Map<Labels, Object> returns = new HashMap();
         ArrayList errors = new ArrayList();
         if (this.find(department) != null) {
-            errors.add(DeptErrors.DEPT102.name());  
+            errors.add(DeptErrors.DEPT102.name());
         } else {
             if (facService.find(department.getFacultad()) != null) {
                 if (deptRepo.findByCode(department.getCode()) != null) {
                     errors.add(DeptErrors.DEPT112.name());
-                }else if (department.getLocation() == null) {
+                } else if (department.getLocation() == null) {
                     errors.add(DeptErrors.DEPT105.name());
-                }else if (locService.find(department.getLocation().getLocationId()) == null) {
+                } else if (locService.find(department.getLocation().getLocationId()) == null) {
                     errors.add(LocationErrors.LOC101.name());
-                }else if (errors.isEmpty()) {
+                } else if (errors.isEmpty()) {
                     department = deptRepo.save(department);
                 }
             } else {
@@ -130,9 +134,21 @@ public class DepartmentService implements IDepartmentService {
     public Department findById(long department) {
         return deptRepo.findById(department).orElse(null);
     }
-    
+
     @Override
     public Department findByCode(String code) {
         return deptRepo.findByCode(code);
+    }
+
+    @Override
+    public boolean validateUserDepartment(long departmentid, CustomUserDetails user) {
+        boolean ban = user.getAuthorities().contains(new SimpleGrantedAuthority(Labels.RolEnum.ADMIN.name()));
+        if (!ban) {
+            Long findAsscDepartment = userService.findAsscDepartment(user.getUsername());
+            if (findAsscDepartment == departmentid) {
+                ban = true;
+            }
+        }
+        return ban;
     }
 }

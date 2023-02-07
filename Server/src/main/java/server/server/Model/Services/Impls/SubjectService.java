@@ -6,6 +6,7 @@ package server.server.Model.Services.Impls;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,13 @@ import server.server.utilities.errors.SubjErrors;
  *
  * @author Fernando
  */
-@Service 
+@Service
 @EnableTransactionManagement
-public class SubjectService implements ISubjectService{
-    
-    @Autowired 
+public class SubjectService implements ISubjectService {
+
+    @Autowired
     private DAOSubject subjRepo;
-    
+
     @Autowired
     private IProgramService programService;
 
@@ -103,16 +104,28 @@ public class SubjectService implements ISubjectService{
         returns.put(Labels.objectReturn, old);
         return returns;
     }
-    
+
     @Override
     public Subject findById(long subject) {
         return subjRepo.findById(subject).orElse(null);
     }
 
     @Override
-    public Long findDepartmentAssc(long subjectId) {
-        return subjRepo.findDepartmentAss(subjectId); 
+    public Map<Labels, Object> getAllByProgramId(long programId) {
+        Map<Labels, Object> returns = new HashMap();
+        List<Subject> sbjs = subjRepo.findByIdProgramId(programId);
+        returns.put(Labels.objectReturn, sbjs);
+        return returns;
     }
 
-    
+    @Override
+    public boolean validateUserSubject(long subjectID, CustomUserDetails user) {
+        boolean ban = false;
+        Subject find = this.subjRepo.findById(subjectID).orElse(null);
+        if (find != null) {
+            ban = programService.validateUserProgram(find.getProgram().getProgramId(), user);
+        }
+        return ban;
+    }
+
 }

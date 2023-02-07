@@ -24,5 +24,9 @@ public enum UserErrors {
     /**
      * Password field cannot be empty or Malformed Password  
      */
-    USR104;  
+    USR104, 
+    /**
+     * No correlated item - user 
+     */
+    USR105;  
 }

@@ -6,6 +6,7 @@ package server.server.Model.Services.Impls;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,14 +26,14 @@ import server.server.utilities.errors.GroupErrors;
  */
 @Service
 @EnableTransactionManagement
-public class GroupService implements IGroupService{
-    
-    @Autowired 
-    private DAOGroup groupRepo; 
-    
+public class GroupService implements IGroupService {
+
+    @Autowired
+    private DAOGroup groupRepo;
+
     @Autowired
     private IAcademicPeriodService apService;
-    
+
     @Autowired
     private ISubjectService subjService;
 
@@ -54,9 +55,9 @@ public class GroupService implements IGroupService{
             if (apService.find(group.getAcademicPeriod()) != null) {
                 Group entitySaved = groupRepo.save(group);
                 returns.put(Labels.objectReturn, entitySaved);
-            }else if (subjService.find(group.getSubject()) != null) {
+            } else if (subjService.find(group.getSubject()) != null) {
                 errors.add(GroupErrors.GROUP105.name());
-            }else {
+            } else {
                 errors.add(GroupErrors.GROUP106.name());
             }
             Group entitySaved = groupRepo.save(group);
@@ -76,15 +77,15 @@ public class GroupService implements IGroupService{
     @Transactional(value = "DataTransactionManager")
     public Map<Labels, Object> update(Group group) {
         Map<Labels, Object> returns = new HashMap();
-        ArrayList<String> errors = new ArrayList(); 
+        ArrayList<String> errors = new ArrayList();
         Group old = this.find(group);
         if (old == null) {
-            errors.add(GroupErrors.GROUP101.name());  
+            errors.add(GroupErrors.GROUP101.name());
         } else {
             old = groupRepo.save(group);
         }
-        returns.put(Labels.errors, errors);  
-        returns.put(Labels.objectReturn, old);   
+        returns.put(Labels.errors, errors);
+        returns.put(Labels.objectReturn, old);
         return returns;
     }
 
@@ -93,20 +94,38 @@ public class GroupService implements IGroupService{
     public Map<Labels, Object> delete(Long GroupId) {
 
         Map<Labels, Object> returns = new HashMap();
-        ArrayList<String> errors = new ArrayList(); 
+        ArrayList<String> errors = new ArrayList();
         Group old = groupRepo.findById(GroupId).orElse(null);
-        if(old != null){
+        if (old != null) {
             groupRepo.delete(old);
-        }else{
-            errors.add(GroupErrors.GROUP101.name());  
+        } else {
+            errors.add(GroupErrors.GROUP101.name());
         }
-        returns.put(Labels.errors, errors); 
-        returns.put(Labels.objectReturn, old); 
-        return returns; 
+        returns.put(Labels.errors, errors);
+        returns.put(Labels.objectReturn, old);
+        return returns;
     }
-    
+
     @Override
     public Group findById(long group) {
         return groupRepo.findById(group).orElse(null);
+    }
+
+    @Override
+    public Map<Labels, Object> getAllBySubjectId(long subjectId) {
+        Map<Labels, Object> returns = new HashMap();
+        List<Group> groups = this.groupRepo.findBySubjectId(subjectId);
+        returns.put(Labels.objectReturn, groups);
+        return returns;
+    }
+
+    @Override
+    public boolean validateUserGroup(long groupId, CustomUserDetails user) {
+        Group findById = this.findById(groupId);
+        boolean ban = false;
+        if (findById != null) {
+            ban = this.subjService.validateUserSubject(findById.getSubject().getIntensity(), user);
+        }
+        return ban;
     }
 }

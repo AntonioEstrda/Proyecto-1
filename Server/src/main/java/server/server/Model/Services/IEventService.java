@@ -7,6 +7,7 @@ package server.server.Model.Services;
 import java.util.List;
 import java.util.Map;
 import server.server.Model.Domain.Event;
+import server.server.Model.Services.Impls.CustomUserDetails;
 import server.server.utilities.Labels;
 
 /**
@@ -30,5 +31,7 @@ public interface IEventService {
     public Map<Labels, Object> findByDepartmentIdAndEventId(long dpo, long eve);
 
     public Map<Labels, Object> findAllByDepartmentAndEvenType(long departmentId, List<String> types);
+    
+    public boolean validateUserEvent(long event, CustomUserDetails user);  
 
 }

@@ -7,6 +7,7 @@ package server.server.Model.Services;
 import java.util.ArrayList;
 import java.util.Map;
 import server.server.Model.Domain.Program;
+import server.server.Model.Services.Impls.CustomUserDetails;
 import server.server.utilities.Labels;
 
 /**
@@ -59,5 +60,7 @@ public interface IProgramService {
     public Program findByCode(String code);
 
     public Map<Labels, Object> getAll(long departmentId);
+
+    public boolean validateUserProgram(long programId, CustomUserDetails user);
 
 }

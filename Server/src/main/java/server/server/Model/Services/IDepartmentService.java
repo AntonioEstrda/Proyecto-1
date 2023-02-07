@@ -7,6 +7,7 @@ package server.server.Model.Services;
 import java.util.ArrayList;
 import java.util.Map;
 import server.server.Model.Domain.Department;
+import server.server.Model.Services.Impls.CustomUserDetails;
 import server.server.utilities.Labels;
 
 /**
@@ -14,54 +15,62 @@ import server.server.utilities.Labels;
  * @author Fernando
  */
 public interface IDepartmentService {
-    /**
-     * Find an department
-     * @param department
-     * @return Department 
-     */
-    public Department find(Department department); 
-    
-    /**
-     * save a department 
-     * @param department
-     * @return Department
-     */
-    public Department findById(long department); 
-    
-    /**
-     * save a department 
-     * @param department
-     * @return Department
-     */
-    public Map<Labels, Object> save(Department department); 
 
     /**
-     * list all departments 
-     * @return ArrayList
-     */
-    public ArrayList<Department> getAll();  
-    
-    
-    /**
-     * Updates an department
+     * Find an department
+     *
      * @param department
      * @return Department
      */
-    public Map<Labels, Object> update(Department department);  
-    
-    
+    public Department find(Department department);
+
+    /**
+     * save a department
+     *
+     * @param department
+     * @return Department
+     */
+    public Department findById(long department);
+
+    /**
+     * save a department
+     *
+     * @param department
+     * @return Department
+     */
+    public Map<Labels, Object> save(Department department);
+
+    /**
+     * list all departments
+     *
+     * @return ArrayList
+     */
+    public ArrayList<Department> getAll();
+
+    /**
+     * Updates an department
+     *
+     * @param department
+     * @return Department
+     */
+    public Map<Labels, Object> update(Department department);
+
     /**
      * Deactivates an Department
+     *
      * @param departmentId
      * @return Department
      */
     public Map<Labels, Object> delete(Long departmentId);
-    
+
     /**
-     * find by code and number 
+     * find by code and number
+     *
      * @param code
      * @param number
-     * @return 
+     * @return
      */
-    public Department findByCode(String code); 
+    public Department findByCode(String code);
+
+    public boolean validateUserDepartment(long departmentid, CustomUserDetails user);
 }

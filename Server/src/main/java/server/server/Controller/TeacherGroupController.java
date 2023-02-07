@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.TeacherGroup;
-import server.server.Model.Domain.TeacherGroup;
 import server.server.Model.Services.ITeacherGroupService;
 import server.server.utilities.Labels;
 
@@ -35,29 +33,29 @@ import server.server.utilities.Labels;
 @RestController
 @RequestMapping("/teacher_group")
 public class TeacherGroupController {
+
     @Autowired
-    public ITeacherGroupService teacherGroupService; 
-    
-    @GetMapping(value = "/all") 
-    public ArrayList<TeacherGroup> all(){
-        return teacherGroupService.getAll();  
-    }          
-   
+    public ITeacherGroupService teacherGroupService;
+
+    @GetMapping(value = "/all")
+    public ArrayList<TeacherGroup> all() {
+        return teacherGroupService.getAll();
+    }
+
     @GetMapping(value = "/{teacherGroupId}")
     @ResponseBody
-    public TeacherGroup getTeacherGroup(@PathVariable  Long teacherGroupId) {
+    public TeacherGroup getTeacherGroup(@PathVariable Long teacherGroupId) {
         TeacherGroup teacherGroup = new TeacherGroup();
         teacherGroup.setTeacherGroupID(teacherGroupId);
         return teacherGroupService.find(teacherGroup);
     }
-    
+
     @PostMapping(
-        consumes = {"application/json"})
-    public ResponseEntity<TeacherGroup> add(@RequestBody TeacherGroup teacherGroup, Errors errors) {     
-       HttpHeaders headers = new HttpHeaders();
+            consumes = {"application/json"})
+    public ResponseEntity<TeacherGroup> add(@RequestBody TeacherGroup teacherGroup, Errors errors) {
+        HttpHeaders headers = new HttpHeaders();
         if (errors.hasErrors()) {
-            ArrayList<String> setErrors = Utility.setErrors(errors);
-            headers.add("Errors", Utility.setErrors(errors).toString());
+            headers.add(Labels.errors.name(), Utility.setErrors(errors).toString());
             return new ResponseEntity<>(teacherGroup, headers, HttpStatus.NOT_MODIFIED);
         } else {
             Map<Labels, Object> returns = teacherGroupService.save(teacherGroup);
@@ -72,11 +70,11 @@ public class TeacherGroupController {
             }
         }
     }
-    
+
     @PutMapping
     @RequestMapping("/update")
     public ResponseEntity<TeacherGroup> update(@RequestBody @Valid TeacherGroup teacherGroup, Errors errors) {
-        
+
         HttpHeaders headers = new HttpHeaders();
         if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
@@ -92,9 +90,9 @@ public class TeacherGroupController {
             }
             return new ResponseEntity<>(teacherGroup, null, HttpStatus.ACCEPTED);
         }
-        
+
     }
-    
+
     @DeleteMapping
     @RequestMapping("/delete/{teacherGroupId}")
     public ResponseEntity<TeacherGroup> delete(@PathVariable Long teacherGroupId) {
@@ -109,5 +107,5 @@ public class TeacherGroupController {
             headers.add(Labels.errors.name(), errors.toString());
             return (new ResponseEntity<>(ac, headers, HttpStatus.NOT_MODIFIED));
         }
-    }    
+    }
 }

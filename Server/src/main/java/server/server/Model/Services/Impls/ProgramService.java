@@ -136,5 +136,15 @@ public class ProgramService implements IProgramService {
         returns.put(Labels.objectReturn, old);
         return returns;
     }
-    
+
+    @Override
+    public boolean validateUserProgram(long programId, CustomUserDetails user) {
+        Program findById = this.programRepo.findById(programId).orElse(null);
+        boolean ban = false;
+        if (findById != null) {
+            ban = deptService.validateUserDepartment(findById.getDepartment().getDepartmentId(), user);
+        }
+        return ban;
+    }
+
 }

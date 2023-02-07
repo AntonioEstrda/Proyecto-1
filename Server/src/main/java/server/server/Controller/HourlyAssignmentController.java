@@ -34,28 +34,28 @@ import server.server.utilities.Labels;
 @RestController
 @RequestMapping("/hourlyassignment")
 public class HourlyAssignmentController {
+
     @Autowired
-    public IHourlyAssignmentService hourlyAssignmentService; 
-    
-    @GetMapping(value = "/all") 
-    public ArrayList<HourlyAssignment> all(){
+    public IHourlyAssignmentService hourlyAssignmentService;
+
+    @GetMapping(value = "/all")
+    public ArrayList<HourlyAssignment> all() {
         return hourlyAssignmentService.getAll();
-    }          
-   
+    }
+
     @GetMapping(value = "/{HourlyAssignmentId}")
     @ResponseBody
-    public HourlyAssignment get(@PathVariable  Long HourlyAssignmentId) {
+    public HourlyAssignment get(@PathVariable Long HourlyAssignmentId) {
         HourlyAssignment hourlyAssignment = new HourlyAssignment();
         hourlyAssignment.setVinculationId(HourlyAssignmentId);
         return hourlyAssignmentService.find(hourlyAssignment);
     }
-    
+
     @PostMapping(
-        consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HourlyAssignment> add(@RequestBody @Valid HourlyAssignment hourlyAssignment, Errors errors) {     
-       HttpHeaders headers = new HttpHeaders();
-       if (errors.hasErrors()) {
-            ArrayList<String> setErrors = Utility.setErrors(errors);
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<HourlyAssignment> add(@RequestBody @Valid HourlyAssignment hourlyAssignment, Errors errors) {
+        HttpHeaders headers = new HttpHeaders();
+        if (errors.hasErrors()) {
             headers.add("Errors", Utility.setErrors(errors).toString());
             return new ResponseEntity<>(hourlyAssignment, headers, HttpStatus.NOT_MODIFIED);
         } else {
@@ -71,7 +71,7 @@ public class HourlyAssignmentController {
             }
         }
     }
-    
+
     @PutMapping
     @RequestMapping("/update")
     public ResponseEntity<HourlyAssignment> update(@RequestBody HourlyAssignment hourlyAssignment, Errors errors) {
@@ -91,7 +91,7 @@ public class HourlyAssignmentController {
             return new ResponseEntity<>(hourlyAssignment, null, HttpStatus.ACCEPTED);
         }
     }
-    
+
     @DeleteMapping
     @RequestMapping("/delete/{vinculationId}")
     public ResponseEntity<HourlyAssignment> delete(@PathVariable Long vinculationId
