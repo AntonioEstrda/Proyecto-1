@@ -61,7 +61,7 @@ export default function AcademicPeriodForm() {
           placeholder="Nombre periodo académico"
           onChange={(e) => setName(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={name}
         />
         <label className="text-paleta2-azul-claro">
@@ -69,7 +69,7 @@ export default function AcademicPeriodForm() {
           <input
             type="date"
             name="initDate"
-            className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
+            className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
             value={initDate}
             onChange={(e) => setInitDate(e.target.value)}
           />
@@ -80,7 +80,7 @@ export default function AcademicPeriodForm() {
           <input
             type="date"
             name="finalDate"
-            className="bg-paleta2-fondo1 p-3 w-full mb-4 rounded-md"
+            className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
             value={finalDate}
             onChange={(e) => setFinalDate(e.target.value)}
           />

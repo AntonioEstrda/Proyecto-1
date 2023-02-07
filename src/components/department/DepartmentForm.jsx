@@ -84,7 +84,7 @@ export default function DepartmentForm() {
           placeholder="Nombre"
           onChange={(e) => setName(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
+          className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={name}
         />
 
@@ -92,7 +92,7 @@ export default function DepartmentForm() {
           placeholder="Código"
           onChange={(e) => setCode(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
+          className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={code}
         />
 

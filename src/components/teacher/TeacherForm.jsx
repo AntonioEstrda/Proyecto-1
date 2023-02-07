@@ -77,27 +77,27 @@ export default function TeacherForm() {
         className="bg-paleta2-purpura p-10 mb-4 rounded-lg"
       >
         <h1 className="text-2xl font-bold text-paleta2-azul-claro mb-3">
-          Crear Licenciado
+          Crear Docente
         </h1>
         <input
           placeholder="Nombre"
           onChange={(e) => setFirstName(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={firstName}
         />
         <input
           placeholder="Apellidos"
           onChange={(e) => setLastName(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={lastName}
         />
         <input
           placeholder="Número de identificación"
           onChange={(e) => setNumIden(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-fondo1 text-neutral-200 p-3 w-full mb-2 rounded-md"
+          className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={numIden}
         />
         <div className="flex flex-wrap">

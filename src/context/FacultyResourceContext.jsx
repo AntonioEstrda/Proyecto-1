@@ -1,18 +1,34 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import { FacultyContext } from "../context/FacultyContext";
+import { ResourceContext } from "../context/ResourceContext";
 
 export const FacultyResourceContext = createContext();
 
 export function FacultyResourceContextProvider(props) {
-  const url = "http://localhost:8080/academicperiod/";
+  const url = "http://localhost:8080/FacultyResource/";
+
+  const { facultys } = useContext(FacultyContext);
+  const { resources } = useContext(ResourceContext);
 
   const [editingFacultyResource, setEditingFacultyResource] = useState();
   const [facultyResources, setFacultyResources] = useState([]);
+  const [idResourceSelected, setIdResourceSelected] = useState(0);
+  const [idFacultySelected, setIdFacultySelected] = useState(0);
   useEffect(() => {
-    fetch(url + "all")
-      .then((response) => response.json())
-      .then((data) => {
-        setFacultyResources(data);
-      });
+    facultys.forEach((faculty) => {
+      fetch(
+        url +
+          "findByType?" +
+          new URLSearchParams({
+            facultyId: faculty.facultyId,
+          })
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setFacultyResources(...facultyResources, data);
+        })
+        .catch((e) => console.log(e));
+    });
   }, []);
 
   async function create(facultyResource) {
