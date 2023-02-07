@@ -11,7 +11,6 @@ const mosaicoMenu = [
   ["Programas", "programas"],
   ["Recursos", "recursos"],
   ["Tipos de recursos", "tiposrecursos"],
-  ["Horarios", "horarios"],
   ["Materias", "materias"],
   ["Profesores", "profesores"],
   ["Grupos profesores", "gruposprofesores"],
