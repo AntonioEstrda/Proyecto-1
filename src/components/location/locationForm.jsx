@@ -59,21 +59,21 @@ export default function LocationForm() {
           placeholder="Nombre "
           onChange={(e) => setName(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
+          className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={name}
         />
         <input
           placeholder="City"
           onChange={(e) => setCity(e.target.value)}
           autoFocus="on"
-          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
+          className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={city}
         />
         <textarea
           name="Parent"
           placeholder="Parent"
           onChange={(e) => setParent(e.target.value)}
-          className="bg-paleta2-fondo1 p-3 w-full mb-0 rounded-md"
+          className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
           value={parent}
         ></textarea>
 

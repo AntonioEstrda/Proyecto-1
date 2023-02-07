@@ -53,7 +53,7 @@ export default function FacultyForm() {
     });
     limpiarForm();
   }
-  
+
   const locationSelectOptions = (location) => {
     return (
       <option key={location.locationId} value={location.locationId}>
@@ -64,8 +64,8 @@ export default function FacultyForm() {
   if (locations) {
     return (
       <div className="max-w-md mx-auto ">
-        <form onSubmit={handleSubmit} className="bg-blue p-10 mb-4 rounded-lg">
-          <h1 className="text-2xl font-bold text-paleta2-red-claro mb-3">
+        <form onSubmit={handleSubmit} className="bg-paleta2-purpura p-10 mb-4 rounded-lg">
+          <h1 className="text-2xl font-bold text-paleta2-azul-claro mb-3">
             Crear una Facultad
           </h1>
           <input
