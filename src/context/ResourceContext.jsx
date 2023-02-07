@@ -84,7 +84,7 @@ export function ResourceContextProvider(props) {
       .then(
         () => {
           setResources(
-            resources.filter((faculty) => faculty.facultyId !== facultyId),
+            //resources.filter((faculty) => faculty.facultyId !== facultyId),
             resources.filter((resource) => resource.resourceId !== resourceId)
           );
           console.log(facultyId, resourceId); /////////
