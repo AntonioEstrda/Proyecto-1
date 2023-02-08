@@ -73,4 +73,6 @@ public interface IResourceService {
     public Resource findById(long id);
 
     public List<Resource> findByIds(List<Long> ids);
+
+    public boolean findAssFaculty(long resource, long facultyId);
 }

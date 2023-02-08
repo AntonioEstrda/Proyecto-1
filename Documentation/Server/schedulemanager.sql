@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 06-02-2023 a las 03:48:41
--- Versión del servidor: 10.4.25-MariaDB
--- Versión de PHP: 8.1.10
+-- Servidor: localhost:3307
+-- Tiempo de generación: 08-02-2023 a las 14:43:33
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -463,7 +463,7 @@ CREATE TABLE `academicperiod` (
   `INITDATE` date NOT NULL,
   `FINALDATE` date NOT NULL,
   `isDisable` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `academicperiod`
@@ -508,7 +508,7 @@ CREATE TABLE `assignmentresource` (
   `isDisable` tinyint(1) NOT NULL DEFAULT 0,
   `envId` int(11) NOT NULL,
   `resId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `assignmentresource`
@@ -548,7 +548,7 @@ CREATE TABLE `department` (
   `NAME` varchar(100) NOT NULL,
   `code` varchar(25) NOT NULL,
   `location` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `department`
@@ -582,7 +582,7 @@ CREATE TABLE `event` (
   `teacherId` int(11) NOT NULL,
   `academicPeriodId` int(11) NOT NULL,
   `departmentId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -594,7 +594,7 @@ CREATE TABLE `faculty` (
   `FACULTYID` int(11) NOT NULL,
   `NAME` varchar(100) NOT NULL,
   `locId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `faculty`
@@ -625,14 +625,14 @@ CREATE TABLE `faculty_resource` (
   `REGISTERDATE` date NOT NULL,
   `FINALDATE` date DEFAULT NULL,
   `isDisable` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `faculty_resource`
 --
 
 INSERT INTO `faculty_resource` (`FAC_AND_RES_ID`, `FACULTYID`, `RESOURCEID`, `REGISTERDATE`, `FINALDATE`, `isDisable`) VALUES
-(0, 16, 6, '2022-11-30', '2022-12-06', 0),
+(0, 16, 6, '2022-11-30', '2022-12-06', 1),
 (2, 16, 3, '2022-11-01', NULL, 0),
 (3, 16, 4, '2022-11-01', NULL, 0),
 (7, 16, 8, '2022-12-02', '2022-12-03', 1),
@@ -653,7 +653,7 @@ CREATE TABLE `groupt` (
   `ACADEMICPERIDODID` int(11) NOT NULL,
   `CAPACITY` int(2) NOT NULL,
   `NAME` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `groupt`
@@ -689,7 +689,7 @@ CREATE TABLE `hourlyassignment` (
   `isDisable` tinyint(1) NOT NULL DEFAULT 0,
   `initialdate` date NOT NULL,
   `finaldate` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `hourlyassignment`
@@ -725,7 +725,7 @@ CREATE TABLE `location` (
   `Name` text NOT NULL,
   `city` varchar(50) NOT NULL,
   `parentId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `location`
@@ -771,7 +771,7 @@ CREATE TABLE `program` (
   `code` varchar(25) NOT NULL,
   `location` int(100) NOT NULL,
   `color` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `program`
@@ -805,7 +805,7 @@ CREATE TABLE `resourcet` (
   `location` int(11) DEFAULT NULL,
   `capacity` int(11) DEFAULT NULL,
   `number` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `resourcet`
@@ -818,7 +818,7 @@ INSERT INTO `resourcet` (`RESOURCEID`, `RESOURCETYPEID`, `NAME`, `DESCRIPTION`, 
 (6, 5, 'Salon', 'Salon', 1, 'SISCOM', 3, 45, 102),
 (7, 10, 'Tablero', 'Tablero', 0, 'AGR', NULL, NULL, 456),
 (8, 7, 'SALON', 'SALON', 0, 'SIS', NULL, 40, 303),
-(9, 5, 'Salon', 'Salon', 1, 'SISCOM', 3, 45, 105);
+(9, 5, 'Salon', 'Salon', 1, 'SISCON', 3, 45, 105);
 
 --
 -- Disparadores `resourcet`
@@ -852,7 +852,7 @@ CREATE TABLE `resourcetype` (
   `RES_RESSOURCETYPEID` int(11) DEFAULT NULL,
   `NAME` varchar(100) NOT NULL,
   `ISDISABLE` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `resourcetype`
@@ -876,7 +876,7 @@ INSERT INTO `resourcetype` (`RESSOURCETYPEID`, `RES_RESSOURCETYPEID`, `NAME`, `I
 CREATE TABLE `rol` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `rol`
@@ -903,7 +903,7 @@ CREATE TABLE `schedule` (
   `ENDTIME` time NOT NULL,
   `initialdate` date NOT NULL,
   `finaldate` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `schedule`
@@ -930,7 +930,7 @@ CREATE TABLE `subject` (
   `ISDISABLE` tinyint(1) NOT NULL,
   `type` enum('TEORICA','PRACTICA','HIBRIDA','FISH') NOT NULL,
   `isExtern` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `subject`
@@ -962,7 +962,7 @@ CREATE TABLE `teacher` (
   `LASTNAME` varchar(100) NOT NULL,
   `NUMIDEN` varchar(50) NOT NULL,
   `ISDISABLE` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `teacher`
@@ -995,7 +995,7 @@ CREATE TABLE `teacher_group` (
   `TEAC_GRP_ID` int(11) NOT NULL,
   `TEACHERID` int(11) NOT NULL,
   `IDGROUP` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `teacher_group`
@@ -1016,7 +1016,7 @@ CREATE TABLE `user` (
   `username` varchar(250) NOT NULL,
   `password` varchar(250) NOT NULL,
   `TeacherId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `user`
@@ -1035,14 +1035,14 @@ CREATE TABLE `userrol` (
   `id` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `rolId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `userrol`
 --
 
 INSERT INTO `userrol` (`id`, `userId`, `rolId`) VALUES
-(1, 2, 2);
+(1, 2, 1);
 
 -- --------------------------------------------------------
 

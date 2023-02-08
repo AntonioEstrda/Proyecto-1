@@ -38,6 +38,7 @@ import server.server.utilities.errors.UserErrors;
  * @author Fernando
  */
 @RestController
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/subject")
 public class SubjectController {
 
@@ -50,42 +51,29 @@ public class SubjectController {
     @Autowired
     private IAuthenticationFacade authenticationFacade;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    
     @GetMapping(value = "/all")
     public ArrayList<Subject> all() {
         return subjectService.getAll();
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @GetMapping(value = "/allByProgramId")
     public ResponseEntity<ArrayList<Subject>> allByProgramId(@RequestParam("programId") long programId) {
         CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
         HttpHeaders headers = new HttpHeaders();
         ArrayList<String> errors2 = new ArrayList();
 
-        if (!programServ.validateUserProgram(programId, user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         Map<Labels, Object> returns = subjectService.getAllByProgramId(programId);
         ArrayList<Subject> ret = (ArrayList<Subject>) returns.get(Labels.objectReturn);
         return (new ResponseEntity<>(ret, null, HttpStatus.ACCEPTED));
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Subject> add(@RequestBody @Valid Subject subject, Errors errors) {
         HttpHeaders headers = new HttpHeaders();
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-        if (!programServ.validateUserProgram(subject.getProgram().getProgramId(), user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         if (errors.hasErrors()) {
             headers.add(Labels.errors.name(), Utility.setErrors(errors).toString());
@@ -104,18 +92,11 @@ public class SubjectController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @PutMapping
     @RequestMapping("/update")
     public ResponseEntity<Subject> update(@RequestBody Subject subject, Errors errors) {
         HttpHeaders headers = new HttpHeaders();
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-        if (!subjectService.validateUserSubject(subject.getSubjectID(), user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
@@ -134,19 +115,11 @@ public class SubjectController {
     }
 
     @DeleteMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @RequestMapping("/delete/{SubjectId}")
     public ResponseEntity<Subject> delete(@PathVariable Long SubjectId
     ) {
         HttpHeaders headers = new HttpHeaders();
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-
-        if (!subjectService.validateUserSubject(SubjectId, user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         Map<Labels, Object> delete = subjectService.delete(SubjectId);
         ArrayList<String> errors = (ArrayList<String>) delete.get(Labels.errors);
@@ -159,7 +132,6 @@ public class SubjectController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @GetMapping(value = "/{SubjectId}")
     @ResponseBody
     public Subject get(@PathVariable Long SubjectId) {

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,6 +28,7 @@ import server.server.Model.Domain.Resource;
 import server.server.Model.Services.IFacultyResourceService;
 import server.server.Model.Services.IResourceService;
 import server.server.utilities.Labels;
+import server.server.utilities.errors.UserErrors;
 
 /**
  * Resource Controller
@@ -34,11 +36,12 @@ import server.server.utilities.Labels;
  * @author anmon
  */
 @RestController
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/Resource")
 public class ResourceController {
 
     @Autowired
-    private IResourceService envService;
+    private IResourceService resService;
 
     @Autowired
     private IFacultyResourceService facResService;
@@ -50,10 +53,17 @@ public class ResourceController {
      * @param facultyId
      * @return 
      */
-    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+
+    
+    @GetMapping(value = "/all")
+    public ArrayList<Resource> all() {
+        return resService.getAll();
+    }
+
+    /*@GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ArrayList<Resource> all(@RequestParam("facultyId") long facultyId) {
         return facResService.findByFacultyIdRes(facultyId);
-    }
+    }*/
 
     /**
      * Busca un recurso de una facultad  
@@ -115,6 +125,8 @@ public class ResourceController {
             @RequestParam("facultyId") long facultyId,
             @RequestBody @Valid Resource res, Errors errors) {
         HttpHeaders headers = new HttpHeaders();
+        ArrayList<String> errors3 = new ArrayList();
+
         if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
             headers.add(Labels.errors.name(), setErrors.toString());
@@ -125,7 +137,7 @@ public class ResourceController {
             headers.add(Labels.errors.name(), errors2.toString());
             return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
         }
-        Map<Labels, Object> returns = envService.update(res);
+        Map<Labels, Object> returns = resService.update(res);
         errors2.addAll((ArrayList<String>) returns.get(Labels.errors));
         Resource res2 = (Resource) returns.get(Labels.objectReturn);
         if (!errors2.isEmpty() || res2 == null) {
@@ -155,7 +167,7 @@ public class ResourceController {
             return new ResponseEntity<>(null, headers, HttpStatus.NOT_MODIFIED);
         }
          
-        Map<Labels, Object> returns = envService.delete(resourceId);
+        Map<Labels, Object> returns = resService.delete(resourceId);
         errors2.addAll((ArrayList<String>) returns.get(Labels.errors));
         Resource res = (Resource) returns.get(Labels.objectReturn);
 

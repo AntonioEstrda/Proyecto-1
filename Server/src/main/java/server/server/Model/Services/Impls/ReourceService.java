@@ -157,4 +157,14 @@ public class ReourceService implements IResourceService {
         List<Resource> findAllById = resRepo.findAllById(ids); 
         return findAllById; 
     }
+
+    @Override
+    public boolean findAssFaculty(long resourceID, long facultyId) {
+        boolean ban = false;
+        Resource find = this.resRepo.findById(resourceID).orElse(null);
+        if (find != null) {
+            ban = resRepo.findAssFaculty(resourceID, facultyId);
+        }
+        return ban;
+    }
 }
