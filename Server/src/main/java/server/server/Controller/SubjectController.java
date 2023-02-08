@@ -28,7 +28,6 @@ import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.Subject;
 import server.server.Model.Services.IProgramService;
 import server.server.Model.Services.ISubjectService;
-import server.server.Model.Services.Impls.CustomUserDetails;
 import server.server.auth.IAuthenticationFacade;
 import server.server.utilities.Labels;
 import server.server.utilities.errors.UserErrors;
@@ -59,7 +58,7 @@ public class SubjectController {
 
     @GetMapping(value = "/allByProgramId")
     public ResponseEntity<ArrayList<Subject>> allByProgramId(@RequestParam("programId") long programId) {
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
+        
         HttpHeaders headers = new HttpHeaders();
         ArrayList<String> errors2 = new ArrayList();
 

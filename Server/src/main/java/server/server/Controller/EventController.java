@@ -29,7 +29,6 @@ import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.Event;
 import server.server.Model.Services.IDepartmentService;
 import server.server.Model.Services.IEventService;
-import server.server.Model.Services.Impls.CustomUserDetails;
 import server.server.auth.IAuthenticationFacade;
 import server.server.utilities.Labels;
 import server.server.utilities.errors.UserErrors;
@@ -39,6 +38,7 @@ import server.server.utilities.errors.UserErrors;
  * @author anmon
  */
 @RestController
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/Event")
 public class EventController {
 
@@ -57,7 +57,6 @@ public class EventController {
      * @param params
      * @return
      */
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @GetMapping(value = "/find")
     @ResponseBody
     public ResponseEntity<Event> get(@RequestParam Map<String, String> params) {
@@ -79,13 +78,6 @@ public class EventController {
 
                     HttpHeaders headers = new HttpHeaders();
                     ArrayList<String> errors2 = new ArrayList();
-                    CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-
-                    if (!dptService.validateUserDepartment(ev.getDepartment().getDepartmentId(), user)) {
-                        errors2.add(UserErrors.USR105.name());
-                        headers.add(Labels.errors.toString(), errors2.toString());
-                        return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-                    }
 
                     responseEntity = new ResponseEntity<>(ev, null, HttpStatus.FOUND);
                 }
@@ -99,22 +91,13 @@ public class EventController {
         return responseEntity;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping("/add")
     public ResponseEntity<Event> add(@RequestBody @Valid Event event, Errors errors) {
-
-        HttpHeaders headers = new HttpHeaders();
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-
-        if (!dptService.validateUserDepartment(event.getDepartment().getDepartmentId(), user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
+        HttpHeaders headers = new HttpHeaders();
 
         Map<Labels, Object> returns = evtService.create(event);
         errors2 = (ArrayList<String>) returns.get(Labels.errors);
@@ -133,7 +116,6 @@ public class EventController {
         return responseEntity;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @RequestMapping("/update")
@@ -141,13 +123,6 @@ public class EventController {
         ResponseEntity<Event> responseEntity;
         HttpHeaders headers = new HttpHeaders();
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-
-        if (!evtService.validateUserEvent(event.getId(), user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         Map<Labels, Object> returns = evtService.update(event);
         errors2 = (ArrayList<String>) returns.get(Labels.errors);
@@ -165,20 +140,12 @@ public class EventController {
         return responseEntity;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @DeleteMapping
     @RequestMapping("/delete")
     public ResponseEntity<Event> delete(@RequestParam("id") long id, @RequestParam("departmentId") long departmentId) {
 
         HttpHeaders headers = new HttpHeaders();
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-
-        if (!evtService.validateUserEvent(id, user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         ResponseEntity<Event> responseEntity;
         Map<Labels, Object> returns = evtService.delete(id, departmentId);
@@ -209,7 +176,6 @@ public class EventController {
         return responseEntity;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @ResponseBody
     @GetMapping(value = "/findByDepartmentAndTypes")
     public ResponseEntity<List<Event>> findByDepartmentAndTypes(@RequestParam("departmentId") long departmentId,
@@ -217,12 +183,6 @@ public class EventController {
         ResponseEntity responseEntity = new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
         HttpHeaders headers = new HttpHeaders();
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-        if (!dptService.validateUserDepartment(departmentId, user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         List<String> types2 = null;
         if (types.isPresent() && types.isEmpty()) {

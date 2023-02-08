@@ -29,7 +29,6 @@ import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.Program;
 import server.server.Model.Services.IDepartmentService;
 import server.server.Model.Services.IProgramService;
-import server.server.Model.Services.Impls.CustomUserDetails;
 import server.server.auth.IAuthenticationFacade;
 import server.server.utilities.Labels;
 import server.server.utilities.errors.UserErrors;
@@ -39,6 +38,7 @@ import server.server.utilities.errors.UserErrors;
  * @author Fernando
  */
 @RestController
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/Program")
 public class ProgramController {
 
@@ -51,33 +51,23 @@ public class ProgramController {
     @Autowired
     private IAuthenticationFacade authenticationFacade;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/all")
     public ArrayList<Program> all() {
         return programService.getAll();
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @GetMapping(value = "/allByDepartmentId")
     public ResponseEntity<List<Program>> all(@RequestParam("departmentId") long departmentId) {
         ResponseEntity<List<Program>> response;
         HttpHeaders headers = new HttpHeaders();
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
 
-        if (!depService.validateUserDepartment(departmentId, user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            response = new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        } else {
-            Map<Labels, Object> returns = programService.getAll(departmentId);
-            List<Program> get = (List<Program>) returns.get(Labels.objectReturn);
-            response = new ResponseEntity<>(get, null, HttpStatus.OK);
-        }
+        Map<Labels, Object> returns = programService.getAll(departmentId);
+        List<Program> get = (List<Program>) returns.get(Labels.objectReturn);
+        response = new ResponseEntity<>(get, null, HttpStatus.OK);
         return response;
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @GetMapping(value = "/{id}")
     @ResponseBody
     public Program get(@PathVariable Long id) {
@@ -86,7 +76,6 @@ public class ProgramController {
         return programService.find(env);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Program> add(@RequestBody @Valid Program program, Errors errors) {
@@ -94,13 +83,8 @@ public class ProgramController {
         HttpHeaders headers = new HttpHeaders();
         ResponseEntity<Program> response;
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
 
-        if (!depService.validateUserDepartment(program.getDepartment().getDepartmentId(), user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            response = new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        } else if (errors.hasErrors()) {
+        if (errors.hasErrors()) {
             headers.add(Labels.errors.name(), Utility.setErrors(errors).toString());
             return new ResponseEntity<>(program, headers, HttpStatus.NOT_MODIFIED);
         } else {
@@ -115,8 +99,8 @@ public class ProgramController {
 
             }
         }
-        return response;
     }
+
 
     @PutMapping
     @RequestMapping("/update")
@@ -124,12 +108,6 @@ public class ProgramController {
         HttpHeaders headers = new HttpHeaders();
         ResponseEntity<Program> response;
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-        if (!programService.validateUserProgram(program.getProgramId(), user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
@@ -155,12 +133,6 @@ public class ProgramController {
         HttpHeaders headers = new HttpHeaders();
         ResponseEntity<Program> response;
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-        if (!programService.validateUserProgram(ProgramId, user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         Map<Labels, Object> delete = programService.delete(ProgramId);
         ArrayList<String> errors = (ArrayList<String>) delete.get(Labels.errors);

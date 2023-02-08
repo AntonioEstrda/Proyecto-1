@@ -32,8 +32,9 @@ import server.server.utilities.Labels;
  * @author Fernando
  */
 @RestController
-@RequestMapping("/academicperiod")
 @PreAuthorize("hasRole('ADMIN')")
+@RequestMapping("/academicperiod")
+
 public class AcademicPeriodController {
     @Autowired
     public IAcademicPeriodService academicPeriodService;

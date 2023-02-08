@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.Teacher;
 import server.server.Model.Services.ITeacherService;
-import server.server.Model.Services.Impls.CustomUserDetails;
 import server.server.auth.IAuthenticationFacade;
 import server.server.utilities.Labels;
 import server.server.utilities.errors.UserErrors;
@@ -35,6 +34,7 @@ import server.server.utilities.errors.UserErrors;
  * @author Fernando
  */
 @RestController
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/teacher")
 public class TeacherController {
 
@@ -43,8 +43,7 @@ public class TeacherController {
 
     @Autowired
     private IAuthenticationFacade authenticationFacade;
-
-    @PreAuthorize("hasRole('ADMIN')")
+    
     @GetMapping(value = "/all")
     public ArrayList<Teacher> all() {
         return teacherService.getAll();
@@ -52,7 +51,6 @@ public class TeacherController {
 
     @GetMapping(value = "/{TeacherId}")
     @ResponseBody
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     public Teacher getTeacher(@PathVariable Long TeacherId) {
         Teacher teacher = new Teacher();
         teacher.setTeacherID(TeacherId);
@@ -61,7 +59,6 @@ public class TeacherController {
 
     @PostMapping(
             consumes = {"application/json"})
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     public ResponseEntity<Teacher> add(@RequestBody Teacher teacher, Errors errors) {
         HttpHeaders headers = new HttpHeaders();
 
@@ -84,7 +81,6 @@ public class TeacherController {
 
     @PutMapping
     @RequestMapping("/update")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
     public ResponseEntity<Teacher> update(@RequestBody @Valid Teacher teacher, Errors errors) {
 
         HttpHeaders headers = new HttpHeaders();
@@ -109,7 +105,6 @@ public class TeacherController {
 
     @DeleteMapping
     @RequestMapping("/delete/{teacherId}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('SCHEDULEMANAGER')")
 
     public ResponseEntity<Teacher> delete(@PathVariable Long teacherId) {
 

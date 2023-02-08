@@ -29,7 +29,6 @@ import server.server.Controller.Utilities.Utility;
 import server.server.Model.Domain.Group;
 import server.server.Model.Services.IGroupService;
 import server.server.Model.Services.ISubjectService;
-import server.server.Model.Services.Impls.CustomUserDetails;
 import server.server.auth.IAuthenticationFacade;
 import server.server.utilities.Labels;
 import server.server.utilities.errors.UserErrors;
@@ -63,17 +62,10 @@ public class GroupController {
         ResponseEntity<List<Group>> response;
         HttpHeaders headers = new HttpHeaders();
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-
-        if (!subjectService.validateUserSubject(subjectId, user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            response = new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        } else {
-            Map<Labels, Object> groups = groupService.getAllBySubjectId(subjectId);
-            List<Group> grs = (List<Group>) groups.get(Labels.objectReturn);
-            response = new ResponseEntity<>(grs, null, HttpStatus.FOUND);
-        }
+        Map<Labels, Object> groups = groupService.getAllBySubjectId(subjectId);
+        List<Group> grs = (List<Group>) groups.get(Labels.objectReturn);
+        response = new ResponseEntity<>(grs, null, HttpStatus.FOUND);
+        
         return response;
     }
 
@@ -92,13 +84,6 @@ public class GroupController {
         HttpHeaders headers = new HttpHeaders();
         ResponseEntity<Group> response;
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-
-        if (!subjectService.validateUserSubject(group.getSubject().getSubjectID(), user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
@@ -125,13 +110,6 @@ public class GroupController {
         HttpHeaders headers = new HttpHeaders();
         ResponseEntity<Group> response;
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-
-        if (!groupService.validateUserGroup(group.getGroupId(), user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         if (errors.hasErrors()) {
             ArrayList<String> setErrors = Utility.setErrors(errors);
@@ -159,13 +137,6 @@ public class GroupController {
         HttpHeaders headers = new HttpHeaders();
         ResponseEntity<Group> response;
         ArrayList<String> errors2 = new ArrayList();
-        CustomUserDetails user = (CustomUserDetails) authenticationFacade.getPrincipal();
-
-        if (!groupService.validateUserGroup(groupId, user)) {
-            errors2.add(UserErrors.USR105.name());
-            headers.add(Labels.errors.toString(), errors2.toString());
-            return new ResponseEntity<>(null, headers, HttpStatus.UNAUTHORIZED);
-        }
 
         Map<Labels, Object> delete = groupService.delete(groupId);
         ArrayList<String> errors = (ArrayList<String>) delete.get(Labels.errors);
