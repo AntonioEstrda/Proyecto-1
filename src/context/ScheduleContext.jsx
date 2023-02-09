@@ -1,14 +1,16 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import { AlertContext } from "./AlertContext";
 
 export const ScheduleContext = createContext();
 
 export function ScheduleContextProvider(props) {
+  const { alert, setAlert, closeAlert } = useContext(AlertContext);
+
   const [grupos, setGrupos] = useState();
   const [recurso, setRecurso] = useState();
   const [idGroupSelected, setIdGroupSelected] = useState(-1);
   const [idResourceSelected, setIdResourceSelected] = useState(-1);
   const [ocupacionAmbiente, setOcupacionAmbiente] = useState();
-  const [alert, setAlert] = useState();
 
   const url = "http://localhost:8080/Schedule/";
 
@@ -25,10 +27,6 @@ export function ScheduleContextProvider(props) {
     if (idResourceSelected === -1) return;
     cargarAsignacionesRecurso();
   }, [idResourceSelected]);
-
-  function closeAlert() {
-    setAlert();
-  }
 
   async function cargarAsignacionesRecurso() {
     await fetch(

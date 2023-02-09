@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { ScheduleContext } from "../../context/ScheduleContext";
+import { AlertContext } from "../../context/AlertContext";
 import { globalErrors } from "../../values/errors/globalErrors";
 
-function ScheduleInfo() {
-  const { alert, closeAlert } = useContext(ScheduleContext);
+function Alert() {
+  const { alert, closeAlert } = useContext(AlertContext);
 
   function CloseButton() {
     return (
@@ -13,14 +13,20 @@ function ScheduleInfo() {
     );
   }
   const showAlert_error = (key) => {
+    return <p>{globalErrors.get(key)}</p>;
+  };
+
+  const alertContainer = (errors) => {
     return (
-      <div className="mb-4" role="alert">
+      <div className="mx-96 mt-4" role="alert">
         <div className="bg-rose-500 text-white font-bold rounded-t px-4 py-2 columns-2">
           <div>Ocurrió un error</div>
           <CloseButton> </CloseButton>
         </div>
         <div className="border border-t-0 border-rose-400 rounded-b bg-rose-100 px-4 py-3 text-rose-700">
-          <p>{globalErrors.get(key)}</p>
+          {errors.map((errorCode) => {
+            return showAlert_error(errorCode);
+          })}
         </div>
       </div>
     );
@@ -29,7 +35,7 @@ function ScheduleInfo() {
   const showAlert_info = (no_resources) => {
     return (
       <div
-        className="flex items-center bg-sky-500 text-white text-sm font-bold px-4 py-3 mb-4"
+        className="flex items-center bg-sky-500 text-white text-sm font-bold px-4 py-3 mx-96 mt-4"
         role="alert"
       >
         <svg
@@ -54,13 +60,12 @@ function ScheduleInfo() {
   if (alert) {
     if (alert === "empty") return <>{showAlert_info(false)}</>;
     if (alert === "NO_RES") return <>{showAlert_info(true)}</>;
-
     const alertList = alert
       .substring(1, alert.length - 1)
       .replace(" ", "")
       .split(",");
-    return <>{showAlert_error(alert)}</>;
+    return <>{alertContainer(alertList)}</>;
   }
 }
 
-export default ScheduleInfo;
+export default Alert;

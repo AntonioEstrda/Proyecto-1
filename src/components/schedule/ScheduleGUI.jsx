@@ -61,7 +61,9 @@ function ScheduleGUI() {
             className="h-10 border-2 rounded border-red bg-green-300"
           >
             {item.group.subject.name +
-              " - " +
+              " (" +
+              item.group.name +
+              ") - " +
               item.res.name +
               " [" +
               item.res.number +

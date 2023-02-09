@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 
-export default function ResourceCard({ resource }) {
+export default function ResourceCard({ resource, facultyId }) {
   const { deleteById, setEditingResource } = useContext(ResourceContext);
 
   function defineEditItem() {
@@ -33,9 +33,7 @@ export default function ResourceCard({ resource }) {
       <div className="grid grid-cols-2 gap-3">
         <button
           className="bg-paleta2-rojo px-2 py-1 rounded-md mt-4 hover:bg-red-400"
-          onClick={() =>
-            deleteById(resource.faculty?.facultyId, resource?.resourceId)
-          }
+          onClick={() => deleteById(facultyId, resource?.resourceId)}
         >
           Eliminar
         </button>

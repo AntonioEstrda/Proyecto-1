@@ -1,7 +1,5 @@
 import ScheduleParametrizer from "../../components/schedule/ScheduleParametrizer";
 import ScheduleGUI from "../../components/schedule/ScheduleGUI";
-import ScheduleInfo from "../../components/schedule/ScheduleInfo";
-import ScheduleAlert from "../../components/schedule/ScheduleAlert";
 
 function AppSchedule() {
   return (
@@ -11,8 +9,6 @@ function AppSchedule() {
           <ScheduleParametrizer />
         </div>
         <div className="w-75 mx-2">
-          <ScheduleAlert />
-          {/* <ScheduleInfo /> */}
           <ScheduleGUI />
         </div>
       </div>

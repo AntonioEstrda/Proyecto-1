@@ -14,9 +14,15 @@ export default function ResourceList() {
   }
   return (
     <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
-      {[...resources.keys()].map((k) => {
-        return resources.get(k).map((resource) => {
-          return <ResourceCard key={resource.resourceId} resource={resource} />;
+      {[...resources.keys()].map((facultyId) => {
+        return resources.get(facultyId).map((resource) => {
+          return (
+            <ResourceCard
+              key={resource.resourceId}
+              resource={resource}
+              facultyId={facultyId}
+            />
+          );
         });
       })}
     </div>
