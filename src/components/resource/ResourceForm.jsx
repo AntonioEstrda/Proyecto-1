@@ -151,21 +151,12 @@ export default function ResourceForm() {
             id="facultySelected"
             name="facultyId"
             className="bg-paleta2-azul-claro w-full text-lg text-paleta2-rojo rounded-md p-4 mb-2"
-            onChange={(e) => {
-              setIdFacultySelected(e.target.value);
-            }}
+            value={idFacultySelected}
+            onChange={(e) => setIdFacultySelected(e.target.value)}
           >
             {facultys.map((faculty) => {
               return (
-                <option
-                  key={faculty.facultyId}
-                  value={faculty.facultyId}
-                  selected={
-                    faculty.facultyId === editingResource?.faculty.facultyId
-                      ? true
-                      : false
-                  }
-                >
+                <option key={faculty.facultyId} value={faculty.facultyId}>
                   {faculty.facultyName}{" "}
                 </option>
               );
@@ -179,18 +170,14 @@ export default function ResourceForm() {
             onChange={(e) => {
               setIdResourceTypeSelected(e.target.value);
             }}
+            defaultValue={editingResource?.resourceType.resourceTypeId}
+            value={editingResource?.resourceType.resourceTypeId}
           >
             {resourceTypes.map((resourceType) => {
               return (
                 <option
                   key={resourceType.resourceTypeId}
                   value={resourceType.resourceTypeId}
-                  selected={
-                    resourceType.resourceTypeId ===
-                    editingResource?.resourceType.resourceTypeId
-                      ? true
-                      : false
-                  }
                 >
                   {resourceType.name}{" "}
                   {resourceType.disable ? "-" + resourceType.disable : ""}
@@ -202,7 +189,6 @@ export default function ResourceForm() {
           <input
             placeholder="Código del recurso"
             onChange={(e) => setResourceCode(e.target.value)}
-            autoFocus="on"
             className="bg-slate-500 text-neutral-200 p-3 w-full mb-2 rounded-md"
             value={resourceCode}
           />
@@ -210,7 +196,6 @@ export default function ResourceForm() {
           <input
             placeholder="Número del recurso"
             onChange={(e) => setResourceNumber(e.target.value)}
-            autoFocus="on"
             className="bg-slate-500 text-neutral-200 p-3 w-full mb-2 rounded-md"
             value={resourceNumber}
           />
@@ -222,18 +207,12 @@ export default function ResourceForm() {
             onChange={(e) => {
               setIdLocationSelected(e.target.value);
             }}
+            value={editingResource?.location.locationId}
+            defaultValue={editingResource?.location.locationId}
           >
             {locations.map((location) => {
               return (
-                <option
-                  key={location.locationId}
-                  value={location.locationId}
-                  selected={
-                    location.locationId === editingResource?.location.locationId
-                      ? true
-                      : false
-                  }
-                >
+                <option key={location.locationId} value={location.locationId}>
                   {location.name} {location.city ? "-" + location.city : ""}
                 </option>
               );
@@ -243,7 +222,6 @@ export default function ResourceForm() {
           <input
             placeholder="Capacidad del recurso"
             onChange={(e) => setResourceCapacity(e.target.value)}
-            autoFocus="on"
             className="bg-slate-500 text-neutral-200 p-3 w-full mb-2 rounded-md"
             value={resourceCapacity}
           />

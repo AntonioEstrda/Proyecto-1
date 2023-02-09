@@ -13,11 +13,19 @@ export function ResourceContextProvider(props) {
   const { facultys } = useContext(FacultyContext);
 
   const [editingResource, setEditingResource] = useState();
-  const [resources, setResources] = useState([]);
-  const [idResourceTypeSelected, setIdResourceTypeSelected] = useState(0);
-  const [idLocationSelected, setIdLocationSelected] = useState(0);
-  const [idFacultySelected, setIdFacultySelected] = useState(0);
+  const [resources, setResources] = useState(new Map());
+  const [idResourceTypeSelected, setIdResourceTypeSelected] = useState(-1);
+  const [idLocationSelected, setIdLocationSelected] = useState(-1);
+  const [idFacultySelected, setIdFacultySelected] = useState(-1);
+  const [alert, setAlert] = useState();
+
   useEffect(() => {
+    loadResources();
+    setResources(recursosMap);
+  }, [facultys]);
+
+  const recursosMap = new Map();
+  async function loadResources() {
     facultys.forEach((faculty) => {
       fetch(
         url +
@@ -26,20 +34,30 @@ export function ResourceContextProvider(props) {
             facultyId: faculty.facultyId,
           })
       )
-        .then((response) => response.json())
-        .then((data) => {
-          setResources(...resources, data);
+        .then((response) => {
+          if (response.ok) return response.json();
+          return Promise.reject(response);
         })
-        .catch((e) => console.log(e));
+        .then((data) => {
+          if (data.length > 0) {
+            recursosMap.set(faculty.facultyId, data);
+          }
+        })
+        .catch((e) => {
+          if (e.status === 400) setAlert(e.headers.get("errors"));
+          console.error(
+            "[ERROR] Ocurrió un error inesperado en cargar los recursos"
+          );
+        });
     });
-  }, [facultys]);
+  }
 
   async function create(resource, facultyId) {
     await fetch(
       url +
         "add?" +
         new URLSearchParams({
-          facultyId,
+          facultyId: +facultyId,
         }),
       {
         method: "POST",
@@ -50,15 +68,23 @@ export function ResourceContextProvider(props) {
         body: JSON.stringify(resource),
       }
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) return response.json();
+        return Promise.reject(response);
+      })
       .then((data) => {
-        setResources((prevState) => prevState.concat([data]));
+        console.log(recursosMap.get(facultyId));
+        recursosMap.get(facultyId).concat([data]);
+        console.log(recursosMap.get(facultyId));
+        setResources(new Map(recursosMap));
         setEditingResource(null);
         setIdResourceTypeSelected(0);
         setIdLocationSelected(0);
         setIdFacultySelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        setAlert(e.headers.get("errors"));
+      });
   }
 
   async function deleteById(facultyId, resourceId) {
@@ -124,7 +150,10 @@ export function ResourceContextProvider(props) {
       .catch((e) => console.log(e));
   }
 
-  //console.log(facultys);
+  function closeAlert() {
+    setAlert();
+  }
+
   return (
     <ResourceContext.Provider
       value={{
@@ -143,6 +172,8 @@ export function ResourceContextProvider(props) {
         idFacultySelected,
         setIdFacultySelected,
         facultys,
+        alert,
+        closeAlert,
       }}
     >
       {props.children}

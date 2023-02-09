@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { ScheduleContext } from "../../context/ScheduleContext";
-import { scheduleErrors } from "../../values/errors/SCH_map";
+import { globalErrors } from "../../values/errors/globalErrors";
 
 function ScheduleInfo() {
   const { alert, closeAlert } = useContext(ScheduleContext);
@@ -20,7 +20,7 @@ function ScheduleInfo() {
           <CloseButton> </CloseButton>
         </div>
         <div className="border border-t-0 border-rose-400 rounded-b bg-rose-100 px-4 py-3 text-rose-700">
-          <p>{scheduleErrors.get(key)}</p>
+          <p>{globalErrors.get(key)}</p>
         </div>
       </div>
     );
@@ -53,7 +53,12 @@ function ScheduleInfo() {
 
   if (alert) {
     if (alert === "empty") return <>{showAlert_info(false)}</>;
-    if (alert === "[NO_RES]") return <>{showAlert_info(true)}</>;
+    if (alert === "NO_RES") return <>{showAlert_info(true)}</>;
+
+    const alertList = alert
+      .substring(1, alert.length - 1)
+      .replace(" ", "")
+      .split(",");
     return <>{showAlert_error(alert)}</>;
   }
 }

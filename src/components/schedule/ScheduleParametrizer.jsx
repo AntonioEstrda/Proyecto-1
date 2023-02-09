@@ -45,7 +45,7 @@ function ScheduleParametrizer() {
         return Promise.reject(response);
       })
       .then((data) => {
-        data.length === 0 ? setAlert("[NO_RES]") : setAlert();
+        data.length === 0 ? setAlert("NO_RES") : setAlert();
         setResources(data);
       })
       .catch((e) => {
