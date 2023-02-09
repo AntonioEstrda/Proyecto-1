@@ -22,11 +22,13 @@ export default function ResourceCard({ resource, facultyId }) {
       </div>
       <h1 className="text-xl font-bold capitalize">{resource?.code}</h1>
       <h1 className="text-xl font-bold capitalize">{resource?.number}</h1>
+
       <div className="bg-paleta2-azulverd text-paleta2-naranja p-4 mt-2 rounded-md">
         <p className="text-lg font-bold text-blue">Localización:</p>
         {resource.location?.name}
         {resource.location?.city ? "-" + resource.location.city : ""}
       </div>
+
       <h1 className="text-xl font-bold capitalize">{resource?.capacity}</h1>
       <h1 className="text-xl font-bold capitalize">{resource?.disable}</h1>
 

@@ -1,57 +1,73 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+import { TeacherContext } from "../context/TeacherContext";
+import { AcademicPeriodContext } from "../context/AcademicPeriodContext";
+import { DepartmentContext } from "../context/DepartmentContext";
 
 export const EventContext = createContext();
 
 export function EventContextProvider(props) {
   const url = "http://localhost:8080/Event/";
 
+  const { teachers } = useContext(TeacherContext);
+  const { departments } = useContext(DepartmentContext);
+  const { academicPeriods } = useContext(AcademicPeriodContext);
+
   const [editingEvent, setEditingEvent] = useState();
   const [events, setEvents] = useState([]);
+  const [idTeacherSelected, setIdTeacherSelected] = useState(0);
+  const [idDepartmentSelected, setIdDepartmentSelected] = useState(0);
+  const [idAPSelected, setIdAPSelected] = useState(0);
   useEffect(() => {
-    fetch(url + "all")
-      .then((response) => response.json())
-      .then((data) => {
-        setEvents(data);
-      });
+    departments.forEach((department) => {
+      fetch(
+        url +
+          "findByDepartmentOrProgram?" +
+          new URLSearchParams({
+            departmentId: department.departmentId,
+          })
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setEvents(data);
+        })
+        .catch((e) => console.log(e));
+    });
   }, []);
 
   async function create(event) {
-    await fetch(url, {
+    await fetch(url + "add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       mode: "cors",
-      body: JSON.stringify({
-        name: event.name,
-        initDate: event.initDate,
-        finalDate: event.finalDate,
-      }),
+      body: JSON.stringify(event),
     })
       .then((response) => response.json())
       .then((data) => {
-        data.initDate = data.initDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
         setEvents((prevState) => prevState.concat([data]));
+        setEditingEvent(null);
+        setIdTeacherSelected(0);
+        setIdDepartmentSelected(0);
+        setIdAPSelected(0);
       })
       .catch((e) => console.log(e));
   }
 
-  async function deleteById(eventID) {
-    await fetch(url + "delete/" + eventID, {
+  async function deleteById(eventID, departmentId) {
+    await fetch(url + "delete?" + eventID + "&" + departmentId, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
       mode: "cors",
     })
-      .then(() =>
-        setEvents(
-          events.filter(
-            (event) =>
-              event.eventID !== eventID
-          )
-        )
+      .then(
+        () => {
+          setEvents(events.filter((event) => event.id !== eventID));
+        },
+        eventID,
+        idDepartmentSelected
       )
       .catch((e) => console.log(e));
   }
@@ -67,16 +83,17 @@ export function EventContextProvider(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        data.initDate = data.initDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
-        events[events.indexOf(editingEvent)] =
-          prevEvent;
+        events[events.indexOf(editingEvent)] = prevEvent;
         setEvents(events);
+        setEditingEvent(null);
+        setIdTeacherSelected(0);
+        setIdDepartmentSelected(0);
+        setIdAPSelected(0);
       })
-      .then(() => setEditingEvent(null))
       .catch((e) => console.log(e));
   }
 
+  console.log(events);
   return (
     <EventContext.Provider
       value={{
@@ -86,6 +103,15 @@ export function EventContextProvider(props) {
         update,
         deleteById,
         setEditingEvent,
+        idTeacherSelected,
+        idDepartmentSelected,
+        idAPSelected,
+        setIdTeacherSelected,
+        setIdDepartmentSelected,
+        setIdAPSelected,
+        teachers,
+        departments,
+        academicPeriods,
       }}
     >
       {props.children}
