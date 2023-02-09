@@ -50,7 +50,7 @@ public class Subject implements Serializable {
     @Column(length = 100, name = "SEMESTER")
     private String semester;
 
-    @NotEmpty(message = "SUBJ106")
+    @NotNull(message = "SUBJ106")
     @Column(length = 100, name = "INTENSITY")
     private Long intensity;
 
