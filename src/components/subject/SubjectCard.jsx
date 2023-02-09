@@ -23,8 +23,6 @@ export default function SubjectCard({ subject }) {
       </div>
 
       <h1 className="text-xl font-bold capitalize">{subject?.code}</h1>
-      <h1 className="text-xl font-bold capitalize">{subject?.isDisable}</h1>
-      <h1 className="text-xl font-bold capitalize">{subject?.isExtern}</h1>
 
       <div className="grid grid-cols-2 gap-3">
         <button

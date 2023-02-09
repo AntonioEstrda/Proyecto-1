@@ -107,8 +107,8 @@ export default function SubjectForm() {
         (program) => program.programId == idProgramSelected
       ),
       code,
-      isDisable,
-      isExtern,
+      isDisable: isDisable === "0" ? "FALSE" : "TRUE",
+      isExtern: isExtern === "0" ? "FALSE" : "TRUE",
     });
     limpiarForm();
   }
@@ -127,8 +127,8 @@ export default function SubjectForm() {
         (program) => program.programId == idProgramSelected
       ),
       code,
-      isDisable,
-      isExtern,
+      isDisable: isDisable === "0" ? "FALSE" : "TRUE",
+      isExtern: isExtern === "0" ? "FALSE" : "TRUE",
     });
     limpiarForm();
   }
@@ -231,7 +231,7 @@ export default function SubjectForm() {
               id="red-radio"
               type="radio"
               value="0"
-              onChange={() => setIsDisable("1")}
+              onChange={() => setIsDisable("0")}
               name="isDisable_radio"
               className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             ></input>
@@ -267,7 +267,7 @@ export default function SubjectForm() {
               id="red-radio"
               type="radio"
               value="0"
-              onChange={() => setIsExtern("1")}
+              onChange={() => setIsExtern("0")}
               name="isExtern_radio"
               className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             ></input>
