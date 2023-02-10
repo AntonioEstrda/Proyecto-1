@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
-import Login from "../components/login/Login";
+import { useContext } from "react";
 import Alert from "../components/resource/Alert";
+import { AlertContext } from "../context/AlertContext";
 
 export default function Navbar() {
+  const { setAlert } = useContext(AlertContext);
+
+  const cerrarSesion = () => {
+    setAlert(["Salida", "Su sesión ha cerrado"]);
+  };
+
   return (
     <div className="bg-fondo2">
       <nav className="bg-blue text-paleta2-azul-claro border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-blue">
@@ -21,17 +28,9 @@ export default function Navbar() {
             <ul className="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-blue dark:border-gray-700">
               <li>
                 <Link
-                  to="/home"
-                  className="block py-2 pl-3 pr-4 text-paleta2-claro bg-blue-700 rounded md:bg-transparent md:text-paleta2-fondo1 md:p-0 dark:text-white"
-                  aria-current="page"
-                >
-                  Inicio
-                </Link>
-              </li>
-              <li>
-                <Link
                   to="./login"
                   className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  onClick={cerrarSesion}
                 >
                   Cerrar sesión
                 </Link>

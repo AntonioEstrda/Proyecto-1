@@ -41,7 +41,7 @@ export default function Login() {
             className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
             value={username}
           />
-          <label for="password" className="text-paleta2-azul-claro">
+          <label htmlFor="password" className="text-paleta2-azul-claro">
             Contraseña:
           </label>
           <input
