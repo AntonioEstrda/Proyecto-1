@@ -38,7 +38,7 @@ export function DepartmentContextProvider(props) {
         setIdLocationSelected(0);
         setIdFacultySelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(departmentId) {
@@ -56,7 +56,7 @@ export function DepartmentContextProvider(props) {
           )
         )
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevDepartment) {
@@ -76,7 +76,7 @@ export function DepartmentContextProvider(props) {
         setIdLocationSelected(0);
         setIdFacultySelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   return (

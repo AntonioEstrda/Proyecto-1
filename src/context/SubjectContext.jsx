@@ -20,7 +20,6 @@ export function SubjectContextProvider(props) {
   }, []);
 
   async function create(subject) {
-    console.log(subject);
     await fetch(url, {
       method: "POST",
       headers: {
@@ -36,7 +35,6 @@ export function SubjectContextProvider(props) {
         setIdProgramSelected(0);
       })
       .catch((e) => {
-        console.log(e);
         response.headers?.get("errors");
       });
   }
@@ -54,11 +52,10 @@ export function SubjectContextProvider(props) {
           subjects.filter((subject) => subject.subjectID !== subjectID)
         )
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevSubject) {
-    console.log(prevSubject);
     await fetch(url + "update", {
       method: "PUT",
       headers: {
@@ -74,9 +71,9 @@ export function SubjectContextProvider(props) {
         setEditingSubject(null);
         setIdProgramSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
-  //console.log(programs);
+  
   return (
     <SubjectContext.Provider
       value={{

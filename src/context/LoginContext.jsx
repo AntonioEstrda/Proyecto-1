@@ -14,15 +14,7 @@ export function LoginContextProvider(props) {
   const [editingLogin, setEditingLogin] = useState();
   const [stateLogin, setLogin] = useState(false);
 
-  const login = useCallback()
-  /*
-  useEffect(() => {
-    fetch(url + "all")
-      .then((response) => response.json())
-      .then((data) => {
-        setLogin(data);
-      });
-  }, []);*/
+  const login = useCallback();
 
   async function session(password) {
     await fetch(url + password, {
@@ -31,14 +23,10 @@ export function LoginContextProvider(props) {
         "Content-Type": "application/json",
       },
       mode: "cors",
-    })
-    /*.then(() =>
-    )
-    .catch((e) => console.log(e));*/
+    });
   }
 
   async function session(username, password) {
-    console.log(stateLogin)
     if (password == "admin" && username == "admin") {
       alert("Bienvenidos");
       setLogin(true);
@@ -47,12 +35,9 @@ export function LoginContextProvider(props) {
       alert("Credenciales incorrectas");
       setLogin(false);
     }
-    return (
-      stateLogin
-    )
+    return stateLogin;
   }
 
-  //console.log(groups);
   return (
     <LoginContext.Provider
       value={{
@@ -60,9 +45,6 @@ export function LoginContextProvider(props) {
         teachers,
         setLogin,
         stateLogin,
-        //logins,
-        // getUser,
-        //password,
       }}
     >
       {props.children}

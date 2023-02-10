@@ -34,7 +34,7 @@ export function FacultyContextProvider(props) {
         setEditingFaculty(null);
         setIdLocationSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(facultyId) {
@@ -50,7 +50,7 @@ export function FacultyContextProvider(props) {
           facultys.filter((faculty) => faculty.facultyId !== facultyId)
         )
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevFaculty) {
@@ -69,7 +69,7 @@ export function FacultyContextProvider(props) {
         setEditingFaculty(null);
         setIdLocationSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   return (

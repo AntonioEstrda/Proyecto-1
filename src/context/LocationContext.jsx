@@ -32,7 +32,7 @@ export function LocationContextProvider(props) {
       .then((data) => {
         setLocations((prevState) => prevState.concat([data]));
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(locationId) {
@@ -48,7 +48,7 @@ export function LocationContextProvider(props) {
           locations.filter((location) => location.locationId !== locationId)
         )
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevLocation) {
@@ -66,7 +66,7 @@ export function LocationContextProvider(props) {
         setLocations(locations);
       })
       .then(() => setEditingLocation(null))
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   return (

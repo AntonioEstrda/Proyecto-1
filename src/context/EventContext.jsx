@@ -30,7 +30,7 @@ export function EventContextProvider(props) {
         .then((data) => {
           setEvents(data);
         })
-        .catch((e) => console.log(e));
+        .catch((e) => console.error(e));
     });
   }, []);
 
@@ -51,7 +51,7 @@ export function EventContextProvider(props) {
         setIdDepartmentSelected(0);
         setIdAPSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(eventID, departmentId) {
@@ -69,7 +69,7 @@ export function EventContextProvider(props) {
         eventID,
         idDepartmentSelected
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevEvent) {
@@ -90,10 +90,9 @@ export function EventContextProvider(props) {
         setIdDepartmentSelected(0);
         setIdAPSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
-  console.log(events);
   return (
     <EventContext.Provider
       value={{

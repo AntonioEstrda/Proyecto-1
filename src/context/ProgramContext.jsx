@@ -23,7 +23,6 @@ export function ProgramContextProvider(props) {
   }, []);
 
   async function create(program) {
-    //console.log(program);
     await fetch(url, {
       method: "POST",
       headers: {
@@ -39,7 +38,7 @@ export function ProgramContextProvider(props) {
         setIdLocationSelected(0);
         setIdDepartmentSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(ProgramId) {
@@ -55,7 +54,7 @@ export function ProgramContextProvider(props) {
           programs.filter((program) => program.ProgramId !== ProgramId)
         )
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevProgram) {
@@ -75,10 +74,9 @@ export function ProgramContextProvider(props) {
         setIdLocationSelected(0);
         setIdDepartmentSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
-  //console.log(locations);
   return (
     <ProgramContext.Provider
       value={{

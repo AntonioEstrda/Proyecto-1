@@ -32,7 +32,7 @@ export function ResourceTypeContextProvider(props) {
       .then((data) => {
         setResourceTypes((prevState) => prevState.concat([data]));
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(resourceTypeId) {
@@ -45,10 +45,12 @@ export function ResourceTypeContextProvider(props) {
     })
       .then(() =>
         setResourceTypes(
-          resourceTypes.filter((resourceType) => resourceType.resourceTypeId !== resourceTypeId)
+          resourceTypes.filter(
+            (resourceType) => resourceType.resourceTypeId !== resourceTypeId
+          )
         )
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevResourceType) {
@@ -62,11 +64,12 @@ export function ResourceTypeContextProvider(props) {
     })
       .then((response) => response.json())
       .then(() => {
-        resourceTypes[resourceTypes.indexOf(editingResourceType)] = prevResourceType;
+        resourceTypes[resourceTypes.indexOf(editingResourceType)] =
+          prevResourceType;
         setResourceTypes(resourceTypes);
       })
       .then(() => setEditingResourceType(null))
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   return (

@@ -20,7 +20,7 @@ export function ScheduleContextProvider(props) {
       .then((data) => {
         setGrupos(data);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }, []);
 
   useEffect(() => {
@@ -44,7 +44,6 @@ export function ScheduleContextProvider(props) {
         setAlert();
       })
       .catch((e) => {
-        if (e.status === 400) console.log(e.headers.get("errors"));
         if (e.status === 404) setAlert("empty");
         if (e.status === 400) setAlert(e.headers.get("errors"));
         setOcupacionAmbiente([]);
@@ -106,7 +105,7 @@ export function ScheduleContextProvider(props) {
         cargarAsignacionesRecurso();
         setGrupos(grupos.filter((grupo) => grupo.id !== scheduleId));
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   if (!grupos) return null;

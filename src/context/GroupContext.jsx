@@ -24,7 +24,6 @@ export function GroupContextProvider(props) {
   }, []);
 
   async function create(group) {
-    //console.log(group)
     await fetch(url, {
       method: "POST",
       headers: {
@@ -40,7 +39,7 @@ export function GroupContextProvider(props) {
         setIdSubjectSelected(0);
         setIdAcademicPeriodSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(groupId) {
@@ -54,7 +53,7 @@ export function GroupContextProvider(props) {
       .then(() =>
         setGroups(groups.filter((group) => group.groupId !== groupId))
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevGroup) {
@@ -74,9 +73,9 @@ export function GroupContextProvider(props) {
         setIdSubjectSelected(0);
         setIdAcademicPeriodSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
-  //console.log(groups);
+
   return (
     <GroupContext.Provider
       value={{

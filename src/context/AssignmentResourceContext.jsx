@@ -35,7 +35,7 @@ export function AssignmentResourceContextProvider(props) {
         data.finalDate = data.finalDate.split("T")[0];
         setAssignmentResources((prevState) => prevState.concat([data]));
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(assignmentResourceID) {
@@ -54,7 +54,7 @@ export function AssignmentResourceContextProvider(props) {
           )
         )
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevAssignmentResource) {
@@ -70,12 +70,13 @@ export function AssignmentResourceContextProvider(props) {
       .then((data) => {
         data.initDate = data.initDate.split("T")[0];
         data.finalDate = data.finalDate.split("T")[0];
-        assignmentResources[assignmentResources.indexOf(editingAssignmentResource)] =
-          prevAssignmentResource;
+        assignmentResources[
+          assignmentResources.indexOf(editingAssignmentResource)
+        ] = prevAssignmentResource;
         setAssignmentResources(assignmentResources);
       })
       .then(() => setEditingAssignmentResource(null))
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   return (

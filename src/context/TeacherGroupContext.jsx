@@ -38,7 +38,7 @@ export function TeacherGroupContextProvider(props) {
         setIdTeacherSelected(0);
         setIdGroupSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(teacherGroupID) {
@@ -56,7 +56,7 @@ export function TeacherGroupContextProvider(props) {
           )
         )
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevTeacherGroup) {
@@ -77,9 +77,9 @@ export function TeacherGroupContextProvider(props) {
         setIdTeacherSelected(0);
         setIdGroupSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
-  //console.log(teachers);
+
   return (
     <TeacherGroupContext.Provider
       value={{

@@ -34,7 +34,7 @@ export function AcademicPeriodContextProvider(props) {
         data.finalDate = data.finalDate.split("T")[0];
         setAcademicPeriods((prevState) => prevState.concat([data]));
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(academicPeriodID) {
@@ -53,7 +53,7 @@ export function AcademicPeriodContextProvider(props) {
           )
         )
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevAcademicPeriod) {
@@ -74,7 +74,7 @@ export function AcademicPeriodContextProvider(props) {
         setAcademicPeriods(academicPeriods);
       })
       .then(() => setEditingAcademicPeriod(null))
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   return (

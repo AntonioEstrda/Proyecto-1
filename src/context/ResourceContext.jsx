@@ -124,7 +124,7 @@ export function ResourceContextProvider(props) {
         );
         setAlert(["Eliminar", "Recurso eliminado con éxito"]);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevResource, facultyId) {
@@ -157,7 +157,7 @@ export function ResourceContextProvider(props) {
         setIdLocationSelected(0);
         setIdFacultySelected(0);
       }, idFacultySelected)
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   return (

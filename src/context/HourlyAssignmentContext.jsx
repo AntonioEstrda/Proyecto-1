@@ -34,7 +34,7 @@ export function HourlyAssignmentContextProvider(props) {
         data.finalDate = data.finalDate.split("T")[0];
         setHourlyAssignments((prevState) => prevState.concat([data]));
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(hourlyAssignmentID) {
@@ -53,7 +53,7 @@ export function HourlyAssignmentContextProvider(props) {
           )
         )
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevHourlyAssignment) {
@@ -74,7 +74,7 @@ export function HourlyAssignmentContextProvider(props) {
         setHourlyAssignments(hourlyAssignments);
       })
       .then(() => setEditingHourlyAssignment(null))
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   return (

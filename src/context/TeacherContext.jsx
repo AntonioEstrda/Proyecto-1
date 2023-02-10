@@ -33,7 +33,7 @@ export function TeacherContextProvider(props) {
       .then((data) => {
         setTeachers((prevState) => prevState.concat([data]));
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(teacherID) {
@@ -49,7 +49,7 @@ export function TeacherContextProvider(props) {
           teachers.filter((teacher) => teacher.teacherID !== teacherID)
         )
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevTeacher) {
@@ -67,7 +67,7 @@ export function TeacherContextProvider(props) {
         setTeachers(teachers);
       })
       .then(() => setEditingTeacher(null))
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   return (

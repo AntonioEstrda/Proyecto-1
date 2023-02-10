@@ -34,7 +34,7 @@ export function FacultyResourceContextProvider(props) {
           .then((data) => {
             setFacultyResources(...facultyResources, data);
           })
-          .catch((e) => console.log(e));
+          .catch((e) => console.error(e));
       });
     });
   }, []);
@@ -67,7 +67,7 @@ export function FacultyResourceContextProvider(props) {
         setIdFacultySelected(0);
         setIdResourceSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function deleteById(facultyId, resourceId) {
@@ -100,7 +100,7 @@ export function FacultyResourceContextProvider(props) {
         idFacultySelected,
         idResourceSelected
       )
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   async function update(prevFacultyResource) {
@@ -121,7 +121,7 @@ export function FacultyResourceContextProvider(props) {
         setFacultyResources(facultyResources);
       })
       .then(() => setEditingFacultyResource(null))
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }
 
   return (

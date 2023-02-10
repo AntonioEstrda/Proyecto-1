@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import AcademicPeriodCard from "./AcademicPeriodCard";
 import { AcademicPeriodContext } from "../../context/AcademicPeriodContext";
+import AcademicPeriodCard from "./AcademicPeriodCard";
 
 export default function AcademicPeriodList() {
   const { academicPeriods } = useContext(AcademicPeriodContext);
