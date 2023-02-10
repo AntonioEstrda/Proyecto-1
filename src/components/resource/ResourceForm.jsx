@@ -27,16 +27,15 @@ export default function ResourceForm() {
 
   useEffect(() => {
     if (editingResource) {
-      setResourceName(editingResource.resourceName);
-      setResourceDescription(editingResource.resourceDescription);
-      setResourceCode(editingResource.resourceCode);
-      setResourceNumber(editingResource.resourceNumber);
-      setResourceCapacity(editingResource.resourceCapacity);
-      setResourceDisable(editingResource.isDisable);
+      setResourceName(editingResource?.name);
+      setResourceDescription(editingResource?.description);
+      setResourceCode(editingResource?.code);
+      setResourceNumber(editingResource?.number);
+      setResourceCapacity(editingResource?.capacity);
+      setResourceDisable(editingResource?.disable);
       setLimpio(false);
-      setIdResourceTypeSelected(editingResource.resourceType.resourceTypeId);
-      setIdLocationSelected(editingResource.location.locationId);
-      setIdFacultySelected(editingResource.faculty.facultyId);
+      setIdResourceTypeSelected(editingResource?.resourceType?.resourceTypeId);
+      setIdLocationSelected(editingResource?.location?.locationId);
 
       setFormRadioIsDisable();
     }

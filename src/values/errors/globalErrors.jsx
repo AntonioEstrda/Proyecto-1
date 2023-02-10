@@ -231,6 +231,10 @@ globalErrors.set(
   "STD101",
   "No se puede eliminar el registro asociado, debido a las subdependencias"
 );
+globalErrors.set(
+  "unespecified",
+  "Algo salió mal, asegúrate de enviar datos válidos en cada campo"
+);
 
 /**
  * EVENT

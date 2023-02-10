@@ -107,8 +107,8 @@ export default function SubjectForm() {
         (program) => program.programId == idProgramSelected
       ),
       code,
-      isDisable: isDisable === "0" ? "FALSE" : "TRUE",
-      isExtern: isExtern === "0" ? "FALSE" : "TRUE",
+      disable: isDisable === "0" ? false : true,
+      extern: isExtern === "0" ? false : true,
     });
     limpiarForm();
   }
