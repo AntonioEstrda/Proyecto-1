@@ -35,7 +35,10 @@ export function SubjectContextProvider(props) {
         setEditingSubject(null);
         setIdProgramSelected(0);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        response.headers?.get("errors");
+      });
   }
 
   async function deleteById(subjectID) {
