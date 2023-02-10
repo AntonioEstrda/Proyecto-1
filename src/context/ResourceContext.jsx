@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import { ResourceTypeContext } from "../context/ResourceTypeContext";
 import { LocationContext } from "../context/LocationContext";
 import { FacultyContext } from "../context/FacultyContext";
+import { AlertContext } from "../context/AlertContext";
 
 export const ResourceContext = createContext();
 
@@ -11,13 +12,13 @@ export function ResourceContextProvider(props) {
   const { resourceTypes } = useContext(ResourceTypeContext);
   const { locations } = useContext(LocationContext);
   const { facultys } = useContext(FacultyContext);
+  const { alert, setAlert, closeAlert } = useContext(AlertContext);
 
   const [editingResource, setEditingResource] = useState();
   const [resources, setResources] = useState(new Map());
   const [idResourceTypeSelected, setIdResourceTypeSelected] = useState(-1);
   const [idLocationSelected, setIdLocationSelected] = useState(-1);
   const [idFacultySelected, setIdFacultySelected] = useState(-1);
-  const [alert, setAlert] = useState();
 
   useEffect(() => {
     loadResources();
@@ -40,7 +41,7 @@ export function ResourceContextProvider(props) {
         })
         .then((data) => {
           if (data.length > 0) {
-            recursosMap.set(faculty.facultyId, data);
+            recursosMap.set(+faculty.facultyId, data);
           }
         })
         .catch((e) => {
@@ -73,17 +74,22 @@ export function ResourceContextProvider(props) {
         return Promise.reject(response);
       })
       .then((data) => {
-        console.log(recursosMap.get(facultyId));
-        recursosMap.get(facultyId).concat([data]);
-        console.log(recursosMap.get(facultyId));
-        setResources(new Map(recursosMap));
+        const recursosMap = resources;
+        setResources(
+          recursosMap.set(
+            +facultyId,
+            recursosMap.get(+facultyId).concat([data])
+          )
+        );
+        setAlert(["Crear", "Recurso creado con éxito"]);
         setEditingResource(null);
         setIdResourceTypeSelected(0);
         setIdLocationSelected(0);
         setIdFacultySelected(0);
       })
       .catch((e) => {
-        setAlert(e.headers.get("errors"));
+        if (e.headers?.has("errors")) setAlert(e.headers.get("errors"));
+        else setAlert("[unespecified]");
       });
   }
 
@@ -106,21 +112,22 @@ export function ResourceContextProvider(props) {
         mode: "cors",
       }
     )
-      .then(
-        () => {
-          setResources(
-            resources.filter((resource) => resource.resourceId !== resourceId)
-          );
-          console.log(facultyId, resourceId); /////////
-        },
-        idFacultySelected,
-        resourceId
-      )
+      .then(() => {
+        const recursosMap = resources;
+        setResources(
+          recursosMap.set(
+            +facultyId,
+            recursosMap
+              .get(+facultyId)
+              .filter((resource) => resource.resourceId !== resourceId)
+          )
+        );
+        setAlert(["Eliminar", "Recurso eliminado con éxito"]);
+      })
       .catch((e) => console.log(e));
   }
 
   async function update(prevResource, facultyId) {
-    console.log(prevResource, facultyId);
     await fetch(
       url +
         "update?" +
@@ -138,18 +145,19 @@ export function ResourceContextProvider(props) {
     )
       .then((response) => response.json())
       .then(() => {
-        resources[resources.indexOf(editingResource)] = prevResource;
-        setResources(resources);
+        const recursosMap = resources;
+        let recursosFacultad = resources.get(+facultyId);
+        recursosFacultad[recursosFacultad.indexOf(editingResource)] =
+          prevResource;
+        setResources(recursosMap.set(+facultyId, recursosFacultad));
+        setAlert(["Actualizar", "Recurso actualizado con éxito"]);
+
         setEditingResource(null);
         setIdResourceTypeSelected(0);
         setIdLocationSelected(0);
         setIdFacultySelected(0);
       }, idFacultySelected)
       .catch((e) => console.log(e));
-  }
-
-  function closeAlert() {
-    setAlert();
   }
 
   return (

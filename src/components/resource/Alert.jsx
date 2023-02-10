@@ -7,18 +7,18 @@ function Alert() {
 
   function CloseButton() {
     return (
-      <div className="text-right">
+      <div className="text-right font-bold">
         <button onClick={closeAlert}>Cerrar</button>
       </div>
     );
   }
   const showAlert_error = (key) => {
-    return <p>{globalErrors.get(key)}</p>;
+    return <p key={key}>{globalErrors.get(key)}</p>;
   };
 
   const alertContainer = (errors) => {
     return (
-      <div className="mx-96 mt-4" role="alert">
+      <div className="mx-40 lg:mx-96 mt-4" role="alert">
         <div className="bg-rose-500 text-white font-bold rounded-t px-4 py-2 columns-2">
           <div>Ocurrió un error</div>
           <CloseButton> </CloseButton>
@@ -27,6 +27,34 @@ function Alert() {
           {errors.map((errorCode) => {
             return showAlert_error(errorCode);
           })}
+        </div>
+      </div>
+    );
+  };
+
+  const showAlert_success = (action_message) => {
+    return (
+      <div
+        className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md sm:mt-0 md:mt-4  sm:mx-0 md:mx-56 lg:mx-72 xl:mx-80 2xl:mx-96"
+        role="alert"
+      >
+        <div className="flex">
+          <div className="py-1">
+            <svg
+              className="fill-current h-6 w-6 text-teal-500 mr-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z" />
+            </svg>
+          </div>
+          <div className="w-full">
+            <p className="font-bold">{action_message[0]}</p>
+            <p className="text-sm">{action_message[1]}</p>
+          </div>
+          <div className="">
+            <CloseButton> </CloseButton>
+          </div>
         </div>
       </div>
     );
@@ -58,6 +86,7 @@ function Alert() {
   };
 
   if (alert) {
+    if (alert instanceof Array) return <>{showAlert_success(alert)}</>;
     if (alert === "empty") return <>{showAlert_info(false)}</>;
     if (alert === "NO_RES") return <>{showAlert_info(true)}</>;
     const alertList = alert

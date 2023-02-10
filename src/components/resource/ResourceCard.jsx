@@ -2,9 +2,11 @@ import { useContext } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 
 export default function ResourceCard({ resource, facultyId }) {
-  const { deleteById, setEditingResource } = useContext(ResourceContext);
+  const { deleteById, setEditingResource, setIdFacultySelected } =
+    useContext(ResourceContext);
 
   function defineEditItem() {
+    setIdFacultySelected(facultyId);
     setEditingResource(resource);
   }
 
@@ -32,12 +34,12 @@ export default function ResourceCard({ resource, facultyId }) {
       <h1 className="text-xl font-bold capitalize">{resource?.capacity}</h1>
       <h1 className="text-xl font-bold capitalize">{resource?.disable}</h1>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2">
         <button
           className="bg-paleta2-rojo px-2 py-1 rounded-md mt-4 hover:bg-red-400"
           onClick={() => deleteById(facultyId, resource?.resourceId)}
         >
-          Eliminar
+          Inactivar
         </button>
 
         <button
