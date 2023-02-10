@@ -1,68 +1,66 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useRef } from "react";
 import { createContext, useState, useEffect } from "react";
 import AppMenu from "../apps/adminUser/AppMenu";
-import { TeacherContext } from "../context/TeacherContext";
-
+import { Link } from "react-router-dom";
 
 export const LoginContext = createContext();
 
 export function LoginContextProvider(props) {
-  const url = "http://localhost:8080/teacher/";
 
-  const { teachers } = useContext(TeacherContext);
 
   const [editingLogin, setEditingLogin] = useState();
-  const [stateLogin, setLogin] = useState(false);
+  const [login, setLogin] = useState(false);
+  const [stateLogin, setStateLogin] = useState(false);
 
-  const login = useCallback()
-  /*
-  useEffect(() => {
-    fetch(url + "all")
-      .then((response) => response.json())
-      .then((data) => {
-        setLogin(data);
-      });
-  }, []);*/
+  //const var_estado = { stateLogin };
+  const var_estado = useRef(false);
 
-  async function session(password) {
-    await fetch(url + password, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-    })
-    /*.then(() =>
-    )
-    .catch((e) => console.log(e));*/
-  }
-
-  async function session(username, password) {
-    console.log(stateLogin)
-    if (password == "admin" && username == "admin") {
+  async function session(usuario) {
+    console.log(usuario)
+    if (usuario.email == "admin" && usuario.password == "admin") {
       alert("Bienvenidos");
-      setLogin(true);
+      var_estado.current = true;
+      setStateLogin(var_estado);
+      estado(var_estado);
       window.location.href = "./home";
     } else {
       alert("Credenciales incorrectas");
-      setLogin(false);
+      var_estado.current = false;
+      setStateLogin(var_estado);
+      estado(var_estado);
     }
-    return (
-      stateLogin
-    )
   }
+
+  const estado = (elestado) => {
+
+    if (elestado) {
+      return (true);
+    } else {
+      var_estado.current = true;
+      return (false);
+    }
+  }
+
+  async function loggeo(status) {
+    if (status == var_estado) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 
   //console.log(groups);
   return (
     <LoginContext.Provider
       value={{
         session,
-        teachers,
         setLogin,
+        login,
         stateLogin,
-        //logins,
-        // getUser,
-        //password,
+        setStateLogin,
+        estado,
+        loggeo,
       }}
     >
       {props.children}

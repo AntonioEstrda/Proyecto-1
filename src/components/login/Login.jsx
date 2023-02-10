@@ -7,26 +7,25 @@ export default function Login() {
         session,
     } = useContext(LoginContext);
 
-    const [username, setUsername] = useState("");
+    const [email, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const usuario = { email, password }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        //alert(username, password);
-        if (username.length === 0 || password.length === 0) {
+        if (email.length === 0 || password.length === 0) {
             alert("Ingrese el usuario y su contraseña");
         } else {
-            /*if (sessionUser(username, password) != true) {
-                console.log(sessionUser);
-                alert("Credenciales incorrectas");
-            }*/
-            sessionUser(username, password);
+            console.log(usuario);
+            sessionUser(usuario);
         }
+
     }
 
-    function sessionUser(u, p) {
-        session(username, password);
+    function sessionUser(usuario) {
+        session(usuario);
     }
+
     return (
         <div className="max-w-md mx-auto ">
             <form id="formulario" onSubmit={handleSubmit} className="bg-paleta2-purpura p-10 mb-4 rounded-lg">
@@ -38,13 +37,13 @@ export default function Login() {
                         Usuario:
                     </label>
                     <input
-                        id="user"
-                        name="username"
+                        id="email"
+                        name="email"
                         autoComplete="off"
                         placeholder="Paquito"
                         onChange={e => setUsername(e.target.value)}
                         className="bg-fondo5 text-neutral-200 p-3 w-full mb-2 rounded-md"
-                        value={username}
+                        value={email}
 
                     />
                     <label for="password" className="text-paleta2-azul-claro">

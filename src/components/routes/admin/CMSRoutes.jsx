@@ -10,10 +10,10 @@ import AppLocation from "../../../apps/adminUser/AppLocation";
 import AppProgram from "../../../apps/adminUser/AppProgram";
 import AppResource from "../../../apps/adminUser/AppResource";
 import AppResourceType from "../../../apps/adminUser/AppResourceType";
+import AppScheduleCMS from "../../../apps/adminUser/AppScheduleCMS";
 import AppSubject from "../../../apps/adminUser/AppSubject";
 import AppTeacher from "../../../apps/adminUser/AppTeacher";
 import AppTeacherGroup from "../../../apps/adminUser/AppTeacherGroup";
-import AppLogin from "../../../apps/adminUser/AppLogin";
 
 import { AcademicPeriodContextProvider } from "../../../context/AcademicPeriodContext";
 import { AssignmentResourceContextProvider } from "../../../context/AssignmentResourceContext";
@@ -27,12 +27,14 @@ import { LocationContextProvider } from "../../../context/LocationContext";
 import { ProgramContextProvider } from "../../../context/ProgramContext";
 import { ResourceContextProvider } from "../../../context/ResourceContext";
 import { ResourceTypeContextProvider } from "../../../context/ResourceTypeContext";
+import { ScheduleCMSContextProvider } from "../../../context/ScheduleCMSContext";
 import { SubjectContextProvider } from "../../../context/SubjectContext";
 import { TeacherContextProvider } from "../../../context/TeacherContext";
 import { TeacherGroupContextProvider } from "../../../context/TeacherGroupContext";
-import { LoginContextProvider } from "../../../context/LoginContext";
 
 import { Route } from "react-router-dom";
+import AppLogin from "../../../apps/adminUser/AppLogin";
+import { LoginContextProvider } from "../../../context/LoginContext";
 
 function CMSRoutes() {
   return (
@@ -197,19 +199,38 @@ function CMSRoutes() {
       </Route>
       <Route path="/recursos">
         <ResourceTypeContextProvider>
-          <LocationContextProvider>
-            <FacultyContextProvider>
-              <ResourceContextProvider>
-                <AppResource />
-              </ResourceContextProvider>
-            </FacultyContextProvider>
-          </LocationContextProvider>
+          <TeacherContextProvider>
+            <LocationContextProvider>
+              <FacultyContextProvider>
+                <DepartmentContextProvider>
+                  <ProgramContextProvider>
+                    <SubjectContextProvider>
+                      <AcademicPeriodContextProvider>
+                        <GroupContextProvider>
+                          <FacultyContextProvider>
+                            <ResourceContextProvider>
+                              <AppResource />
+                            </ResourceContextProvider>
+                          </FacultyContextProvider>
+                        </GroupContextProvider>
+                      </AcademicPeriodContextProvider>
+                    </SubjectContextProvider>
+                  </ProgramContextProvider>
+                </DepartmentContextProvider>
+              </FacultyContextProvider>
+            </LocationContextProvider>
+          </TeacherContextProvider>
         </ResourceTypeContextProvider>
       </Route>
       <Route path="/tiposrecursos">
         <ResourceTypeContextProvider>
           <AppResourceType />
         </ResourceTypeContextProvider>
+      </Route>
+      <Route path="/horarios">
+        <ScheduleCMSContextProvider>
+          <AppScheduleCMS />
+        </ScheduleCMSContextProvider>
       </Route>
       <Route path="/materias">
         <TeacherContextProvider>
@@ -252,13 +273,7 @@ function CMSRoutes() {
           </LocationContextProvider>
         </TeacherContextProvider>
       </Route>
-      <Route path="/login">
-        <TeacherContextProvider>
-          <LoginContextProvider>
-            <AppLogin />
-          </LoginContextProvider>
-        </TeacherContextProvider>
-      </Route>
+
     </>
   );
 }
