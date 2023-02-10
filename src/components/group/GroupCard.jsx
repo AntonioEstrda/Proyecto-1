@@ -14,11 +14,6 @@ export default function GroupCard({ group }) {
         <h1 className="text-xl font-bold capitalize">Grupo: {group?.name}</h1>
 
         <div className="bg-fondo3 text-paleta2-rojo p-4 mt-2 rounded-md">
-          <p className="text-lg font-bold text-blue">Capacidad:</p>
-          {group?.capacity}
-        </div>
-
-        <div className="bg-fondo3 text-paleta2-rojo p-4 mt-2 rounded-md">
           <p className="text-lg font-bold text-blue">Materia:</p>
           {group.subject?.name}
         </div>
@@ -26,6 +21,11 @@ export default function GroupCard({ group }) {
         <div className="bg-fondo3 text-paleta2-rojo p-4 mt-2 rounded-md">
           <p className="text-lg font-bold text-blue">Periodo académico:</p>
           {group.academicPeriod?.name}
+        </div>
+        
+        <div className="bg-fondo3 text-paleta2-rojo p-4 mt-2 rounded-md">
+          <p className="text-lg font-bold text-blue">Capacidad:</p>
+          {group?.capacity}
         </div>
 
         <div className="grid grid-cols-2 gap-3">

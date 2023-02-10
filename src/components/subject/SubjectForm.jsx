@@ -8,36 +8,32 @@ export default function SubjectForm() {
     update,
     idProgramSelected,
     setIdProgramSelected,
+    setEditingSubject,
     programs,
   } = useContext(SubjectContext);
 
   const [limpio, setLimpio] = useState(true);
   const [name, setName] = useState("");
-  const [requisits, setRequisits] = useState("");
   const [semester, setSemester] = useState("");
   const [intensity, setIntensity] = useState("");
   const [modality, setModality] = useState("");
   const [type, setType] = useState("");
   const [code, setCode] = useState("");
-  const [isDisable, setIsDisable] = useState("");
-  const [isExtern, setIsExtern] = useState("");
+  const [isDisable, setIsDisable] = useState(true);
+  const [isExtern, setIsExtern] = useState(true);
 
   useEffect(() => {
     if (editingSubject) {
       setName(editingSubject.name);
-      setRequisits(editingSubject.requisits);
       setSemester(editingSubject.semester);
       setIntensity(editingSubject.intensity);
       setModality(editingSubject.modality);
       setType(editingSubject.type);
       setCode(editingSubject.code);
-      setIsDisable(editingSubject.isDisable);
-      setIsExtern(editingSubject.isExtern);
+      setIsDisable(!editingSubject.isDisable);
+      setIsExtern(!editingSubject.isExtern);
       setLimpio(false);
       setIdProgramSelected(editingSubject.program.programId);
-
-      setFormRadioDisable();
-      setFormRadioExtern();
     }
   }, [editingSubject]);
 
@@ -47,58 +43,23 @@ export default function SubjectForm() {
 
   function limpiarForm() {
     setName("");
-    setRequisits("");
     setSemester("");
     setIntensity("");
     setModality("");
     setType("");
     setCode("");
-    setIsDisable("");
-    setIsExtern("");
+    setIsDisable(true);
+    setIsExtern(true);
     setLimpio(true);
     setIdProgramSelected(0);
-
-    cleanRadioDisable();
-    cleanRadioExtern();
-  }
-
-  function setFormRadioDisable() {
-    let ele = document.getElementsByName("isDisable_radio");
-    if (editingSubject.isDisable === "1") {
-      ele[1].removeAttribute("checked");
-      ele[0].setAttribute("checked", "");
-    } else {
-      ele[0].removeAttribute("checked");
-      ele[1].setAttribute("checked", "");
-    }
-  }
-  function cleanRadioDisable() {
-    let ele = document.getElementsByName("isDisable_radio");
-    ele[0].removeAttribute("checked");
-    ele[1].removeAttribute("checked");
-  }
-
-  function setFormRadioExtern() {
-    let ele = document.getElementsByName("isExtern_radio");
-    if (editingSubject.isExtern === "1") {
-      ele[1].removeAttribute("checked");
-      ele[0].setAttribute("checked", "");
-    } else {
-      ele[0].removeAttribute("checked");
-      ele[1].setAttribute("checked", "");
-    }
-  }
-  function cleanRadioExtern() {
-    let ele = document.getElementsByName("isExtern_radio");
-    ele[0].removeAttribute("checked");
-    ele[1].removeAttribute("checked");
+    setEditingSubject();
   }
 
   function crear(e) {
     e.preventDefault();
     create({
       name,
-      requisits,
+      requisits: '{"7":null}',
       semester,
       intensity,
       modality,
@@ -107,8 +68,8 @@ export default function SubjectForm() {
         (program) => program.programId == idProgramSelected
       ),
       code,
-      disable: isDisable === "0" ? false : true,
-      extern: isExtern === "0" ? false : true,
+      disable: isDisable,
+      extern: isExtern,
     });
     limpiarForm();
   }
@@ -118,7 +79,7 @@ export default function SubjectForm() {
     update({
       subjectID: editingSubject.subjectID,
       name,
-      requisits,
+      requisits: '{"7":null}',
       semester,
       intensity,
       modality,
@@ -127,16 +88,11 @@ export default function SubjectForm() {
         (program) => program.programId == idProgramSelected
       ),
       code,
-      isDisable: isDisable === "0" ? "FALSE" : "TRUE",
-      isExtern: isExtern === "0" ? "FALSE" : "TRUE",
+      disable: isDisable,
+      extern: isExtern,
     });
     limpiarForm();
   }
-
-  const modalidades = [
-    { label: "Anual", value: "Anual" },
-    { label: "Semestral", value: "Semestral" },
-  ];
 
   return (
     <div className="max-w-md mx-auto ">
@@ -155,42 +111,47 @@ export default function SubjectForm() {
           value={name}
         />
         <input
-          placeholder="Requisitos"
-          onChange={(e) => setRequisits(e.target.value)}
-          autoFocus="on"
-          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
-          value={requisits}
-        />
-        <input
           placeholder="Semestre"
           onChange={(e) => setSemester(e.target.value)}
-          autoFocus="on"
           className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={semester}
         />
         <input
           placeholder="Intensidad"
           onChange={(e) => setIntensity(e.target.value)}
-          autoFocus="on"
           className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={intensity}
         />
 
-        <input
-          placeholder="Modalidad"
-          onChange={(e) => setModality(e.target.value)}
-          autoFocus="on"
-          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
-          value={modality}
-        />
+        <select
+          id="programSelected"
+          name="programId"
+          className="bg-paleta2-azul-claro w-full text-lg text-paleta2-rojo rounded-md p-4 mb-2"
+          onChange={(e) => {
+            setModality(e.target.value);
+          }}
+          value={editingSubject?.modality}
+        >
+          <option value="">Selecciona una modalidad</option>
+          <option value="Semestral">Semestral</option>
+          <option value="Anual">Anual</option>
+        </select>
 
-        <input
-          placeholder="Tipo de materia"
-          onChange={(e) => setType(e.target.value)}
-          autoFocus="on"
-          className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
-          value={type}
-        />
+        <select
+          id="programSelected"
+          name="programId"
+          className="bg-paleta2-azul-claro w-full text-lg text-paleta2-rojo rounded-md p-4 mb-2"
+          onChange={(e) => {
+            setType(e.target.value);
+          }}
+          value={editingSubject?.type}
+        >
+          <option value="">Selecciona el tipo de Asignatura</option>
+          <option value="TEORICA">TEORICA</option>
+          <option value="PRACTICA">PRACTICA</option>
+          <option value="HIBRIDA">HIBRIDA</option>
+          <option value="FISH">FISH</option>
+        </select>
 
         <select
           id="programSelected"
@@ -199,18 +160,12 @@ export default function SubjectForm() {
           onChange={(e) => {
             setIdProgramSelected(e.target.value);
           }}
+          value={editingSubject?.program?.programId}
         >
+          <option value="">Selecciona el programa</option>
           {programs.map((program) => {
             return (
-              <option
-                key={program.programId}
-                value={program.programId}
-                selected={
-                  program.programId === editingSubject?.program.programId
-                    ? true
-                    : false
-                }
-              >
+              <option key={program.programId} value={program.programId}>
                 {program.name}{" "}
               </option>
             );
@@ -220,80 +175,33 @@ export default function SubjectForm() {
         <input
           placeholder="Código"
           onChange={(e) => setCode(e.target.value)}
-          autoFocus="on"
           className="bg-paleta2-fondo1 p-3 w-full mb-2 rounded-md"
           value={code}
         />
 
-        <div className="flex flex-wrap">
-          <div className="flex items-center mr-4">
+        <div className="grid grid-cols-2 grid-flow-col-dense mt-1 mb-3">
+          <label className="relative inline-flex items-center mr-5 cursor-pointer">
             <input
-              id="red-radio"
-              type="radio"
-              value="0"
-              onChange={() => setIsDisable("0")}
-              name="isDisable_radio"
-              className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              type="checkbox"
+              className="sr-only peer"
+              onChange={(e) => setIsDisable(!e.target.checked)}
             ></input>
-            <label
-              htmlFor="red-radio"
-              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Inactivo
-            </label>
-          </div>
-          <div className="flex items-center mr-4">
+            <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+            <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+              Activa
+            </span>
+          </label>
+          <label className="relative inline-flex items-center mr-5 cursor-pointer">
             <input
-              id="green-radio"
-              type="radio"
-              value="1"
-              onChange={() => setIsDisable("0")}
-              name="isDisable_radio"
-              className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+              type="checkbox"
+              className="sr-only peer"
+              onChange={(e) => setIsExtern(!e.target.checked)}
             ></input>
-            <label
-              htmlFor="green-radio"
-              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Activo
-            </label>
-          </div>
-        </div>
-        <p>. </p>
-
-        <div className="flex flex-wrap">
-          <div className="flex2 items-center mr-4">
-            <input
-              id="red-radio"
-              type="radio"
-              value="0"
-              onChange={() => setIsExtern("0")}
-              name="isExtern_radio"
-              className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            ></input>
-            <label
-              htmlFor="red-radio"
-              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              Externa
-            </label>
-          </div>
-          <div className="flex items-center mr-4">
-            <input
-              id="green-radio"
-              type="radio"
-              value="1"
-              onChange={() => setIsExtern("0")}
-              name="isExtern_radio"
-              className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            ></input>
-            <label
-              htmlFor="green-radio"
-              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
+            <div className="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+            <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
               Interna
-            </label>
-          </div>
+            </span>
+          </label>
         </div>
 
         <div className="grid grid-cols-1">
