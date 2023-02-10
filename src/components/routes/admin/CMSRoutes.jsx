@@ -119,31 +119,9 @@ function CMSRoutes() {
         </TeacherContextProvider>
       </Route>
       <Route path="/recursosfacultades">
-        <ResourceTypeContextProvider>
-          <TeacherContextProvider>
-            <LocationContextProvider>
-              <FacultyContextProvider>
-                <DepartmentContextProvider>
-                  <ProgramContextProvider>
-                    <SubjectContextProvider>
-                      <AcademicPeriodContextProvider>
-                        <GroupContextProvider>
-                          <FacultyContextProvider>
-                            <ResourceContextProvider>
-                              <FacultyResourceContextProvider>
-                                <AppFacultyResource />
-                              </FacultyResourceContextProvider>
-                            </ResourceContextProvider>
-                          </FacultyContextProvider>
-                        </GroupContextProvider>
-                      </AcademicPeriodContextProvider>
-                    </SubjectContextProvider>
-                  </ProgramContextProvider>
-                </DepartmentContextProvider>
-              </FacultyContextProvider>
-            </LocationContextProvider>
-          </TeacherContextProvider>
-        </ResourceTypeContextProvider>
+        <FacultyResourceContextProvider>
+          <AppFacultyResource />
+        </FacultyResourceContextProvider>
       </Route>
       <Route path="/grupos">
         <LocationContextProvider>

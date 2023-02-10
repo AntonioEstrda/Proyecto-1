@@ -1,48 +1,54 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { FacultyContext } from "../context/FacultyContext";
-import { ResourceContext } from "../context/ResourceContext";
-import { ResourceTypeContext } from "../context/ResourceTypeContext";
+import { AlertContext } from "./AlertContext";
 
 export const FacultyResourceContext = createContext();
 
 export function FacultyResourceContextProvider(props) {
-  const url = "http://localhost:8080/FacultyResource/";
-
-  const { facultys } = useContext(FacultyContext);
-  const { resources } = useContext(ResourceContext);
-  const { resourceTypes } = useContext(ResourceTypeContext);
-
-  const [editingFacultyResource, setEditingFacultyResource] = useState();
-  const [facultyResources, setFacultyResources] = useState([]);
-  const [idResourceSelected, setIdResourceSelected] = useState(0);
-  const [idFacultySelected, setIdFacultySelected] = useState(0);
+  const [idResourceSelected, setIdResourceSelected] = useState(-1);
+  const [idFacultySelected, setIdFacultySelected] = useState(-1);
+  const [facultys, setFacultys] = useState([]);
+  const [resources, setResources] = useState(new Map());
+  const { setAlert } = useContext(AlertContext);
   useEffect(() => {
-    facultys.forEach((faculty) => {
-      resourceTypes.forEach((resourceType) => {
-        fetch(
-          url +
-            "findByType?" +
-            new URLSearchParams({
-              facultyId: faculty.facultyId,
-            }) +
-            "&" +
-            new URLSearchParams({
-              resTypeId: resourceType.resourceTypeId,
-            })
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            setFacultyResources(...facultyResources, data);
-          })
-          .catch((e) => console.error(e));
+    fetch("http://localhost:8080/faculty/all")
+      .then((response) => response.json())
+      .then((data) => {
+        setFacultys(data);
       });
-    });
   }, []);
 
+  useEffect(() => {
+    const recursosMap = new Map();
+    facultys.forEach((faculty) => {
+      fetch(
+        "http://localhost:8080/Resource/all?" +
+          new URLSearchParams({
+            facultyId: faculty.facultyId,
+          })
+      )
+        .then((response) => {
+          if (response.ok) return response.json();
+          return Promise.reject(response);
+        })
+        .then((data) => {
+          if (data.length > 0) {
+            recursosMap.set(+faculty.facultyId, data);
+          }
+        })
+        .catch((e) => {
+          if (e.status === 400) setAlert(e.headers.get("errors"));
+          console.error(
+            "[ERROR] Ocurrió un error inesperado en cargar los recursos"
+          );
+        });
+    });
+    setResources(recursosMap);
+  }, [facultys]);
+
   async function create(facultyResource, facultyId, resourceId) {
+    console.log(facultyId, resourceId);
     await fetch(
-      url +
-        "assing?" +
+      "http://localhost:8080/FacultyResource/assign?" +
         new URLSearchParams({
           facultyId,
         }) +
@@ -60,85 +66,24 @@ export function FacultyResourceContextProvider(props) {
       }
     )
       .then((response) => {
-        response.json(), response.headers.get("errors");
+        if (response.ok) setAlert(["Asignado", "Asignación correcta"]);
+        return Promise.reject(response);
       })
-      .then((data) => {
-        setFacultyResources((prevState) => prevState.concat([data]));
-        setIdFacultySelected(0);
-        setIdResourceSelected(0);
-      })
-      .catch((e) => console.error(e));
-  }
-
-  async function deleteById(facultyId, resourceId) {
-    await fetch(
-      url +
-        "unassign?" +
-        new URLSearchParams({
-          facultyId,
-        }) +
-        "&" +
-        new URLSearchParams({
-          resourceId,
-        }),
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        mode: "cors",
-      }
-    )
-      .then(
-        () => {
-          setFacultyResources(
-            facultyResources.filter(
-              (facultyResource) => facultyResource.facResId !== facResId
-            )
-          );
-        },
-        idFacultySelected,
-        idResourceSelected
-      )
-      .catch((e) => console.error(e));
-  }
-
-  async function update(prevFacultyResource) {
-    await fetch(url + "update", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-      body: JSON.stringify(prevFacultyResource),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        data.registrerDate = data.registrerDate.split("T")[0];
-        data.finalDate = data.finalDate.split("T")[0];
-        facultyResources[facultyResources.indexOf(editingFacultyResource)] =
-          prevFacultyResource;
-        setFacultyResources(facultyResources);
-      })
-      .then(() => setEditingFacultyResource(null))
-      .catch((e) => console.error(e));
+      .catch((e) => {
+        if (e.headers) setAlert(e.headers.get("errors"));
+        else setAlert("[unespecified]");
+      });
   }
 
   return (
     <FacultyResourceContext.Provider
       value={{
-        facultyResources,
-        editingFacultyResource,
         create,
-        update,
-        deleteById,
-        setEditingFacultyResource,
         idResourceSelected,
         setIdResourceSelected,
-        resourceTypes,
-        resources,
         idFacultySelected,
         setIdFacultySelected,
+        resources,
         facultys,
       }}
     >
