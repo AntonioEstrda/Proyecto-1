@@ -104,7 +104,6 @@ export function SubjectContextProvider(props) {
         idProgramSelected,
         setIdProgramSelected,
         programs,
-        setEditingSubject,
       }}
     >
       {props.children}
