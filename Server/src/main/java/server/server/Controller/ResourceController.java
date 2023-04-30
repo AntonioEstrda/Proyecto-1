@@ -1,0 +1,170 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package server.server.Controller;
+
+import server.server.Controller.Utilities.Utility;
+import java.util.ArrayList;
+import java.util.Map;
+import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import server.server.Model.Domain.FacultyResource;
+import server.server.Model.Domain.Resource;
+import server.server.Model.Services.IFacultyResourceService;
+import server.server.Model.Services.IResourceService;
+import server.server.utilities.Labels;
+
+/**
+ * Resource Controller
+ *
+ * @author anmon
+ */
+@RestController
+@RequestMapping("/Resource")
+public class ResourceController {
+
+    @Autowired
+    private IResourceService envService;
+
+    @Autowired
+    private IFacultyResourceService facResService;
+    
+    
+    /**
+     * Obtiene todos los recursos de una facultad  
+     * (tantos los activos como los inactivos)
+     * @param facultyId
+     * @return 
+     */
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ArrayList<Resource> all(@RequestParam("facultyId") long facultyId) {
+        return facResService.findByFacultyIdRes(facultyId);
+    }
+
+    /**
+     * Busca un recurso de una facultad  
+     * @param facultyId
+     * @param resourceId
+     * @return 
+     */
+    @GetMapping(value = "/find", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Resource> get(@RequestParam("facultyId") long facultyId, @RequestParam("resourceId") long resourceId) {
+        FacultyResource returns = facResService.findByFacultyIdResourceId(facultyId, resourceId);
+        if (returns == null) {
+            return new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(returns.getResourceFR(), null, HttpStatus.OK);
+        }
+    }
+
+    /**
+     * Crea un recurso, y lo asigna a una facultad  
+     * @param facultyId
+     * @param res
+     * @param errors
+     * @return 
+     */
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping("/add")
+    public ResponseEntity<Resource> add(
+            @RequestParam("facultyId") long facultyId,
+            @RequestBody @Valid Resource res, Errors errors) {
+        HttpHeaders headers = new HttpHeaders();
+        if (errors.hasErrors()) {
+            headers.add(Labels.errors.name(), Utility.setErrors(errors).toString());
+            return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
+        }
+
+        Map<Labels, Object> returns = facResService.addNewOneReource(facultyId, res);
+        ArrayList<String> errors2 = (ArrayList<String>) returns.get(Labels.errors);
+        Resource res2 = (Resource) returns.get(Labels.objectReturn);
+        if (!errors2.isEmpty() || res2 == null) {
+            headers.add(Labels.errors.name(), errors2.toString());
+            return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
+        }
+        return new ResponseEntity<>(res, null, HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Actualiza un recurso de una facultad  
+     * @param facultyId
+     * @param res
+     * @param errors
+     * @return 
+     */
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping("/update")
+    public ResponseEntity<Resource> update(
+            @RequestParam("facultyId") long facultyId,
+            @RequestBody @Valid Resource res, Errors errors) {
+        HttpHeaders headers = new HttpHeaders();
+        if (errors.hasErrors()) {
+            ArrayList<String> setErrors = Utility.setErrors(errors);
+            headers.add(Labels.errors.name(), setErrors.toString());
+            return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
+        }
+        ArrayList<String> errors2 = facResService.validateAssignment(facultyId, res.getResourceId());
+        if (!errors2.isEmpty()) {
+            headers.add(Labels.errors.name(), errors2.toString());
+            return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
+        }
+        Map<Labels, Object> returns = envService.update(res);
+        errors2.addAll((ArrayList<String>) returns.get(Labels.errors));
+        Resource res2 = (Resource) returns.get(Labels.objectReturn);
+        if (!errors2.isEmpty() || res2 == null) {
+            headers.add(Labels.errors.name(), errors2.toString());
+            return new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED);
+        }
+        return new ResponseEntity<>(res, null, HttpStatus.ACCEPTED);
+
+    }
+    
+    /**
+     * Desactiva un recurso de una facultad  
+     * @param facultyId
+     * @param resourceId
+     * @return 
+     */
+    @DeleteMapping
+    @RequestMapping("/delete")
+    public ResponseEntity<Resource> delete(
+            @RequestParam("facultyId") long facultyId, 
+            @RequestParam("resourceId") long resourceId) {
+        
+        HttpHeaders headers = new HttpHeaders();
+        ArrayList<String> errors2 = facResService.validateAssignment(facultyId, resourceId);
+        if (!errors2.isEmpty()) {
+            headers.add(Labels.errors.name(), errors2.toString());
+            return new ResponseEntity<>(null, headers, HttpStatus.NOT_MODIFIED);
+        }
+         
+        Map<Labels, Object> returns = envService.delete(resourceId);
+        errors2.addAll((ArrayList<String>) returns.get(Labels.errors));
+        Resource res = (Resource) returns.get(Labels.objectReturn);
+
+        if (res != null) {
+            facResService.deactivate(facultyId, resourceId);
+            return new ResponseEntity<>(res, null, HttpStatus.ACCEPTED);
+        } else {
+            headers.add(Labels.errors.name(), errors2.toString());
+            return (new ResponseEntity<>(res, headers, HttpStatus.NOT_MODIFIED));
+        }
+    }   
+}
